@@ -1,4 +1,5 @@
 import styled from "styled-components";
+//수정
 const HeaderSearch = styled.header`
   height: 50px;
   box-shadow: 0px 2px 10px gray;
