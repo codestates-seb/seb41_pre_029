@@ -1,15 +1,15 @@
 import styled from "styled-components";
 
+import displayedAt from "../util/displayedAt"
+
 const QuestionSummaryContainer = styled.div`
   width: 100%;
   padding: 16px;
-
   display: flex;
   flex-direction: row;
 
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 `;
-
 const SummaryStats = styled.div`
   width: 108px;
   margin-right: 16px;
@@ -125,9 +125,9 @@ const SummaryMeta = styled.div`
   }
 `;
 
-const QuestionSummary = () => {
+const QuestionSummary = ({ props }) => {
   return (
-    <QuestionSummaryContainer id="question_sumamry_{id}">
+    <QuestionSummaryContainer id="question_sumamry_{props.id}">
       <SummaryStats>
         <div className="summary_item">
           <span className="summary_item_number">0</span>
@@ -144,11 +144,8 @@ const QuestionSummary = () => {
       </SummaryStats>
       <div className="summary_title_meta_wrapper">
         <SummaryTitleContents>
-          <div className="summary_title">
-            How can I change the .env file in production in React Vite
-            applications?
-          </div>
-          <div className="summary_contents"></div>
+          <div className="summary_title">{props.title}</div>
+          <div className="summary_contents">{props.contents}</div>
         </SummaryTitleContents>
         <SummaryMeta>
           <div className="summary_meta_tags">
@@ -156,11 +153,13 @@ const QuestionSummary = () => {
             <div className="summary_meta_tag">tag</div>
           </div>
           <div className="summary_meta_user">
-            <span className="user_avatar">pic</span>
+            <span className="user_avatar">{props.userAvatar}</span>
             <div className="user_info">
-              <div className="user_link">user ID</div>
+              <div className="user_link">{props.userId}</div>
               <div className="user_awards">29</div>
-              <div className="user_time">asked 41 sec ago</div>
+              <div className="user_time">
+                asked {displayedAt(props.createdAt)}
+              </div>
             </div>
           </div>
         </SummaryMeta>
@@ -170,9 +169,3 @@ const QuestionSummary = () => {
 };
 
 export default QuestionSummary;
-
-
-/*
- * title,contents,user_avatar,user_Id,user_reputaion,user_time(작성시간)
- * vote,answers,views,tag
- */
