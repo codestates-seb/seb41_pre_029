@@ -24,8 +24,7 @@ public class CommentRecommend {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     private Comment comment;
-
-
+    
     @Column(nullable = false)
     private Boolean flag;
 
