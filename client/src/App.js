@@ -1,12 +1,10 @@
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
     <div className="App">
-      <ul>
-        <li>11312312323</li>
-        <li>23232</li>
-      </ul>
+      
     </div>
   );
 }
