@@ -1,11 +1,16 @@
 package com.ikujo.stackoverflow.domain.article.entity;
 
+import com.ikujo.stackoverflow.domain.comment.entity.Comment;
+import com.ikujo.stackoverflow.domain.comment.entity.CommentRecommend;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.global.entity.BaseTime;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -27,5 +32,25 @@ public class Article extends BaseTime {
 
     @Column(nullable = false)
     private Integer recommendCount;
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
+    private List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
+    private List<ArticleRecommend>  articleRecommendList= new ArrayList<>();
+
+    public void addComment(Comment comment){
+        commentList.add(comment);
+        if(comment.getArticle() != this){
+            comment.setArticle(this);
+        }
+    }
+
+    public void addArticleRecommend(ArticleRecommend articleRecommend){
+        articleRecommendList.add(articleRecommend);
+        if(articleRecommend.getArticle() != this){
+            articleRecommend.setArticle(this);
+        }
+    }
 
 }
