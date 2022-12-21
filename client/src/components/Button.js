@@ -13,14 +13,12 @@ const StyledButton = styled.button`
   background-color: ${(props) => props.background || "#0A95FF"};
 `;
 
-const handleClick = () => {
-  
-}
+
 
 const Button = ({ buttonName, link, ...rest }) => {
   return(
     <Link to={link}>
-      <StyledButton {...rest} onClick={handleClick}>buttonName</StyledButton>
+      <StyledButton {...rest}>buttonName</StyledButton>
     </Link>
   )
 };
