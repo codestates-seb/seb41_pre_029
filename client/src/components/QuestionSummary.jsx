@@ -1,10 +1,11 @@
 import styled from "styled-components";
 
-import displayedAt from "../util/displayedAt"
+import displayedAt from "./displayedAt";
 
 const QuestionSummaryContainer = styled.div`
   width: 100%;
   padding: 16px;
+
   display: flex;
   flex-direction: row;
 

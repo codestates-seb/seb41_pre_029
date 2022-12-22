@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 const Pagination = ({ total, limit, page, setPage }) => {
-  
   const numPages = Math.ceil(total / limit);
 
   return (
@@ -27,7 +26,7 @@ export default Pagination;
 
 const Nav = styled.nav`
   display: flex;
-  justify-content: center;
+  flex-direction: row;
   align-items: center;
   gap: 4px;
   margin: 16px;
