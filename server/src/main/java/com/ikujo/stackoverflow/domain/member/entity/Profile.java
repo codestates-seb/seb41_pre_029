@@ -18,7 +18,4 @@ public class Profile {
 
     private String aboutMe;
 
-    public static Profile of(String location, String title, String aboutMe) {
-        return new Profile(location, title, aboutMe);
-    }
 }
