@@ -15,6 +15,7 @@ const Container = styled.div`
   margin-right: auto;
   padding: 0px 10px;
 `;
+
 //플랙스를 주기 위한 div
 const Flex = styled.div`
   display: flex;

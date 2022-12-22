@@ -2,6 +2,8 @@ import styled from "styled-components";
 
 import displayedAt from "../util/displayedAt";
 
+//주석
+
 const QuestionSummaryContainer = styled.div`
   width: 100%;
   padding: 16px;
