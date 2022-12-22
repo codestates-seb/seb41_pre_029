@@ -27,24 +27,4 @@ public class Member extends BaseTime {
     @Embedded
     private Profile profile;
 
-    /**
-     * 해당 예시는 폼에서 profile 까지 받는다고 생각하고 작성했다.
-     */
-    public Member(String email, String password, String nickname, Profile profile) {
-        this.id = null;
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-        this.profile = profile;
-    }
-
-    public static Member of(String email, String password, String nickname, Profile profile) {
-        return new Member(
-                email,
-                password,
-                nickname,
-                profile
-        );
-    }
-
 }
