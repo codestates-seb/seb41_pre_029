@@ -13,14 +13,12 @@ const StyledButton = styled.button`
   background-color: ${(props) => props.background || "#0A95FF"};
 `;
 
-
-
 const Button = ({ buttonName, link, ...rest }) => {
-  return(
-    <Link to={link}>
-      <StyledButton {...rest}>buttonName</StyledButton>
-    </Link>
-  )
+  return (
+    // <Link to={link}>
+    <StyledButton {...rest}>{buttonName}</StyledButton>
+    // </Link>
+  );
 };
 
 export default Button;
