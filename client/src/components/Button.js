@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledButton = styled.button`
-  width: ${(props) => props.width || "80px"};
+  width: ${(props) => props.width || "Auto"};
   height: 33px;
   outline: none;
   margin: 0 3px;
