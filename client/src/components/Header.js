@@ -5,7 +5,9 @@ const HeaderSearch = styled.header`
   height: 50px;
   box-sizing: border-box;
   border-top: 3px solid orange;
-  box-shadow: 0px 2px 10px gray;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+
+  z-index: 1;
 `;
 const Container = styled.div`
   max-width: 1950px;
