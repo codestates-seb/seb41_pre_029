@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { useState } from "react";
 
-import data from "./dummydata";
+//주석
+
+import data from "../dummydata";
 import QuestionSummary from "./QuestionSummary";
 import Pagination from "./Pagination";
 

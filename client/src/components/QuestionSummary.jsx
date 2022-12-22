@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
-import displayedAt from "./displayedAt";
+import displayedAt from "../util/displayedAt";
+
+//주석
 
 const QuestionSummaryContainer = styled.div`
   width: 100%;

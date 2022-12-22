@@ -1,11 +1,14 @@
 // import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-
 import styled from "styled-components";
 
 const NavContainer = styled.ol`
-  width: 164px;
-  height: 384px;
+  margin-top: 0.2px;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  width: 165px;
+  height: 100vh;
+
+  z-index: -1;
 
   display: flex;
   flex-direction: column;
@@ -15,6 +18,8 @@ const NavContainer = styled.ol`
 const GoHome = styled.button`
   width: 164px;
   height: 34px;
+
+  margin-top: 20px;
 
   padding: 4px 4px 4px 8px;
   color: #525960;
