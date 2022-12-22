@@ -12,6 +12,7 @@ import SignoutPage from "./pages/SignoutPage";
 import SignupPage from "./pages/SignupPage";
 
 function App() {
+  //주석
   return (
     <div className="App">
       <Header />

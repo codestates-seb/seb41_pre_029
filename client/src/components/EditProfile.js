@@ -1,3 +1,5 @@
-const EditProfile = () => {};
+const EditProfile = () => {
+  return <div>ㅠㅠ</div>;
+};
 
 export default EditProfile;

@@ -3,6 +3,8 @@ import DeleteProfile from "../components/DeleteProfile";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 
+//주석
+
 const MyPage = () => {
   return (
     <>
