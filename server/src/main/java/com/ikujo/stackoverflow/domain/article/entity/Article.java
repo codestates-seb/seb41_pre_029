@@ -34,17 +34,7 @@ public class Article extends BaseTime {
     private Integer recommendCount;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
-    private List<Comment> commentList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
     private List<ArticleRecommend>  articleRecommendList= new ArrayList<>();
-
-    public void addComment(Comment comment){
-        commentList.add(comment);
-        if(comment.getArticle() != this){
-            comment.setArticle(this);
-        }
-    }
 
     public void addArticleRecommend(ArticleRecommend articleRecommend){
         articleRecommendList.add(articleRecommend);
@@ -52,5 +42,4 @@ public class Article extends BaseTime {
             articleRecommend.setArticle(this);
         }
     }
-
 }
