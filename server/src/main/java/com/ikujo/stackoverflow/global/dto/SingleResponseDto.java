@@ -1,9 +1,11 @@
 package com.ikujo.stackoverflow.global.dto;
 
-public record SingleResponseDto<T>(
-        T data
-) {
-    public SingleResponseDto of(T data) {
-        return new SingleResponseDto(data);
-    }
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
+public class SingleResponseDto<T> {
+    private T data;
+    
 }
