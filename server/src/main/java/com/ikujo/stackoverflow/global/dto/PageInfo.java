@@ -1,12 +1,13 @@
 package com.ikujo.stackoverflow.global.dto;
 
-public record PageInfo(
-        Integer page,
-        Integer size,
-        Long totalElements,
-        Integer totalPages) {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-    public static PageInfo of(Integer page, Integer size, Long totalElements, Integer totalPages) {
-        return new PageInfo(page, size, totalElements, totalPages);
-    }
+@AllArgsConstructor
+@Getter
+public class PageInfo {
+    private int page;
+    private int size;
+    private long totalElements;
+    private int totalPages;
 }
