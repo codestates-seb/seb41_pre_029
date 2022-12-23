@@ -1,6 +1,7 @@
 import styled from "styled-components";
+import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import Button from "./Button";
 
@@ -78,31 +79,33 @@ const FlexItem = styled.div`
 `;
 
 const DeleteProfile = () => {
+  const { params } = useParams();
   const navigate = useNavigate();
 
   const [active, setActive] = useState(false);
+  console.log(active);
 
   const handleActive = () => {
     setActive(!active);
   };
 
   //회원 탈퇴 기능
-  // const handleDeleteProfile = () => {
-  //   if (active) {
-  //     if (window.confirm("정말 삭제하시겠습니까?")) {
-  //       //상태 로그아웃으로 만들기
-  //       axios
-  //         .delete(`http://localhost:8080/members/{member-id}`)
-  //         .then(() => {
-  //           alert("그동안 이용해주셔서 감사합니다.");
-  //           navigate("/");
-  //         })
-  //         .catch((err) => console.log("error!!"));
-  //     } else {
-  //       return;
-  //     }
-  //   }
-  // };
+  const handleDeleteProfile = (id) => {
+    if (active) {
+      if (window.confirm("정말 삭제하시겠습니까?")) {
+        //상태 로그아웃으로 만들기
+        axios
+          .delete(`http://localhost:8080/members/{member-${id}}`)
+          .then(() => {
+            alert("그동안 이용해주셔서 감사합니다.");
+            navigate("/");
+          })
+          .catch((err) => console.log("error!!"));
+      } else {
+        return;
+      }
+    }
+  };
 
   return (
     <DeleteProfileContainer>
@@ -147,7 +150,7 @@ const DeleteProfile = () => {
         width="104.03"
         background="#D43A40"
         className={active ? "active" : "normal"}
-        // onClick={handleDeleteProfile}
+        onClick={handleDeleteProfile(params)}
       ></Button>
     </DeleteProfileContainer>
   );
