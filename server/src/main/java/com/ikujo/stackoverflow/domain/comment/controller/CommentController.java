@@ -1,13 +1,11 @@
 package com.ikujo.stackoverflow.domain.comment.controller;
 
 import com.ikujo.stackoverflow.domain.article.entity.Article;
-import com.ikujo.stackoverflow.domain.comment.dto.CommentPostDto;
 import com.ikujo.stackoverflow.domain.comment.dto.CommentResponseDto;
+import com.ikujo.stackoverflow.domain.comment.dto.CommentMultiResponseDto;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.Profile;
-import com.ikujo.stackoverflow.global.dto.MultiResponseDto;
-import com.ikujo.stackoverflow.global.dto.SingleResponseDto;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +32,6 @@ public class CommentController {
         Comment comment1 = new Comment(2L, article, member, "블라라2", false, 0, null);
         Comment comment2 = new Comment(3L, article, member, "블라블라3", false, 0, null);
 
-
         CommentResponseDto commentResponseDto = CommentResponseDto.of(comment);
         CommentResponseDto commentResponseDto1 = CommentResponseDto.of(comment1);
         CommentResponseDto commentResponseDto2 = CommentResponseDto.of(comment2);
@@ -46,10 +43,7 @@ public class CommentController {
         commentResponseDtoList.add(commentResponseDto2);
 
         return new ResponseEntity<>(
-                new MultiResponseDto<>(commentResponseDtoList), HttpStatus.OK);
+                new CommentMultiResponseDto<>(commentResponseDtoList.size(),commentResponseDtoList), HttpStatus.OK);
+
     }
-
-
 }
-
-
