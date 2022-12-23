@@ -18,7 +18,10 @@ import java.util.List;
 @RequestMapping("/questions/{article-id}/comments")
 public class CommentController {
 
-     // 작업 시작
+     @PostMapping
+    public ResponseEntity postComments() {
+         return null;
+     }
 
     }
 
