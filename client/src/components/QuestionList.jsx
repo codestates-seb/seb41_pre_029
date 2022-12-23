@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { useState } from "react";
-
-//주석
+import { useEffect, useState } from "react";
+import {useSelector} from 'react-redux';
+import { showQuestion, getAllQuestionsAsync } from "../redux/reducer";
 
 import data from "../dummydata";
 import QuestionSummary from "./QuestionSummary";
@@ -57,8 +57,8 @@ const PageContainer = styled.div`
 `;
 
 const QuestionList = () => {
-  const questionData = data;
-  const [questions, setQuestions] = useState(questionData);
+  // const data  = useSelector(showQuestion);
+  const [questions, setQuestions] = useState(data);
   const [isActive, setIsActive] = useState("15");
 
   //페이지 당 게시물 수

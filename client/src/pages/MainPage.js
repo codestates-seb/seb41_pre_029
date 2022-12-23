@@ -1,9 +1,10 @@
+import { useLocation } from "react-router-dom";
+import styled from "styled-components";
+
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import QuestionList from "../components/QuestionList";
 import Button from "../components/Button";
-
-import styled from "styled-components";
 
 const MainPageContainer = styled.div`
   display: flex;
@@ -43,10 +44,12 @@ const MainBar = styled.div`
 const SideBar = styled.div``;
 
 const MainPage = () => {
+  const location = useLocation();
+
   return (
     <>
       <MainPageContainer>
-        <Nav />
+        <Nav location={location} />
         <MainBar>
           <div className="head">
             <h1>All Questions</h1>
