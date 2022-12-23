@@ -1,31 +1,48 @@
-//리듀서를 만들어주는 메서드
-import { createSlice } from "@reduxjs/toolkit";
+// //리듀서를 만들어주는 메서드
+// import { createSlice } from "@reduxjs/toolkit";
 
-import axios from "axios";
+// import { useEffect } from "react";
 
-const API_URL = "http://localhost:8080/questions";
+// import axios from "axios";
+// import { createAsyncThunk } from "@reduxjs/toolkit";
 
-const questionSlice = createSlice({
-  name: "question",
-  initialState: {
-    data: [],
-  },
-  reducers: {
-    getAllQuestions: (state, action) => {
-      state.data = [action.payload];
-    },
-  },
-});
+// export const questionAction = createAsyncThunk(
+//   "questionSlice/questionAction",
+//   async (payload) => {
+//     const response = await axios("/quesions", {
+//       method: "get",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       data: payload,
+//     });
 
-export const getAllQuestionsAsync = () => async (dispatch) => {
-  try {
-    const response = await axios.get(`${API_URL}`);
-    dispatch(getAllQuestions(response.data));
-  } catch (err) {
-    throw new Error(err);
-  }
-};
+//     return response;
+//   }
+// );
 
-export default questionSlice.reducer;
-export const showQuestion = (state) => state.question.data;
-export const { getAllQuestions } = questionSlice.actions;
+// const questionSlice = createSlice({
+//   name: "questions",
+//   initialState: [],
+//   reducers: {
+//     getOneQuestion: (state, action) => {
+//       state.data.push(action.payload);
+//     },
+//   },
+//   extraReducers: (builder) => {
+//     builder.addCase(questionAction.pending, (state) => {
+//       state.loading = "pending";
+//     });
+//     builder.addCase(questionAction.fulfilled, (state, action) => {
+//       state.loading = "succeeded";
+//       state.user = action.payload;
+//     });
+//     builder.addCase(questionAction.rejected, (state) => {
+//       state.loading = "failed";
+//     });
+//   },
+// });
+
+// export default questionSlice.reducer;
+// // export const showQuestion = (state) => state;
+// export const { getOneQuestion } = questionSlice.actions;

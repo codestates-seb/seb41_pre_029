@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import {useSelector} from 'react-redux';
-import { showQuestion, getAllQuestionsAsync } from "../redux/reducer";
+// import {useSelector,useDispatch} from 'react-redux';
+import axios from "axios";
 
-import data from "../dummydata";
+// import data from "../dummydata";
 import QuestionSummary from "./QuestionSummary";
 import Pagination from "./Pagination";
 
@@ -57,8 +57,25 @@ const PageContainer = styled.div`
 `;
 
 const QuestionList = () => {
-  // const data  = useSelector(showQuestion);
-  const [questions, setQuestions] = useState(data);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+
+  //     try {
+  //       const response = await axios.get("/questions");
+  //       console.log(response.data);
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+
+  // const data  = useSelector((state)=> state);
+  // console.log(data);
+
   const [isActive, setIsActive] = useState("15");
 
   //페이지 당 게시물 수
@@ -79,7 +96,7 @@ const QuestionList = () => {
 
   return (
     <QuestionListContainer>
-      {questions.slice(offset, offset + limit).map((question) => (
+      {/* {questions?.slice(offset, offset + limit).map((question) => (
         <QuestionSummary key={question.id} props={question} />
       ))}
       <PageContainer>
@@ -119,7 +136,7 @@ const QuestionList = () => {
           </button>
           <div className="per_page">per page</div>
         </div>
-      </PageContainer>
+      </PageContainer> */}
     </QuestionListContainer>
   );
 };
