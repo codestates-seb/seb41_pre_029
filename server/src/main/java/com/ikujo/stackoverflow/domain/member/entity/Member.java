@@ -30,7 +30,7 @@ public class Member extends BaseTime {
     private Profile profile;
 
     /**
-     * MemberSignupPostDto 사용을 위한 생성자
+     * MemberSignupPostDto 사용을 위한 생성자 및 of 메서드
      */
     public Member(String email, String password, String nickname) {
         this.email = email;
@@ -41,6 +41,32 @@ public class Member extends BaseTime {
     public static Member of(String email, String password, String nickname) {
 
         return new Member(email, password, nickname);
+    }
+
+    /**
+     * MemberLoginPostDto 사용을 위한 생성자 및 of 메서드
+     */
+    public Member(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public static Member of(String email, String password) {
+
+        return new Member(email, password);
+    }
+
+    /**
+     * MemberLoginPostDto 사용을 위한 생성자 및 of 메서드
+     */
+    public Member(String nickname, Profile profile) {
+        this.nickname = nickname;
+        this.profile = profile;
+    }
+
+    public static Member of(String nickname, Profile profile) {
+
+        return new Member(nickname, profile);
     }
 
 }
