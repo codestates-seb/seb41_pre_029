@@ -1,7 +1,53 @@
 import styled from "styled-components";
 
-
 import displayedAt from "../util/displayedAt";
+
+const QuestionSummary = ({ props }) => {
+  
+  return (
+    <QuestionSummaryContainer id="question_sumamry_{props.id}">
+      <SummaryStats>
+        <div className="summary_item">
+          <span className="summary_item_number">0</span>
+          <span className="summary_item_unit">votes</span>
+        </div>
+        <div className="summary_item">
+          <span className="summary_item_number">0</span>
+          <span className="summary_item_unit">answers</span>
+        </div>
+        <div className="summary_item">
+          <span className="summary_item_number">0</span>
+          <span className="summary_item_unit">views</span>
+        </div>
+      </SummaryStats>
+      <div className="summary_title_meta_wrapper">
+        <SummaryTitleContents>
+          <div className="summary_title">{props.title}</div>
+          <div className="summary_contents">{props.content}</div>
+        </SummaryTitleContents>
+        <SummaryMeta>
+          <div className="summary_meta_tags">
+            {props.tags.map((tag)=>(
+                <div className="summary_meta_tag">{tag}</div>
+            ))}
+          </div>
+          <div className="summary_meta_user">
+            <span className="user_avatar">{props.userAvatar}</span>
+            <div className="user_info">
+              <div className="user_link">{props.userId}</div>
+              <div className="user_awards">29</div>
+              <div className="user_time">
+                asked {displayedAt(props.createdAt)}
+              </div>
+            </div>
+          </div>
+        </SummaryMeta>
+      </div>
+    </QuestionSummaryContainer>
+  );
+};
+
+export default QuestionSummary;
 
 const QuestionSummaryContainer = styled.div`
   padding: 16px;
@@ -130,48 +176,3 @@ const SummaryMeta = styled.div`
   }
 `;
 
-const QuestionSummary = ({ props }) => {
-  
-  return (
-    <QuestionSummaryContainer id="question_sumamry_{props.id}">
-      <SummaryStats>
-        <div className="summary_item">
-          <span className="summary_item_number">0</span>
-          <span className="summary_item_unit">votes</span>
-        </div>
-        <div className="summary_item">
-          <span className="summary_item_number">0</span>
-          <span className="summary_item_unit">answers</span>
-        </div>
-        <div className="summary_item">
-          <span className="summary_item_number">0</span>
-          <span className="summary_item_unit">views</span>
-        </div>
-      </SummaryStats>
-      <div className="summary_title_meta_wrapper">
-        <SummaryTitleContents>
-          <div className="summary_title">{props.title}</div>
-          <div className="summary_contents">{props.contents}</div>
-        </SummaryTitleContents>
-        <SummaryMeta>
-          <div className="summary_meta_tags">
-            <div className="summary_meta_tag">tag</div>
-            <div className="summary_meta_tag">tag</div>
-          </div>
-          <div className="summary_meta_user">
-            <span className="user_avatar">{props.userAvatar}</span>
-            <div className="user_info">
-              <div className="user_link">{props.userId}</div>
-              <div className="user_awards">29</div>
-              <div className="user_time">
-                asked {displayedAt(props.createdAt)}
-              </div>
-            </div>
-          </div>
-        </SummaryMeta>
-      </div>
-    </QuestionSummaryContainer>
-  );
-};
-
-export default QuestionSummary;
