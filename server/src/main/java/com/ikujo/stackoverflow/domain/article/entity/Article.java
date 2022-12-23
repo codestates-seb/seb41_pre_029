@@ -8,11 +8,14 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
 @Getter
 @Entity
 public class Article extends BaseTime {
@@ -25,12 +28,19 @@ public class Article extends BaseTime {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Column(nullable = false, length = 300)
+    private String title;
+
     @Column(nullable = false, length = 2000)
     private String content;
 
     private String tag;
 
+    @ColumnDefault("0")
+    private Long hits;
+
     @Column(nullable = false)
+    @ColumnDefault("0")
     private Integer recommendCount;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
