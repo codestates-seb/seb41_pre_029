@@ -13,11 +13,11 @@ public record CommentResponseDto(Long id,
                                  Boolean selection,
                                  LocalDateTime createdAt,
                                  LocalDateTime lastModifiedAt,
-                                 String nickname) {
+                                 MemberDummyDto member) {
 
     public static CommentResponseDto of(Comment comment) {
 
-        Member member = new Member(1L,
+        Member member1 = new Member(1L,
                 "aaa@gmail.com",
                 "1234",
                 "김회원",
@@ -29,9 +29,9 @@ public record CommentResponseDto(Long id,
         Boolean selection = comment.getSelection();
         LocalDateTime createdAt = comment.getCreatedAt();
         LocalDateTime lastModifiedAt = comment.getLastModifiedAt();
-        String nickname = member.getNickname();
+        MemberDummyDto member = MemberDummyDto.of(member1);
 
-        return new CommentResponseDto(id, content, recommendCount, selection, createdAt, lastModifiedAt, nickname);
+        return new CommentResponseDto(id, content, recommendCount, selection, createdAt, lastModifiedAt, member);
     }
 
 }
