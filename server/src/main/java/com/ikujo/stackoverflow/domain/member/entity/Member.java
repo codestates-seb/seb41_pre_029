@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor // 임시로 넣었음
 @Getter
 @Entity
+@AllArgsConstructor // 테스트를 위한 용도
 public class Member extends BaseTime {
 
     @Id
@@ -28,5 +29,19 @@ public class Member extends BaseTime {
 
     @Embedded
     private Profile profile;
+
+    /**
+     * MemberSignupPostDto 사용을 위한 생성자
+     */
+    public Member(String email, String password, String nickname) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+    }
+
+    public static Member of(String email, String password, String nickname) {
+
+        return new Member(email, password, nickname);
+    }
 
 }
