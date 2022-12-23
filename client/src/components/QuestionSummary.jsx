@@ -2,16 +2,14 @@ import styled from "styled-components";
 
 import displayedAt from "../util/displayedAt";
 
-//주석
-
 const QuestionSummaryContainer = styled.div`
-  width: 100%;
   padding: 16px;
 
   display: flex;
   flex-direction: row;
 
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
 `;
 const SummaryStats = styled.div`
   width: 108px;
@@ -23,6 +21,7 @@ const SummaryStats = styled.div`
   align-items: flex-end;
 
   & .summary_item {
+
     height: 19px;
     margin-bottom: 4px;
 
@@ -50,6 +49,8 @@ const SummaryTitleContents = styled.div`
     font-size: 17px;
     font-weight: 400;
     color: #0074cc;
+    margin-bottom:5px;
+
   }
 
   & .summary_contents {

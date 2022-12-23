@@ -8,13 +8,14 @@ import QuestionSummary from "./QuestionSummary";
 import Pagination from "./Pagination";
 
 const QuestionListContainer = styled.div`
-  border-top: solid 1px #d6d9dc;
+    border-top: solid 1px #d6d9dc;
 `;
 
 const PageContainer = styled.div`
   display: flex;
   justify-content: space-between;
-
+  margin: 20px 0;
+  
   & .select_buttons {
     width: 184px;
     height: 27px;

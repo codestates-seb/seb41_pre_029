@@ -1,5 +1,5 @@
-// import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const NavContainer = styled.ol`
@@ -8,12 +8,25 @@ const NavContainer = styled.ol`
   width: 165px;
   height: 100vh;
 
-  z-index: -1;
+  z-index: 1;
+  position: sticky;
+  top: 0;
 
   display: flex;
   flex-direction: column;
 
   font-size: 13px;
+
+  > a {
+    text-decoration: none;
+  }
+
+  & .active {
+    font-weight: bold;
+    background: #f1f2f3;
+    color: var(--black-900);
+    border-right: 3px solid #ff7f00;
+  }
 `;
 const GoHome = styled.button`
   width: 164px;
@@ -128,54 +141,54 @@ const NavLink = styled.div`
   color: #525960;
 
   cursor: pointer;
-  /* 활성화 되었을 때 css 변화 */
-  &.isActive {
+
+  &:hover {
+    color: #ff7f00;
+  }
+
+  & .active {
     font-weight: bold;
     background: #f1f2f3;
     color: var(--black-900);
     border-right: 3px solid #ff7f00;
   }
-
-  &:hover {
-    color: #ff7f00;
-  }
 `;
 
 const Nav = () => {
-  const [isActive, setIsActive] = useState();
-  //리액트 라우터 설정 후 변경
-  // const navigate = useNavigate();
-
-  // const handleNavigate = ({ prop }) => {
-  //   navigate("{prop}");
-  // };
-
-  //const handleActive = () => {
+  const [active, setActive] = useState("home");
 
   return (
     <NavContainer>
-      <GoHome>
-        <div>Home</div>
-        <div />
-      </GoHome>
+      <Link to="/">
+        <GoHome>
+          <div>Home</div>
+          <div />
+        </GoHome>
+      </Link>
       <NavList className="first_list">PUBLIC </NavList>
-      <NavLink_Icon className="isActive">
-        <div className="icon">
-          <svg
-            aria-hidden="true"
-            class="svg-icon iconGlobe"
-            s
-            width="18"
-            height="18"
-            viewBox="0 0 18 18"
-          >
-            <path d="M9 1C4.64 1 1 4.64 1 9c0 4.36 3.64 8 8 8 4.36 0 8-3.64 8-8 0-4.36-3.64-8-8-8ZM8 15.32a6.46 6.46 0 0 1-4.3-2.74 6.46 6.46 0 0 1-.93-5.01L7 11.68v.8c0 .88.12 1.32 1 1.32v1.52Zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1v-2c0-.44-.56-1-1-1H6V7h1c.44 0 1-.56 1-1V5h2c.88 0 1.4-.72 1.4-1.6v-.33a6.45 6.45 0 0 1 3.83 4.51 6.45 6.45 0 0 1-1.51 5.73v.01Z"></path>
-          </svg>
-          Questions
-        </div>
-      </NavLink_Icon>
+      <Link to="/" onClick={() => setActive("home")}>
+        <NavLink_Icon className={active === "home" ? "active" : "none"}>
+          <div className="icon">
+            <svg
+              aria-hidden="true"
+              class="svg-icon iconGlobe"
+              s
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+            >
+              <path d="M9 1C4.64 1 1 4.64 1 9c0 4.36 3.64 8 8 8 4.36 0 8-3.64 8-8 0-4.36-3.64-8-8-8ZM8 15.32a6.46 6.46 0 0 1-4.3-2.74 6.46 6.46 0 0 1-.93-5.01L7 11.68v.8c0 .88.12 1.32 1 1.32v1.52Zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1v-2c0-.44-.56-1-1-1H6V7h1c.44 0 1-.56 1-1V5h2c.88 0 1.4-.72 1.4-1.6v-.33a6.45 6.45 0 0 1 3.83 4.51 6.45 6.45 0 0 1-1.51 5.73v.01Z"></path>
+            </svg>
+            Questions
+          </div>
+        </NavLink_Icon>
+      </Link>
       <NavLink>Tags</NavLink>
-      <NavLink>Users</NavLink>
+      <Link to="/mypage" onClick={() => setActive("mypage")}>
+        <NavLink className={active === "mypage" ? "active" : "none"}>
+          Users
+        </NavLink>
+      </Link>
       <NavLink>Companies</NavLink>
       <NavList className="second_list">COLLECTIVES </NavList>
       <NavLink_Icon>
