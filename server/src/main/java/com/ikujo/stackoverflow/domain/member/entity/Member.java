@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor // 임시로 넣었음
 @Getter
 @Entity
 @AllArgsConstructor // 테스트를 위한 용도
