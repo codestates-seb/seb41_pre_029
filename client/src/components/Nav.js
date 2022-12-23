@@ -169,7 +169,6 @@ const NavLink = styled(Link)`
 `;
 
 const Nav = ({ location }) => {
-  console.log(location.pathname);
   const [active, setActive] = useState(location.pathname);
 
   const handleClick = (link) => {
@@ -204,8 +203,7 @@ const Nav = ({ location }) => {
               <div className="icon">
                 <svg
                   aria-hidden="true"
-                  class="svg-icon iconGlobe"
-                  s
+                  className="svg-icon iconGlobe"
                   width="18"
                   height="18"
                   viewBox="0 0 18 18"
@@ -224,7 +222,7 @@ const Nav = ({ location }) => {
         <div className="icon">
           <svg
             aria-hidden="true"
-            class="mt-auto fc-orange-400 svg-icon iconStarVerified"
+            className="mt-auto fc-orange-400 svg-icon iconStarVerified"
             width="18"
             height="18"
             viewBox="0 0 18 18"
@@ -242,7 +240,7 @@ const Nav = ({ location }) => {
             <div className="brief_case">
               <svg
                 aria-hidden="true"
-                class="svg-icon iconBriefcaseSm"
+                className="svg-icon iconBriefcaseSm"
                 width="14"
                 height="14"
                 viewBox="0 0 14 14"
@@ -253,7 +251,7 @@ const Nav = ({ location }) => {
             </div>
             <svg
               aria-hidden="true"
-              class="native s-avatar--badge svg-icon iconShieldXSm"
+              className="native s-avatar--badge svg-icon iconShieldXSm"
               width="9"
               height="10"
               viewBox="0 0 9 10"

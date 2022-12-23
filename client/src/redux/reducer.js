@@ -17,7 +17,7 @@ const questionSlice = createSlice({
   },
 });
 
-export const getAllQuestionsAsync = (d) => async (dispatch) => {
+export const getAllQuestionsAsync = () => async (dispatch) => {
   try {
     const response = await axios.get(`${API_URL}`);
     dispatch(getAllQuestions(response.data));

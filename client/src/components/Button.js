@@ -13,6 +13,7 @@ const StyledButton = styled.button`
   color: ${(props) => props.color || "#FFFFFF"};
   background-color: ${(props) => props.background || "#0A95FF"};
 
+  cursor: pointer;
   box-shadow: rgba(255, 255, 255, 0.4) 0px 2px 0px 0px inset;
 `;
 

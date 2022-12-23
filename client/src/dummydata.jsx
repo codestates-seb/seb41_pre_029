@@ -63,7 +63,7 @@ const data = [
     ]
   },
     {
-    id: 4125,
+    id: 41295,
     createdAt: "2022-05-16T01:02:17Z",
     updatedAt: "2022-05-16T01:02:17Z",
     title: "제목을 넣어주세요1",
