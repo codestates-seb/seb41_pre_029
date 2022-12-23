@@ -2,9 +2,11 @@ package com.ikujo.stackoverflow.domain.member.controller;
 
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.Profile;
+import com.ikujo.stackoverflow.domain.member.entity.dto.MemberProfilePatchDto;
 import com.ikujo.stackoverflow.domain.member.entity.dto.MemberResponseDto;
 import com.ikujo.stackoverflow.domain.member.repository.StubMemberRepository;
 import com.ikujo.stackoverflow.global.dto.SingleResponseDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,22 +31,37 @@ public class MemberController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity patchMemberProfile(@PathVariable("id") Long id) {
+    public ResponseEntity patchMemberProfile(@PathVariable("id") Long id,
+                                             @Valid @RequestBody MemberProfilePatchDto profilePatchDto) {
 
-        return null;
+        Member member = new Member(1L,
+                "aaa@gmail.com",
+                "1234",
+                "김회원",
+                new Profile("대한민국", "안녕하세요", "김회원입니다~"));
+
+        MemberResponseDto memberResponseDto = MemberResponseDto.of(member);
+
+        return new ResponseEntity<>(new SingleResponseDto<>(memberResponseDto), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteMember(@PathVariable("id") Long id) {
+
+        return ResponseEntity.noContent().build();
     }
 
 
     @PostMapping("/signup")
     public ResponseEntity signup() {
 
-        return null;
+        return ResponseEntity.created(null).build();
     }
 
     @PostMapping("/login")
     public ResponseEntity login() {
 
-        return null;
+        return ResponseEntity.ok(null);
     }
 
 }
