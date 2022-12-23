@@ -84,26 +84,25 @@ const DeleteProfile = () => {
 
   const handleActive = () => {
     setActive(!active);
-    console.log("active!");
   };
 
   //회원 탈퇴 기능
-  const handleDeleteProfile = () => {
-    if (active) {
-      if (window.confirm("정말 삭제하시겠습니까?")) {
-        //상태 로그아웃으로 만들기
-        axios
-          .delete(`http://localhost:8080/members/{member-id}`)
-          .then(() => {
-            alert("그동안 이용해주셔서 감사합니다.");
-            navigate("/");
-          })
-          .catch((err) => console.log("error!!"));
-      } else {
-        return;
-      }
-    }
-  };
+  // const handleDeleteProfile = () => {
+  //   if (active) {
+  //     if (window.confirm("정말 삭제하시겠습니까?")) {
+  //       //상태 로그아웃으로 만들기
+  //       axios
+  //         .delete(`http://localhost:8080/members/{member-id}`)
+  //         .then(() => {
+  //           alert("그동안 이용해주셔서 감사합니다.");
+  //           navigate("/");
+  //         })
+  //         .catch((err) => console.log("error!!"));
+  //     } else {
+  //       return;
+  //     }
+  //   }
+  // };
 
   return (
     <DeleteProfileContainer>
@@ -147,8 +146,8 @@ const DeleteProfile = () => {
         buttonName={"Delete profile"}
         width="104.03"
         background="#D43A40"
-        className={active === true ? "active" : "normal"}
-        onClick={handleDeleteProfile}
+        className={active ? "active" : "normal"}
+        // onClick={handleDeleteProfile}
       ></Button>
     </DeleteProfileContainer>
   );
