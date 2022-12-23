@@ -1,6 +1,7 @@
 package com.ikujo.stackoverflow.domain.comment.controller;
 
 import com.ikujo.stackoverflow.domain.article.entity.Article;
+import com.ikujo.stackoverflow.domain.comment.dto.CommentPostDto;
 import com.ikujo.stackoverflow.domain.comment.dto.CommentResponseDto;
 import com.ikujo.stackoverflow.domain.comment.dto.CommentMultiResponseDto;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
@@ -19,8 +20,8 @@ import java.util.List;
 public class CommentController {
 
      @PostMapping
-    public ResponseEntity postComments() {
-         return null;
+    public ResponseEntity postComments(@RequestBody CommentPostDto commentPostDto) {
+        return null;
      }
 
     }
