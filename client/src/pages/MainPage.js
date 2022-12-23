@@ -7,6 +7,7 @@ import styled from "styled-components";
 
 const MainPageContainer = styled.div`
   display: flex;
+  margin: 0 320.5px 0 320.5px;
 `;
 
 const MainBar = styled.div`
