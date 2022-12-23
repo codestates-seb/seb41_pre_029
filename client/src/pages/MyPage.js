@@ -65,7 +65,7 @@ const ContentsWrapper = styled.div `
           border-radius: 15px;
           color: #232629;
           font-size: 11px;
-          font-weight: bold;
+          font-weight: 700;
           margin-bottom: 2px;
           margin-top: 30px;
         }
