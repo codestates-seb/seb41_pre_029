@@ -48,4 +48,12 @@ public class Comment extends BaseTime {
         }
     }
 
+    public Comment(String content) {
+        this.content = content;
+    }
+
+    public static Comment of(String content) {
+        return new Comment(content);
+    }
+
 }
