@@ -6,6 +6,7 @@ import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.global.entity.BaseTime;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor // 임시로 넣었음
 @DynamicInsert
 @Getter
 @Entity
@@ -44,7 +46,7 @@ public class Article extends BaseTime {
     private Integer recommendCount;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
-    private List<ArticleRecommend>  articleRecommendList= new ArrayList<>();
+    private List<ArticleRecommend> articleRecommendList= new ArrayList<>();
 
     public void addArticleRecommend(ArticleRecommend articleRecommend){
         articleRecommendList.add(articleRecommend);
