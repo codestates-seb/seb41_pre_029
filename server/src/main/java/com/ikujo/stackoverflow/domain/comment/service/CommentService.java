@@ -1,5 +1,6 @@
 package com.ikujo.stackoverflow.domain.comment.service;
 
+import com.ikujo.stackoverflow.domain.comment.dto.CommentDto;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
 import com.ikujo.stackoverflow.domain.comment.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,8 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
 
-    public Comment createMember(Comment comment) {
+    public Comment createMember(CommentDto commentDto) {
+        Comment comment = commentDto.toEntity();
         return commentRepository.save(comment);
     }
 }

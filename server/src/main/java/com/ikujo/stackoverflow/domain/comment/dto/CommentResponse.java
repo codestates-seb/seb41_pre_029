@@ -5,17 +5,16 @@ import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.Profile;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-public record CommentResponseDto(Long id,
-                                 String content,
-                                 Integer recommendCount,
-                                 Boolean selection,
-                                 LocalDateTime createdAt,
-                                 LocalDateTime lastModifiedAt,
-                                 MemberDummyDto member) {
+public record CommentResponse(Long id,
+                              String content,
+                              Integer recommendCount,
+                              Boolean selection,
+                              LocalDateTime createdAt,
+                              LocalDateTime lastModifiedAt,
+                              MemberDummyDto member) {
 
-    public static CommentResponseDto of(Comment comment) {
+    public static CommentResponse of(Comment comment) {
 
         Member member1 = new Member(1L,
                 "aaa@gmail.com",
@@ -31,7 +30,7 @@ public record CommentResponseDto(Long id,
         LocalDateTime lastModifiedAt = comment.getLastModifiedAt();
         MemberDummyDto member = MemberDummyDto.of(member1);
 
-        return new CommentResponseDto(id, content, recommendCount, selection, createdAt, lastModifiedAt, member);
+        return new CommentResponse(id, content, recommendCount, selection, createdAt, lastModifiedAt, member);
     }
 
 }

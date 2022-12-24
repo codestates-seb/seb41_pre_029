@@ -6,6 +6,8 @@ import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.global.entity.BaseTime;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
+@DynamicInsert
 public class Comment extends BaseTime {
 
     @Id
@@ -33,9 +36,11 @@ public class Comment extends BaseTime {
     private String content;
 
     @Column(nullable = false)
+    @ColumnDefault("false")
     private Boolean selection;
 
     @Column(nullable = false)
+    @ColumnDefault("0")
     private Integer recommendCount;
 
     @OneToMany(mappedBy = "comment", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
@@ -48,12 +53,18 @@ public class Comment extends BaseTime {
         }
     }
 
-    public Comment(String content) {
+    public Comment(Article article, Member member, String content, Boolean selection,
+                   Integer recommendCount, List<CommentRecommend> commentRecommendList) {
+        this.article = article;
+        this.member = member;
         this.content = content;
+        this.selection = selection;
+        this.recommendCount = recommendCount;
+        this.commentRecommendList = commentRecommendList;
     }
 
-    public static Comment of(String content) {
-        return new Comment(content);
+    public static Comment of(Article article, Member member, String content, Boolean selection,
+                             Integer recommendCount, List<CommentRecommend> commentRecommendList) {
+        return new Comment(article, member, content, selection, recommendCount, commentRecommendList);
     }
-
 }
