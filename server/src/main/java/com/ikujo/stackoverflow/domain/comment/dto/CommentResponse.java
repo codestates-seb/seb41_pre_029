@@ -12,25 +12,21 @@ public record CommentResponse(Long id,
                               Boolean selection,
                               LocalDateTime createdAt,
                               LocalDateTime lastModifiedAt,
-                              MemberDummyDto member) {
+                              Member member) {
 
-    public static CommentResponse of(Comment comment) {
+    public static CommentResponse from(Comment comment) {
 
-        Member member1 = new Member(1L,
-                "aaa@gmail.com",
-                "1234",
-                "김회원",
-                new Profile("대한민국", "안녕하세요", "김회원입니다~"));
+        return new CommentResponse(
 
-        Long id = comment.getId();
-        String content = comment.getContent();
-        Integer recommendCount = comment.getRecommendCount();
-        Boolean selection = comment.getSelection();
-        LocalDateTime createdAt = comment.getCreatedAt();
-        LocalDateTime lastModifiedAt = comment.getLastModifiedAt();
-        MemberDummyDto member = MemberDummyDto.of(member1);
+                comment.getId(),
+                comment.getContent(),
+                comment.getRecommendCount(),
+                comment.getSelection(),
+                comment.getCreatedAt(),
+                comment.getLastModifiedAt(),
+                comment.creator()
 
-        return new CommentResponse(id, content, recommendCount, selection, createdAt, lastModifiedAt, member);
+        );
     }
 
 }

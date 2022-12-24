@@ -67,4 +67,8 @@ public class Comment extends BaseTime {
                              Integer recommendCount, List<CommentRecommend> commentRecommendList) {
         return new Comment(article, member, content, selection, recommendCount, commentRecommendList);
     }
+
+    public Member creator() {
+        return new Member(member.getId(), member.getNickname());
+    }
 }
