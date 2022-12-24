@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Editor from "./Editor";
+// import Editor from "./Editor";
 import Input from "./Input";
 import StyledButton from "./Button";
 import { useState } from "react";
@@ -7,7 +7,7 @@ import { ReactComponent as SvgTwitter } from "../assets/twitter.svg";
 import { ReactComponent as SvgGit } from "../assets/git.svg";
 import { ReactComponent as Web } from "../assets/web.svg";
 import { useNavigate } from "react-router-dom";
-
+import Editor from "./Editors";
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -106,7 +106,7 @@ const EditProfile = () => {
     gitHub: "",
     fullName: "",
   });
-  const [content, setContent] = useState("");
+
   const { displayName, location, title, website, twitter, gitHub, fullName } =
     info;
 
@@ -116,6 +116,8 @@ const EditProfile = () => {
       [e.target.name]: e.target.value,
     });
   };
+  const [editValue, setEditValue] = useState("");
+
   const navigator = useNavigate();
   const clear = () => {
     setInfo({
@@ -127,9 +129,11 @@ const EditProfile = () => {
       twitter: "",
       gitHub: "",
       fullName: "",
+      edit: "",
     });
-    setContent("");
+    setEditValue("");
   };
+  console.log(editValue);
   const submitBtn = (e) => {
     e.preventDefault();
     const data = {
@@ -140,8 +144,9 @@ const EditProfile = () => {
       twitter,
       gitHub,
       fullName,
+      editValue,
     };
-    setInfo(data);
+    console.log(data);
     clear();
   };
 
@@ -182,14 +187,7 @@ const EditProfile = () => {
             onChange={changeHandler}
           />
           <Title className="editor">About me</Title>
-          <Editor
-            data={content}
-            onChange={(data) => {
-              setContent(data);
-            }}
-          />
-          <div dangerouslySetInnerHTML={{ __html: content }}></div>
-          {content}
+          <Editor set={setEditValue} get={editValue} />
         </FormList>
         <Title>Links</Title>
         <FormList className="link">
