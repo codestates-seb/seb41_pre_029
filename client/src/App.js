@@ -25,8 +25,8 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
       <Router>
+        <Header />
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/addquestionpage" element={<AddQuestionPage />} />

@@ -38,6 +38,7 @@ const Title = styled.div`
 const Profile = styled.div`
   cursor: pointer;
   img {
+    border-radius: 5px;
     width: 164px;
     height: 164px;
     margin: -1px 0px 10px 0px;
@@ -144,7 +145,7 @@ const EditProfile = () => {
       twitter,
       gitHub,
       fullName,
-      editValue,
+
     };
     console.log(data);
     clear();
