@@ -42,11 +42,15 @@ public class Comment extends BaseTime {
     @OneToMany(mappedBy = "comment", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<CommentRecommend> commentRecommendList = new ArrayList<>();
 
-    public void addCommentRecommend(CommentRecommend commentRecommend){
+    public void addCommentRecommend(CommentRecommend commentRecommend) {
         commentRecommendList.add(commentRecommend);
-        if(commentRecommend.getComment() != this){
+        if (commentRecommend.getComment() != this) {
             commentRecommend.setComment(this);
         }
+    }
+
+    public Boolean isSelection() {
+        return this.selection;
     }
 
 }
