@@ -3,11 +3,9 @@ package com.ikujo.stackoverflow.domain.article.repository;
 import com.ikujo.stackoverflow.domain.article.entity.Article;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.Profile;
-import com.ikujo.stackoverflow.global.entity.BaseTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Range;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
