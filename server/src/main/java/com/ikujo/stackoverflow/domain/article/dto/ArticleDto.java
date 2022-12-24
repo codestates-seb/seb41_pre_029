@@ -1,7 +1,5 @@
 package com.ikujo.stackoverflow.domain.article.dto;
 
-import com.ikujo.stackoverflow.domain.article.dto.request.ArticlePatch;
-import com.ikujo.stackoverflow.domain.article.dto.request.ArticlePost;
 import com.ikujo.stackoverflow.domain.article.entity.Article;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 
@@ -18,14 +16,21 @@ public record ArticleDto(
         LocalDateTime lastModifiedAt
 ) {
 
-    public ArticleDto of(ArticlePost articlePost, Member member) {
-        return new ArticleDto(null, member, articlePost.title(), articlePost.content(), articlePost.tag(),
-                null, null, null);
+    public static ArticleDto of(Member member, String title, String content, String tag) {
+        return new ArticleDto(null, member, title, content, tag, null, null, null);
     }
 
-    public ArticleDto of(ArticlePatch articlepatch, Member member) {
-        return new ArticleDto(null, member, articlepatch.title(), articlepatch.content(), articlepatch.tag(),
-                null, null, null);
+    public static ArticleDto from(Article article){
+        return new ArticleDto(
+                article.getId(),
+                article.getMember(),
+                article.getTitle(),
+                article.getContent(),
+                article.getTag(),
+                article.getHits(),
+                article.getCreatedAt(),
+                article.getLastModifiedAt()
+        );
     }
 
     public Article toEntity() {
