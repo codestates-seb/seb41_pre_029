@@ -29,7 +29,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<MainPage />} />
-          {/* <Route path="/addquestionpage" element={<AddQuestionPage />} /> */}
+          <Route path="/addquestionpage" element={<AddQuestionPage />} />
           {/* <Route path="/errorpage" element={<ErrorPage />} /> */}
           {/* <Route path="/loginpage" element={<LoginPage />} /> */}
           {/* <Route path="/logoutpage" element={<LogoutPage />} /> */}
