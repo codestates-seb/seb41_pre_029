@@ -145,7 +145,7 @@ const EditProfile = () => {
       twitter,
       gitHub,
       fullName,
-      // editValue,
+
     };
     console.log(data);
     clear();

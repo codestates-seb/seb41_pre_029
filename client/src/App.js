@@ -14,14 +14,14 @@ import SignupPage from "./pages/SignupPage";
 import useStore from "./zustand/store.js";
 
 function App() {
-  const { getInitialQuestions } = useStore((state) => state);
+  // const { getInitialQuestions } = useStore((state) => state);
 
   // const data = getInitialMembers().then((data) => console.log(data.data));
 
-  (async () => {
-    const { data } = await getInitialQuestions();
-    console.log(data);
-  })();
+  // (async () => {
+  //   const { data } = await getInitialQuestions();
+  //   console.log(data);
+  // })();
 
   return (
     <div className="App">
@@ -30,13 +30,13 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/addquestionpage" element={<AddQuestionPage />} />
-          <Route path="/errorpage" element={<ErrorPage />} />
-          <Route path="/loginpage" element={<LoginPage />} />
-          <Route path="/logoutpage" element={<LogoutPage />} />
+          {/* <Route path="/errorpage" element={<ErrorPage />} /> */}
+          {/* <Route path="/loginpage" element={<LoginPage />} /> */}
+          {/* <Route path="/logoutpage" element={<LogoutPage />} /> */}
           <Route path="/mypage" element={<MyPage />} />
-          <Route path="questionpage" element={<QuestionPage />} />
-          <Route path="/signoutpage" element={<SignoutPage />} />
-          <Route path="/signuppage" element={<SignupPage />} />
+          <Route path="/questionpage" element={<QuestionPage />} />
+          {/* <Route path="/signoutpage" element={<SignoutPage />} /> */}
+          {/* <Route path="/signuppage" element={<SignupPage />} /> */}
         </Routes>
       </Router>
     </div>
