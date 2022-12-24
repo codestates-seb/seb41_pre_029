@@ -5,6 +5,8 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import QuestionList from "../components/QuestionList";
 import Button from "../components/Button";
+import GreyBox from "../components/GreyBox";
+import YellowBox from "../components/YellowBox";
 
 const MainPageContainer = styled.div`
   display: flex;
@@ -41,7 +43,13 @@ const MainBar = styled.div`
   }
 `;
 
-const SideBar = styled.div``;
+const SideBar = styled.div`
+  margin-top: 20.2px;
+
+  > * {
+    margin-bottom: 15px;
+  }
+`;
 
 const MainPage = () => {
   const location = useLocation();
@@ -65,7 +73,11 @@ const MainPage = () => {
           <QuestionList />
         </MainBar>
         <SideBar>
-          <div>widget</div>
+          <YellowBox />
+          <GreyBox title="Custom Filters"></GreyBox>
+          <GreyBox title="Watched Tags Filters"></GreyBox>
+          <GreyBox title="Ignored Tags"></GreyBox>
+          <GreyBox title="Collectives"></GreyBox>
         </SideBar>
       </MainPageContainer>
       <Footer />

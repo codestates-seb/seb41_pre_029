@@ -5,7 +5,7 @@ const data = [
     createdAt: "2022-05-16T01:02:17Z",
     updatedAt: "2022-05-16T01:02:17Z",
     title: "제목을 넣어주세요1",
-    userId: "아이디 자리",
+    nickname: "아이디 자리",
     content:
       "I have a folder of videos and I want to take a jpeg every 60 seconds from those videos using cv2, while giving names the code listed below I only manage to get 1 screenshot fro...",
     userAvatar: "🥺",
@@ -36,7 +36,7 @@ const data = [
     createdAt: "2022-05-16T01:02:17Z",
     updatedAt: "2022-05-16T01:02:17Z",
     title: "제목을 넣어주세요1",
-    userId: "아이디 자리",
+    nickname: "아이디 자리",
     content:
       "I have a folder of videos and I want to take a jpeg every 60 seconds from those videos using cv2, while giving names the code listed below I only manage to get 1 screenshot fro...",
     userAvatar: "🥺",
@@ -67,13 +67,14 @@ const data = [
     createdAt: "2022-05-16T01:02:17Z",
     updatedAt: "2022-05-16T01:02:17Z",
     title: "제목을 넣어주세요1",
-    userId: "아이디 자리",
+    nickname: "아이디 자리",
     content:
       "I have a folder of videos and I want to take a jpeg every 60 seconds from those videos using cv2, while giving names the code listed below I only manage to get 1 screenshot fro...",
     userAvatar: "🥺",
     likes: 0,
     tags: ["c", "java"],
     views: 0,
+    recommendCount:1,
     answer: [
       {
         userId: 1823,
@@ -98,13 +99,15 @@ const data = [
     createdAt: "2022-05-16T01:02:17Z",
     updatedAt: "2022-05-16T01:02:17Z",
     title: "제목을 넣어주세요1",
-    userId: "아이디 자리",
+    nickname: "아이디 자리",
     content:
       "I have a folder of videos and I want to take a jpeg every 60 seconds from those videos using cv2, while giving names the code listed below I only manage to get 1 screenshot fro...",
     userAvatar: "🥺",
     likes: 0,
     tags: ["c", "java"],
     views: 0,
+    selection:true,
+    recommendCount:1,
     answer: [
       {
         userId: 12123,

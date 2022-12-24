@@ -8,12 +8,26 @@ const QuestionSummary = ({ props }) => {
     <QuestionSummaryContainer id="question_sumamry_{props.id}">
       <SummaryStats>
         <div className="summary_item">
-          <span className="summary_item_number">0</span>
-          <span className="summary_item_unit">votes</span>
+          <span className="summary_item_number">{props.hits || 0}</span>
+          <span className="summary_item_unit">{props.hits === 1? "vote" : "votes"
+          }</span>
         </div>
         <div className="summary_item">
-          <span className="summary_item_number">0</span>
-          <span className="summary_item_unit">answers</span>
+          {props.selection ? 
+          <span className="selected">
+            ✔ {props.recommendCount}
+          <span summary_item_unit>
+              {props.recommendCount === 1? " answer" : " answers"}
+            </span>
+          </span>
+          : 
+          <span className={props.recommendCount>=1? "recommneded" :"summary_item_number"}>
+            {props.recommendCount}
+            <span  className="summary_item_unit">
+              {props.recommendCount === 1? " answer" : " answers"}
+            </span>
+          </span>
+           }
         </div>
         <div className="summary_item">
           <span className="summary_item_number">0</span>
@@ -34,10 +48,10 @@ const QuestionSummary = ({ props }) => {
           <div className="summary_meta_user">
             <span className="user_avatar">{props.userAvatar}</span>
             <div className="user_info">
-              <div className="user_link">{props.userId}</div>
+              {/* <div className="user_link">{props.member.nickname}</div> */}
               <div className="user_awards">29</div>
               <div className="user_time">
-                asked {displayedAt(props.createdAt)}
+                {/* asked {displayedAt(props.baseTime.createdAt)} */}
               </div>
             </div>
           </div>
@@ -63,22 +77,41 @@ const SummaryStats = styled.div`
   margin-right: 16px;
   margin-bottom: 4px;
 
+
   display: flex;
   flex-direction: column;
   align-items: flex-end;
 
   & .summary_item {
-
     height: 19px;
-    margin-bottom: 4px;
-
+    margin-bottom: 5px;
     font-size: 13px;
+    /* background-color: pink; */
 
     > span {
       height: 17px;
       margin-right: 5px;
     }
+
+  & .selected {
+    width:89px;
+    height:23px;
+    padding:3px 8px;
+    color:white;
+    font-weight: 600;
+    background-color:#2f6f44;
+    border-radius: 3px;
+    line-height: 17px;
+    margin-bottom: 4px;
   }
+
+  & .recommneded {
+    border : 1px solid #4c524e;
+    border-radius: 3px;
+    color : #2f6f44;
+    padding:2px 6px;
+  }
+}
 `;
 
 const SummaryTitleContents = styled.div`
@@ -94,9 +127,10 @@ const SummaryTitleContents = styled.div`
 
   & .summary_title {
     font-size: 17px;
-    font-weight: 400;
+    font-weight: 600;
     color: #0074cc;
     margin-bottom:5px;
+    padding-bottom:5px;
 
   }
 
@@ -106,6 +140,7 @@ const SummaryTitleContents = styled.div`
 
     margin-top: -2px;
     margin-bottom: 8px;
+    padding-bottom: 2px;
 
     font-size: 13px;
     color: #3b4045;
@@ -128,9 +163,8 @@ const SummaryMeta = styled.div`
     & .summary_meta_tag {
       background: #e1ecf4;
 
-      margin-right: 2px;
-      margin-bottom: 2px;
-      padding: 3px 5px;
+      margin-right: 4px;
+      padding: 3px 6px;
 
       border-width: 1px;
       border-style: solid;

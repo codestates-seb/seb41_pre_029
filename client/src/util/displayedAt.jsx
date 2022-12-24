@@ -1,5 +1,5 @@
 function displayedAt(createdAt) {
-  const milliSeconds = new Date() - createdAt
+  const milliSeconds = new Date() - new Date(createdAt)
   const seconds = milliSeconds / 1000
   if (seconds < 60) return `방금 전`
   const minutes = seconds / 60

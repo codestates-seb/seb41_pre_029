@@ -2,8 +2,8 @@ import create from "zustand"; // create로 zustand를 불러옵니다.
 import axios from "axios";
 
 const useStore = create((set) => ({
-  async getInitialQuestions() {
-    const response = await axios.get("/questions");
+  async getInitialQuestions(url) {
+    const response = await axios.get(url);
     return response.data;
   },
   // async getInitialMembers() {
