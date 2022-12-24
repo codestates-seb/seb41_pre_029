@@ -77,4 +77,48 @@ const data = [
       totalPages: 30
   }
 
+
+  const answerData = {
+    "data": [
+        {
+            "id": 1,
+            "content": "블라블라블라1",
+            "recommendCount": 0,
+            "selection": false,
+            "createdAt": "2022-12-24T14:26:59.7627641",
+            "lastModifiedAt": "2022-12-24T14:26:59.7627641",
+            "member": {
+                "id": 1,
+                "nickName": "김회원"
+            }
+        },
+        {
+            "id": 2,
+            "content": "블라라2",
+            "recommendCount": 0,
+            "selection": false,
+            "createdAt": "2022-12-24T14:26:59.7627641",
+            "lastModifiedAt": "2022-12-24T14:26:59.7627641",
+            "member": {
+                "id": 1,
+                "nickName": "김회원"
+            }
+        },
+        {
+            "id": 3,
+            "content": "블라블라3",
+            "recommendCount": 0,
+            "selection": false,
+            "createdAt": "2022-12-24T14:26:59.7627641",
+            "lastModifiedAt": "2022-12-24T14:26:59.7627641",
+            "member": {
+                "id": 1,
+                "nickName": "김회원"
+            }
+        }
+    ],
+    "size": 3
+}
+
   export default data;
+  export { answerData as answerData }
