@@ -9,9 +9,9 @@ const Nav = ({ location }) => {
   const handleClick = (link) => {
     setActive(link);
   };
-
+  
   const menu = [
-    { name: "Questions", link: "/" || "/questionpage" },
+    { name: "Questions", link: "/" },
     { name: "Tags", link: "/tags" },
     { name: "Users", link: "/mypage" },
     { name: "Companies", link: "/companies" },
@@ -30,7 +30,7 @@ const Nav = ({ location }) => {
         <NavLink
           key={index}
           to={el.link}
-          className={el.link === active ? "active" : null}
+          className={`${el.link === active ? "active" : null} ${location.pathname === '/questionpage' && index === 0 ? "active" : null}`}
           onClick={() => handleClick(el.link)}
         >
           <div>
