@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-// import useStore from "../zustand/store.js";
+import useStore from "../zustand/store.js";
+import axios from "axios";
 
 import dummydata from '../dummydata'
 
@@ -58,14 +59,16 @@ const PageContainer = styled.div`
 
 const QuestionList = () => {
 
-//  const { getInitialQuestions } = useStore((state) => state.data);
- const [questions, setQuestions] = useState(dummydata);
-
-  //  useEffect(() => {
-  // getInitialQuestions().then((data)=>setQuestions(data.data))
-  //  },[])
-  // console.log(questions);
+ const [questions, setQuestions] = useState([]);
  
+ useEffect(()=>{
+  axios.get("https://jsonplaceholder.typicode.com/posts")
+  .then((data)=> setQuestions(data.data))
+ },[]);
+
+ console.log(questions)
+
+
  const [isActive, setIsActive] = useState("15");
  
  

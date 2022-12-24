@@ -1,13 +1,84 @@
 import styled from "styled-components";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import Footer from "../components/Footer";
 import Editor from "../components/Editors";
+import Button from "../components/Button";
+import Modal from "../components/Modal";
 
 const AddQuestionPage = () => {
-  const [title, setTitle] = useState("");
+  const navigate = useNavigate();
+  const [modal, setModal] = useState(false);
+
+  const [input, setInput] = useState({
+    title: "",
+    content: "",
+    tags: [],
+  });
+
+  const [editValue, setEditValue] = useState("");
+
+  const handleSubmit = () => {
+    if (window.confirm("Are you sure you want to submit this Question?")) {
+      const newQuestion = [
+        {
+          id: 5, //게시글 번호..
+          title: input.title,
+          content: editValue,
+          tags: input.tags,
+          recommendCount: 0,
+          hits: 0,
+          baseTime: {
+            createdAt: new Date(),
+            lastModified: new Date(),
+          },
+          selection: false,
+          commentCount: 1,
+        },
+      ];
+      axios
+        .post("https://jsonplaceholder.typicode.com/posts", {
+          userId: 11,
+          id: 111,
+          body: "editValue",
+          title: input.title,
+        })
+        .then((json) => console.log(json.data));
+      navigate("/");
+    }
+  };
+
+  const handleChange = (e) => {
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleClear = () => {
+    console.log("Clear!!");
+    setInput({
+      title: "",
+      question: "",
+      tried: "",
+      tags: "",
+    });
+    setModal(false);
+  };
+
   return (
     <>
+      {modal ? (
+        <Modal
+          title="Discard question"
+          content="Are you sure you want discard this question? This cannot be undone."
+          buttonName="Discard question"
+          setModal={() => setModal(!modal)}
+          handleClear={handleClear}
+        />
+      ) : null}
       <QuestionForm>
         <div className="title">
           <h1>Ask a public question</h1>
@@ -44,8 +115,9 @@ const AddQuestionPage = () => {
           </div>
           <input
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            name="title"
+            value={input.title}
+            onChange={handleChange}
             placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
           ></input>
         </InputBox>
@@ -55,7 +127,7 @@ const AddQuestionPage = () => {
             Introduce the problem and expand on what you put in the title.
             Minimum 20 characters.
           </div>
-          <Editor />
+          <Editor set={setEditValue} get={editValue} />
         </InputBox>
         <InputBox>
           <div className="title">
@@ -65,20 +137,30 @@ const AddQuestionPage = () => {
             Describe what you tried, what you expected to happen, and what
             actually resulted. Minimum 20 characters.
           </div>
-          <Editor />
+          <Editor set={setEditValue} get={editValue} />
         </InputBox>
         <InputBox>
-          <div className="title">Title</div>
+          <div className="title">Tags</div>
           <div className="content">
             Be specific and imagine you’re asking a question to another person.
           </div>
           <input
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
+            name="tags"
+            value={input.tags}
+            onChange={handleChange}
+            placeholder="e.g. (ajax wpf sql)"
           ></input>
+          <Button className="next_button" buttonName={"Next"} />
         </InputBox>
+        <SubmitContainer>
+          <Button
+            buttonName={"Review your question"}
+            width=""
+            onClick={handleSubmit}
+          />
+          <div onClick={setModal}>Discard draft</div>
+        </SubmitContainer>
       </QuestionForm>
       <Footer />
     </>
@@ -182,5 +264,39 @@ const InputBox = styled.div`
   > input {
     padding: 7.8px 9.2px;
     width: 96%;
+  }
+
+  > .next_button {
+    margin-top: 10px;
+    &:hover {
+      background-color: #0063bf;
+    }
+  }
+`;
+
+const SubmitContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  margin-top: 20px;
+  > * {
+    margin-right: 30px;
+    font-size: 13px;
+  }
+  > :first-child {
+    :hover {
+      background-color: #0063bf;
+    }
+  }
+
+  > div {
+    color: #c22e32;
+    cursor: pointer;
+    padding: 10.4px;
+
+    &:hover {
+      color: #ab262a;
+      background-color: #fdf2f2;
+    }
   }
 `;
