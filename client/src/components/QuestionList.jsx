@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import useStore from "../zustand/store.js";
+// import useStore from "../zustand/store.js";
 
 import dummydata from '../dummydata'
 
@@ -58,13 +58,13 @@ const PageContainer = styled.div`
 
 const QuestionList = () => {
 
- const { getInitialQuestions } = useStore((state) => state);
- const [questions,setQuestions] = useState(dummydata)
+//  const { getInitialQuestions } = useStore((state) => state.data);
+ const [questions, setQuestions] = useState(dummydata);
 
   //  useEffect(() => {
-  // getInitialQuestions('/questions').then((data)=>setQuestions(data.data))
+  // getInitialQuestions().then((data)=>setQuestions(data.data))
   //  },[])
-// console.log(questions);
+  // console.log(questions);
  
  const [isActive, setIsActive] = useState("15");
  
