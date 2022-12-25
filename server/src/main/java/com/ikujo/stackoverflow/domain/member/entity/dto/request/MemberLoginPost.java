@@ -10,9 +10,4 @@ public record MemberLoginPost(
         @NotBlank
         String password
 
-) {
-
-    public static MemberLoginPost of(String email, String password) {
-        return new MemberLoginPost(email, password);
-    }
-}
+) {}
