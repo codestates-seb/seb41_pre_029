@@ -54,6 +54,7 @@ public class Article extends BaseTime {
     }
 
     public Article(Member member, String title, String content, String tag, Long hits) {
+        this.id = null;
         this.member = member;
         this.title = title;
         this.content = content;

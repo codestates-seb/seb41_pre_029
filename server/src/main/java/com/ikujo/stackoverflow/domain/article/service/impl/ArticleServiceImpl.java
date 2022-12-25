@@ -40,13 +40,13 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleDetailResponse findArticle(Long articleId) {
         return articleRepository.findById(articleId)
                 .map(ArticleDetailResponse::from)
-                .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId));
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 게시글 입니다. articleId : " + articleId));
     }
 
     @Override
-    public ArticleDto saveArticle(ArticleRequest articlePost, Long memberId) {
+    public ArticleDto saveArticle(ArticleRequest articleRequest, Long memberId) {
         Member member = memberRepository.getReferenceById(memberId);
-        Article article = articleRepository.save(articlePost.toDto(member).toEntity());
+        Article article = articleRepository.save(articleRequest.toDto(member).toEntity());
 
         return ArticleDto.from(article);
     }
@@ -61,7 +61,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     private void verifyExistArticle(Long articleId) {
         if (articleRepository.findById(articleId).isEmpty()) {
-            throw new IllegalStateException("존재하지 않는 게시글 입니다.");
+            throw new EntityNotFoundException("존재하지 않는 게시글 입니다. - articleId : " + articleId);
         }
     }
 
