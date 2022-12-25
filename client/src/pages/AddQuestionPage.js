@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -12,12 +12,25 @@ const AddQuestionPage = () => {
   const navigate = useNavigate();
   const [modal, setModal] = useState(false);
   const [tags, setTags] = useState([]);
+  const [firstContent, setFirstContent] = useState("");
+  const [secondContent, setSecondContent] = useState("");
 
   const [input, setInput] = useState({
     title: "",
-    content: "",
+    firstContent: "",
+    secondContent: "",
     tags: "",
   });
+  console.log(input);
+
+  useEffect(() => {
+    setInput({
+      ...input,
+      tags,
+      firstContent,
+      secondContent,
+    });
+  }, [tags, firstContent, secondContent]);
 
   const addTags = (event) => {
     let inputValue = event.target.value;
@@ -25,10 +38,6 @@ const AddQuestionPage = () => {
       setTags([...tags, inputValue]);
       event.target.value = "";
     }
-    setInput({
-      ...input,
-      tags: tags,
-    });
   };
 
   const removeTags = (indexToRemove) => {
@@ -37,13 +46,7 @@ const AddQuestionPage = () => {
         return idx !== indexToRemove;
       })
     );
-    setInput({
-      ...input,
-      tags: tags,
-    });
   };
-
-  const [editValue, setEditValue] = useState("");
 
   const handleSubmit = () => {
     if (window.confirm("Are you sure you want to submit this Question?")) {
@@ -55,6 +58,7 @@ const AddQuestionPage = () => {
           body: "editValue",
           title: input.title,
           tags: input.tags,
+          content: input.firstContent + input.secondContent,
         })
         .then((json) => console.log(json.data));
       navigate("/");
@@ -137,7 +141,7 @@ const AddQuestionPage = () => {
             Introduce the problem and expand on what you put in the title.
             Minimum 20 characters.
           </div>
-          <Editor set={setEditValue} get={editValue} />
+          <Editor set={setFirstContent} get={firstContent} />
         </InputBox>
         <InputBox>
           <div className="title">
@@ -147,7 +151,7 @@ const AddQuestionPage = () => {
             Describe what you tried, what you expected to happen, and what
             actually resulted. Minimum 20 characters.
           </div>
-          <Editor set={setEditValue} get={editValue} />
+          <Editor set={setSecondContent} get={secondContent} />
         </InputBox>
         <InputBox className="tag_box">
           <div className="title">Tags</div>
