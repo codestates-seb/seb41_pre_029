@@ -9,6 +9,10 @@ public record ArticleRequest(
         String tag
 ) {
 
+    public static ArticleRequest of(String title, String content, String tag) {
+        return new ArticleRequest(title, content, tag);
+    }
+
     public ArticleDto toDto(Member member) {
         return ArticleDto.of(
                 member,

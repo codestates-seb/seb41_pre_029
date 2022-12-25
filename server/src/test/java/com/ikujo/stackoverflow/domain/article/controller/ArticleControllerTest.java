@@ -3,6 +3,8 @@ package com.ikujo.stackoverflow.domain.article.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ikujo.stackoverflow.config.LocalDateTimeSerializer;
+import com.ikujo.stackoverflow.domain.article.dto.ArticleDto;
+import com.ikujo.stackoverflow.domain.article.dto.request.ArticleRequest;
 import com.ikujo.stackoverflow.domain.article.dto.response.ArticleDetailResponse;
 import com.ikujo.stackoverflow.domain.article.service.ArticleService;
 import com.ikujo.stackoverflow.domain.member.entity.dto.MemberIdentityDto;
@@ -24,9 +26,10 @@ import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -84,7 +87,7 @@ class ArticleControllerTest {
 
         //when
         ResultActions actions =
-                mockMvc.perform(get("/questions/" + articleId)
+                mockMvc.perform(get("/questions/{article-id}", articleId)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content));
@@ -94,6 +97,47 @@ class ArticleControllerTest {
                 .andExpect(jsonPath("$.data.id").value(articleDetail.id()))
                 .andExpect(jsonPath("$.data.member.nickname").value(articleDetail.member().nickname()))
                 .andExpect(jsonPath("$.data.title").value(articleDetail.title()));
+    }
+
+    @DisplayName("[API][POST] 게시글 작성 - 정상 호출")
+    @Test
+    void postArticle() throws Exception {
+        //given
+        ArticleDto articleDto = createArticleDto();
+        given(articleService.saveArticle(any(ArticleRequest.class), anyLong()))
+                .willReturn(articleDto);
+
+        String content = gson.toJson(articleDto);
+
+        //when
+        ResultActions actions =
+                mockMvc.perform(post("/questions")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content));
+
+        //then
+        actions.andExpect(status().isCreated())
+                .andExpect(jsonPath("$.data.title").value(articleDto.title()))
+                .andExpect(jsonPath("$.data.content").value(articleDto.content()));
+    }
+
+    @DisplayName("[API][DELETE] 게시글 삭제 - 정상 호출")
+    @Test
+    void deleteArticle() throws Exception {
+        //given
+        Long articleId = 1L;
+        willDoNothing().given(articleService).deleteArticle(articleId);
+
+        //when
+        ResultActions actions =
+                mockMvc.perform(delete("/questions/{article-id}", articleId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON));
+
+        //then
+        actions.andExpect(status().isNoContent());
+        then(articleService).should().deleteArticle(articleId);
     }
 
     private ArticleDetailResponse createArticleDetailResponse() {
@@ -106,6 +150,15 @@ class ArticleControllerTest {
                 1,
                 11L,
                 BaseTimeDto.of(LocalDateTime.now(), LocalDateTime.now())
+        );
+    }
+
+    private ArticleDto createArticleDto() {
+        return ArticleDto.of(
+                null,
+                "Test Title",
+                "Test Content",
+                "#Java#Stack#Over#flow"
         );
     }
 

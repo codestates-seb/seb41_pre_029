@@ -44,7 +44,7 @@ public class ArticleController {
     }
 
     @PostMapping()
-    public ResponseEntity postNewArticle(@Valid @RequestBody ArticleRequest articlePost) {
+    public ResponseEntity postArticle(@Valid @RequestBody ArticleRequest articlePost) {
         // FIXME : 회원 아이디를 어떻게 받을지 결정되면 이 부분만 수정하면 된다.
         Long memberId = 1L ;
         ArticleDto articleDto = articleService.saveArticle(articlePost, memberId);
