@@ -21,7 +21,7 @@ const AddQuestionPage = () => {
     secondContent: "",
     tags: "",
   });
-  console.log(input);
+  // console.log(input);
 
   useEffect(() => {
     setInput({
@@ -53,14 +53,24 @@ const AddQuestionPage = () => {
       //임시
       axios
         .post("https://jsonplaceholder.typicode.com/posts", {
-          userId: 11,
-          id: 111,
-          body: "editValue",
-          title: input.title,
-          tags: input.tags,
-          content: input.firstContent + input.secondContent,
+          data: {
+            member: {
+              nickname: "2929",
+              memberId: 29,
+            },
+            id: 111,
+            title: input.title,
+            content: input.firstContent + input.secondContent,
+            tags: input.tags,
+            recommendCount: 0,
+            hits: 0,
+            baseTime: {
+              createAt: new Date(),
+              lastModifiedAt: new Date(),
+            },
+          },
         })
-        .then((json) => console.log(json.data));
+        .then((res) => console.log(res.data));
       navigate("/");
     }
   };
