@@ -33,7 +33,7 @@ const MainBar = styled.div`
     }
     > .go_add_question {
       :hover {
-        background-color: #f0c6cd;
+        background-color: #f5704a;
       }
     }
   }
