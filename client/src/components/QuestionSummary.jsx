@@ -16,7 +16,7 @@ const QuestionSummary = ({ props }) => {
           {props.selection ? 
           <span className="selected">
             ✔ {props.recommendCount}
-          <span summary_item_unit>
+          <span className="summary_item_unit">
               {props.recommendCount === 1? " answer" : " answers"}
             </span>
           </span>
