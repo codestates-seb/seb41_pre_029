@@ -11,39 +11,50 @@ import Modal from "../components/Modal";
 const AddQuestionPage = () => {
   const navigate = useNavigate();
   const [modal, setModal] = useState(false);
+  const [tags, setTags] = useState([]);
 
   const [input, setInput] = useState({
     title: "",
     content: "",
-    tags: [],
+    tags: "",
   });
+
+  const addTags = (event) => {
+    let inputValue = event.target.value;
+    if (inputValue.length !== 0 && !tags.includes(inputValue)) {
+      setTags([...tags, inputValue]);
+      event.target.value = "";
+    }
+    setInput({
+      ...input,
+      tags: tags,
+    });
+  };
+
+  const removeTags = (indexToRemove) => {
+    setTags(
+      tags.filter((__, idx) => {
+        return idx !== indexToRemove;
+      })
+    );
+    setInput({
+      ...input,
+      tags: tags,
+    });
+  };
 
   const [editValue, setEditValue] = useState("");
 
   const handleSubmit = () => {
     if (window.confirm("Are you sure you want to submit this Question?")) {
-      const newQuestion = [
-        {
-          id: 5, //게시글 번호..
-          title: input.title,
-          content: editValue,
-          tags: input.tags,
-          recommendCount: 0,
-          hits: 0,
-          baseTime: {
-            createdAt: new Date(),
-            lastModified: new Date(),
-          },
-          selection: false,
-          commentCount: 1,
-        },
-      ];
+      //임시
       axios
         .post("https://jsonplaceholder.typicode.com/posts", {
           userId: 11,
           id: 111,
           body: "editValue",
           title: input.title,
+          tags: input.tags,
         })
         .then((json) => console.log(json.data));
       navigate("/");
@@ -65,6 +76,7 @@ const AddQuestionPage = () => {
       tried: "",
       tags: "",
     });
+    setTags([]);
     setModal(false);
   };
   return (
@@ -137,18 +149,36 @@ const AddQuestionPage = () => {
           </div>
           <Editor set={setEditValue} get={editValue} />
         </InputBox>
-        <InputBox>
-          <div className="title">Title</div>
+        <InputBox className="tag_box">
+          <div className="title">Tags</div>
           <div className="content">
             Be specific and imagine you’re asking a question to another person.
           </div>
-          <input
-            type="text"
-            name="tags"
-            value={input.tags}
-            onChange={handleChange}
-            placeholder="e.g. (ajax wpf sql)"
-          ></input>
+          <TagsInput>
+            <ul id="tags">
+              {tags.map((tag, index) => (
+                <li key={index} className="tag">
+                  <span className="tag_title">{tag}</span>
+                  <span
+                    className="tag_close_icon"
+                    onClick={() => removeTags(index)}
+                  >
+                    &times;
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <input
+              className="tag_input"
+              type="text"
+              onKeyUp={(e) => {
+                if (e.key === "Enter") {
+                  addTags(e);
+                }
+              }}
+              placeholder="Press enter to add tags"
+            />
+          </TagsInput>
           <Button className="next_button" buttonName={"Next"} />
         </InputBox>
         <SubmitContainer>
@@ -245,6 +275,7 @@ const InputBox = styled.div`
   max-width: 800px;
   border-radius: 3px;
   border: 1px solid #e3e6e8;
+
   > .title {
     font-size: 17px;
     font-weight: 600;
@@ -258,6 +289,14 @@ const InputBox = styled.div`
   > input {
     padding: 7.8px 9.2px;
     width: 96%;
+    border-radius: 3px;
+    border: 1px solid #e3e6e8;
+
+    &:focus {
+      box-shadow: 1px 1px 1px 2px #cde9fe, -1px -1px 1px 2px #cde9fe;
+      outline: none !important;
+      border-color: #39739d;
+    }
   }
 
   > .next_button {
@@ -265,6 +304,80 @@ const InputBox = styled.div`
     &:hover {
       background-color: #0063bf;
     }
+  }
+`;
+
+const TagsInput = styled.div`
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  min-height: 48px;
+  width: 480px;
+  padding: 0 8px;
+  border: 1px solid rgb(214, 216, 218);
+  border-radius: 6px;
+
+  > ul {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 10px 0 0 0;
+
+    > .tag {
+      width: auto;
+      height: 24px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      /* justify-content: center; */
+      color: #39739d;
+      padding: 1px 4px;
+      font-size: 12px;
+      list-style: none;
+      border-radius: 3px;
+      margin: 2px;
+      background: #e1ecf4;
+      line-height: 22px;
+      > .tag_close_icon {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 13px;
+        height: 13px;
+        font-size: 20px;
+        font-weight: 700;
+        margin-top: -2px;
+        margin-left: 4px;
+        color: #39739d;
+        border-radius: 3px;
+        background: #e1ecf4;
+        cursor: pointer;
+        padding: 1px;
+        &:hover {
+          color: #e1ecf4;
+          background: #39739d;
+          padding-bottom: 3px;
+          margin-top: 3px;
+        }
+      }
+    }
+  }
+
+  > input {
+    flex: 1;
+    border: none;
+    height: 46px;
+    font-size: 14px;
+    margin-left: 7px;
+    padding: 4px 0 0 0;
+    :focus {
+      outline: transparent;
+    }
+  }
+
+  &:focus-within {
+    border: 1px solid #39739d;
+    box-shadow: 1px 1px 1px 2px #cde9fe, -1px -1px 1px 2px #cde9fe;
   }
 `;
 

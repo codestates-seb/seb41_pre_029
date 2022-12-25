@@ -31,6 +31,11 @@ const MainBar = styled.div`
       text-align: left;
       letter-spacing: normal;
     }
+    > .go_add_question {
+      :hover {
+        background-color: #f0c6cd;
+      }
+    }
   }
 
   & .data_controller {
@@ -62,6 +67,7 @@ const MainPage = ({ data }) => {
           <div className="head">
             <h1>All Questions</h1>
             <Button
+              className="go_add_question"
               buttonName="Ask Question"
               onClick={() => navigate("/addquestionpage")}
               width="103px"
