@@ -19,7 +19,7 @@ public record MemberDto(
         LocalDateTime lastModifiedAt
 ) {
 
-    public MemberDto of(MemberLoginPost memberLoginPost) {
+    public static MemberDto of(MemberLoginPost memberLoginPost) {
         return new MemberDto(
                 null,
                 memberLoginPost.email(),
@@ -30,32 +30,33 @@ public record MemberDto(
                 null);
     }
 
-    public MemberDto of(MemberSignupPost memberSignupPost) {
+    public static MemberDto of(MemberSignupPost memberSignupPost) {
         return new MemberDto(
                 null,
                 memberSignupPost.email(),
                 memberSignupPost.password(),
                 memberSignupPost.nickname(),
                 null,
-                null,
-                null
+                LocalDateTime.now(),
+                LocalDateTime.now()
                 );
     }
 
-    public MemberDto of(Long id, MemberProfilePatch memberProfilePatch) {
-
-        Profile profile = new Profile(memberProfilePatch.location(), memberProfilePatch.title(), memberProfilePatch.aboutMe());
-
-        return new MemberDto(
-                id,
-                null,
-                null,
-                memberProfilePatch.nickname(),
-                profile,
-                null,
-                null
-                );
-    }
+    // 리팩토링 필요!
+//    public static MemberDto of(Long id, MemberProfilePatch memberProfilePatch) {
+//
+//        Profile profile = new Profile(memberProfilePatch.location(), memberProfilePatch.title(), memberProfilePatch.aboutMe());
+//
+//        return new MemberDto(
+//                id,
+//                null,
+//                null,
+//                memberProfilePatch.nickname(),
+//                profile,
+//                null,
+//                null
+//                );
+//    }
 
     public Member toEntity() {
         return Member.of(
