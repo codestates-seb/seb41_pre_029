@@ -48,10 +48,10 @@ const QuestionSummary = ({ props }) => {
           <div className="summary_meta_user">
             <span className="user_avatar">{props.userAvatar}</span>
             <div className="user_info">
-              {/* <div className="user_link">{props.member.nickname}</div> */}
+              <div className="user_link">{props.member.nickname}</div>
               <div className="user_awards">29</div>
               <div className="user_time">
-                {/* asked {displayedAt(props.baseTime.createdAt)} */}
+                asked {displayedAt(props.baseTime.createdAt)}
               </div>
             </div>
           </div>
