@@ -15,9 +15,4 @@ public record MemberSignupPost(
         @NotBlank
         String nickname
 
-) {
-
-    public static MemberSignupPost of(String email, String password, String nickname) {
-        return new MemberSignupPost(email, password, nickname);
-    }
-}
+) {}
