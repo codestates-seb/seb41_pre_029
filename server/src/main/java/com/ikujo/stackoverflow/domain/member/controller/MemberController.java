@@ -2,8 +2,12 @@ package com.ikujo.stackoverflow.domain.member.controller;
 
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.Profile;
+import com.ikujo.stackoverflow.domain.member.entity.dto.MemberDto;
+import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberLoginPost;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberProfilePatch;
+import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberSignupPost;
 import com.ikujo.stackoverflow.domain.member.entity.dto.response.MemberResponse;
+import com.ikujo.stackoverflow.domain.member.service.MemberService;
 import com.ikujo.stackoverflow.global.dto.SingleResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,51 +21,48 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MemberController {
 
+    private final MemberService memberService;
+
     @GetMapping("/{id}")
     public ResponseEntity getMemberProfile(@PathVariable("id") Long id) {
-        Member member = new Member(1L,
-                "aaa@gmail.com",
-                "1234",
-                "김회원",
-                new Profile("대한민국", "안녕하세요", "김회원입니다~"));
+        Member findMember = memberService.findMember(id);
+        MemberResponse response = MemberResponse.of(findMember);
 
-        MemberResponse memberResponseDto = MemberResponse.of(member);
-
-        return new ResponseEntity<>(new SingleResponseDto<>(memberResponseDto), HttpStatus.OK);
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity patchMemberProfile(@PathVariable("id") Long id,
                                              @Valid @RequestBody MemberProfilePatch profilePatchDto) {
 
-        Member member = new Member(1L,
-                "aaa@gmail.com",
-                "1234",
-                "김회원",
-                new Profile("대한민국", "안녕하세요", "김회원입니다~"));
+        Member updateMember = memberService.updateMember(id, profilePatchDto);
 
-        MemberResponse memberResponse = MemberResponse.of(member);
+        MemberResponse response = MemberResponse.of(updateMember);
 
-        return new ResponseEntity<>(new SingleResponseDto<>(memberResponse), HttpStatus.OK);
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteMember(@PathVariable("id") Long id) {
+        memberService.deleteMember(id);
 
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
     @PostMapping("/signup")
-    public ResponseEntity signup() {
+    public ResponseEntity signup(@Valid @RequestBody MemberSignupPost memberSignupPost) {
+        Member member = memberService.createMember(MemberDto.of(memberSignupPost).toEntity());
+        MemberResponse response = MemberResponse.of(member);
 
-        return ResponseEntity.created(null).build();
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity login() {
+    public ResponseEntity login(@Valid @RequestBody MemberLoginPost memberLoginPost) {
+        memberService.loginMember(memberLoginPost);
 
-        return ResponseEntity.ok(null);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
