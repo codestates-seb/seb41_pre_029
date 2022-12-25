@@ -87,4 +87,11 @@ public class ArticleDummyRepository {
         return articles;
     }
 
+    public Article save(Article toEntity) {
+        return null;
+    }
+
+    public void deleteById(Long articleId) {
+
+    }
 }
