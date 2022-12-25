@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
@@ -52,6 +52,7 @@ const SideBar = styled.div`
 
 const MainPage = ({ data }) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -62,7 +63,7 @@ const MainPage = ({ data }) => {
             <h1>All Questions</h1>
             <Button
               buttonName="Ask Question"
-              link="/addquestionpage"
+              onClick={() => navigate("/addquestionpage")}
               width="103px"
             />
           </div>
