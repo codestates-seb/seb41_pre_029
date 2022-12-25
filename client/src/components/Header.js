@@ -95,11 +95,15 @@ const IconLi = styled.li`
   }
 `;
 const Header = () => {
-  const [isLogin, setIslogin] = useState(false);
+  const [searchdata, setSearchData] = useState("");
+  const [isLogin, setIsLogin] = useState(false);
+  const changeValue = (e) => {
+    setSearchData(e.target.value);
+    console.log(searchdata);
+  };
 
   const navigate = useNavigate();
   const clickBtn = (value) => {
-    console.log(value);
     if (value === "Log Out") {
       // navigate("/logoutpage");
     } else if (value === "Log In") {
@@ -163,7 +167,11 @@ const Header = () => {
             <Li>For Teams</Li>
           </Ul>
           <InputDiv>
-            <Input placeholder="Search…" />
+            <Input
+              placeholder="Search…"
+              value={searchdata}
+              onChange={changeValue}
+            />
           </InputDiv>
           {isLogin ? (
             <>
