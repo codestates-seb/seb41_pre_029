@@ -41,4 +41,5 @@ public class Member extends BaseTime {
     public static Member of(String email, String password, String nickname, Profile profile) {
         return new Member(email, password, nickname, profile);
     }
+
 }
