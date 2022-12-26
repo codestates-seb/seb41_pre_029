@@ -72,10 +72,7 @@ class MemberControllerTest {
                 .andExpect(jsonPath("$.data.id").value(memberResponse.id()))
                 .andExpect(jsonPath("$.data.email").value(memberResponse.email()))
                 .andExpect(jsonPath("$.data.nickname").value(memberResponse.nickname()))
-                .andDo(document("signup",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())
-                ));
+                .andReturn();
     }
 
 }
