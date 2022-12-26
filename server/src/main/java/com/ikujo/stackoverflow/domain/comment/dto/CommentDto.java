@@ -19,12 +19,12 @@ public record CommentDto(Long id,
 
     public static CommentDto of(CommentPost commentPost, Article article, Member member) {
         return new CommentDto(null, article, member, commentPost.content(), null,
-                null, null, null, null);
+                null, null, LocalDateTime.now(), LocalDateTime.now());
     }
 
     public static CommentDto of(Comment comment, CommentPatch commentPatch, Article article, Member member) {
         return new CommentDto(comment.getId(), article, member, commentPatch.content(), comment.getSelection(),
-                comment.getRecommendCount(), comment.getCommentRecommendList(), comment.getCreatedAt(), null);
+                comment.getRecommendCount(), comment.getCommentRecommendList(), comment.getCreatedAt(), LocalDateTime.now());
     }
 
     public Comment toEntity() {
