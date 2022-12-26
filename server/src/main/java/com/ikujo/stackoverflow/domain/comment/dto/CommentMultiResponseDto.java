@@ -16,5 +16,3 @@ public class CommentMultiResponseDto<T> {
         this.size = size;
     }
 }
-
-
