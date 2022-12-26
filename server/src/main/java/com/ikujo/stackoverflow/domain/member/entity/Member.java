@@ -42,4 +42,9 @@ public class Member extends BaseTime {
         return new Member(email, password, nickname, profile);
     }
 
+    public Member(Long id, String nickname) {
+        this.id = id;
+        this.nickname = nickname;
+    }
+
 }

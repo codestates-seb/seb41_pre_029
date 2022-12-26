@@ -145,7 +145,6 @@ const EditProfile = () => {
       twitter,
       gitHub,
       fullName,
-
     };
     console.log(data);
     clear();
@@ -189,6 +188,7 @@ const EditProfile = () => {
           />
           <Title className="editor">About me</Title>
           <Editor set={setEditValue} get={editValue} />
+          {editValue}
         </FormList>
         <Title>Links</Title>
         <FormList className="link">

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
+import Theme from "../components/Theme";
 import EditProfile from "../components/EditProfile";
 import DeleteProfile from "../components/DeleteProfile";
 import Nav from "../components/Nav";
@@ -297,7 +298,7 @@ const MyPage = () => {
                 </div>
               </div>
               <div className="content-interface">
-                {page === "theme" && <div>theme</div>}
+                {page === "theme" && <Theme />}
                 {page === "edit" && <EditProfile />}
                 {page === "delete" && <DeleteProfile />}
               </div>

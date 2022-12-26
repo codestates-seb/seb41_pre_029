@@ -44,6 +44,7 @@ const EditQuestion = ({originData}) => {
 
   /* 태그 추가, 삭제 */
   const addTags = (event) => {
+
     let inputValue = event.target.value;
     if (inputValue.length !== 0 && !tags.includes(inputValue)) {
       setTags([...tags, inputValue]);
@@ -58,6 +59,7 @@ const EditQuestion = ({originData}) => {
       })
     );
   };
+
 
   // const handleSubmit = ()=>{
 
@@ -80,6 +82,7 @@ const EditQuestion = ({originData}) => {
           value={input.title}
           name="title"
           onChange={handleChange}>
+
           </input>
         </InputBox>
           <InputBox>
@@ -117,7 +120,9 @@ const EditQuestion = ({originData}) => {
         </InputBox>
         <InputBox>
           <div className="edit_summary">Edit Summary</div>
+
           <input className="edit_summary_input" placeholder="brieflt explain your changes" name="summary" onChange={handleChange}>
+
           </input>
         </InputBox>
         <SubmitContainer>

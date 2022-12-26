@@ -2,13 +2,9 @@ package com.ikujo.stackoverflow.domain.member.service;
 
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.Profile;
-import com.ikujo.stackoverflow.domain.member.entity.dto.MemberDto;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberLoginPost;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberProfilePatch;
-import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberSignupPost;
-import com.ikujo.stackoverflow.domain.member.entity.dto.response.MemberResponse;
 import com.ikujo.stackoverflow.domain.member.repository.MemberRepository;
-import com.ikujo.stackoverflow.domain.member.repository.StubMemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -43,15 +39,14 @@ public class MemberService {
     public Member updateMember(Long id, MemberProfilePatch memberProfilePatch) {
         Member findMember = findVerifiedMember(id);
 
-        if (findMember.getProfile() == null) {
-            findMember.setProfile(new Profile());
-        }
-
         // 닉네임은 필수
         Optional.of(memberProfilePatch.nickname())
                 .ifPresent(findMember::setNickname);
 
         // 프로필 정보는 null 허용
+        Optional.of(memberProfilePatch.image())
+                .ifPresent(image -> findMember.getProfile().setImage(image));
+
         Optional.ofNullable(memberProfilePatch.location())
                 .ifPresent(location -> findMember.getProfile().setLocation(location));
 
@@ -72,6 +67,8 @@ public class MemberService {
         if (!findMember.isPresent()) {
             throw new RuntimeException("존재하지 않는 이메일입니다.");
         }
+
+        // 비밀번호 검증 로직
     }
 
     /**
@@ -101,7 +98,7 @@ public class MemberService {
     }
 
     /**
-     * 회원 조회 검증
+     * 회원 조회 검증 (코드 단순화)
      */
     @Transactional(readOnly = true)
     public Member findVerifiedMember(Long id) {

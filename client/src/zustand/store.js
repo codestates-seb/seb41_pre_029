@@ -2,6 +2,7 @@ import create from "zustand"; // create로 zustand를 불러옵니다.
 import axios from "axios";
 
 const useStore = create((set) => ({
+
   questionData: [
     {
       member: {
@@ -124,7 +125,6 @@ const useStore = create((set) => ({
     console.log("들어옴? :" + question);
     set((state) => ({ questionData: state.questionData.push(question) }));
   },
-
   // async getInitialMembers() {
   //   const response = await axios.get("/members/1");
   //   return response.data;

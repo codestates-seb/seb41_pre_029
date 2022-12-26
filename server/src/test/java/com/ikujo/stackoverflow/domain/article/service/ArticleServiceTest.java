@@ -127,7 +127,7 @@ class ArticleServiceTest {
                 "test@gmail.com",
                 "1234",
                 "테스트",
-                new Profile("대한민국", "안녕하세요", "테스트입니다~"));
+                new Profile("이미지", "대한민국", "안녕하세요", "테스트입니다~"));
     }
 
     private ArticleRequest createArticleRequest() {

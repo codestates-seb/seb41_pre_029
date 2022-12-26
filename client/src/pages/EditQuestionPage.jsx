@@ -9,6 +9,7 @@ const EditQuestionPage = () =>{
     const {id} = useParams();
 
     const navigate = useNavigate();
+
     const {questionData} =  useStore((state) => state)
 
     useEffect(()=>{
@@ -22,6 +23,7 @@ const EditQuestionPage = () =>{
         }
     }
     },[id,questionData]);
+
     return <div>
       {originData && <EditQuestion originData={originData}/>}
 

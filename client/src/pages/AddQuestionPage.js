@@ -21,6 +21,7 @@ const AddQuestionPage = () => {
 
   // const { createQuestion, questionData } = useStore((state) => state);
 
+
   const [input, setInput] = useState({
     title: "",
     content: "",
@@ -47,6 +48,10 @@ const AddQuestionPage = () => {
       event.target.value = "";
     }
   };
+
+  // '#123#456#태그-태그#'
+
+  //공백은 하이픈
 
   const removeTags = (indexToRemove) => {
     setTags(
@@ -119,6 +124,7 @@ const AddQuestionPage = () => {
     });
     setTags([]);
     setContent("");
+
     setModal(false);
   };
 
