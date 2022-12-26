@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 import Nav from "./Nav";
 import Footer from "./Footer";
@@ -7,14 +7,44 @@ import CEditor from './CKEditor';
 import Parser from "./Parser";
 import Button from "./Button";
 
-
 const EditQuestion = ({originData}) => {
     const location = {pathname:'/'}
-    const [content, setContent] = useState(originData[0].content);
-    const [title,setTitle] = useState(originData[0].title);
-    const [tags, setTags] = useState(originData[0].tags);
+    const [content, setContent] = useState(originData.content);
+    const [title,setTitle] = useState(originData.title);
+    const [tags, setTags] = useState(originData.tags);
+    const [submitTags, setSubmitTags] = useState("");
+    const[summary, setSummary] = useState(originData.summary || "");
 
-    const addTags = (event) => {
+    const [input, setInput] = useState({
+      title,
+      tags,
+      content,
+      summary
+    });
+
+    useEffect(() => {
+      setInput({
+        submitTags,
+        content,
+      });
+    }, [submitTags, content]);
+
+  /* 태그 제출 형식으로 변경 */
+   useEffect(() => {
+    setSubmitTags(`#${tags.map((el) => el.replaceAll(" ", "-")).join("#")}`);
+  });
+  // console.log(input);
+
+  const handleChange = (e) => {
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  /* 태그 추가, 삭제 */
+  const addTags = (event) => {
+
     let inputValue = event.target.value;
     if (inputValue.length !== 0 && !tags.includes(inputValue)) {
       setTags([...tags, inputValue]);
@@ -30,7 +60,11 @@ const EditQuestion = ({originData}) => {
     );
   };
 
-  console.log(content)
+
+  // const handleSubmit = ()=>{
+
+  // }
+
   return (
     <>
     <EditContainer>
@@ -44,7 +78,11 @@ const EditQuestion = ({originData}) => {
       </YellowBoxContainer>
         <InputBox>
           <div className="title">Title</div>
-          <input className="title_input" value={title}>
+          <input className="title_input"
+          value={input.title}
+          name="title"
+          onChange={handleChange}>
+
           </input>
         </InputBox>
           <InputBox>
@@ -82,7 +120,9 @@ const EditQuestion = ({originData}) => {
         </InputBox>
         <InputBox>
           <div className="edit_summary">Edit Summary</div>
-          <input className="edit_summary_input" placeholder="brieflt explain your changes">
+
+          <input className="edit_summary_input" placeholder="brieflt explain your changes" name="summary" onChange={handleChange}>
+
           </input>
         </InputBox>
         <SubmitContainer>
