@@ -196,6 +196,7 @@ const QuestionPage = () => {
   // }, [])
 
   const navigate = useNavigate()
+
   const params = useParams();
   const questionId = Number(params.id);
 

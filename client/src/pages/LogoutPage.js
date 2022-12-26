@@ -188,7 +188,9 @@ const LogoutPage = () => {
           </DeviceLogout>
           <LoginChoice>
             <LogoutButton onClick={() => logoutHandler()}>Log out</LogoutButton>
-            <CancelButton>Cancel</CancelButton>
+            <Link to={"/"}>
+              <CancelButton>Cancel</CancelButton>
+            </Link>
           </LoginChoice>
           <Explanation>
             If you’re on a shared computer, remember to log out of your Open ID

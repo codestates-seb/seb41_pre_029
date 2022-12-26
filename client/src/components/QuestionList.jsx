@@ -60,6 +60,7 @@ const PageContainer = styled.div`
 const QuestionList = ({ data }) => {
   const { getInitialQuestions } = useStore((state) => state);
   const [questions, setQuestions] = useState(dummydata);
+
   console.log(data);
 
   const id =1;
@@ -71,7 +72,6 @@ useEffect(()=>{
   const filtered = questions.filter(
     (el) => el.content.includes(data) || el.title.includes(data)
   );
-  console.log(filtered);
 
   console.log(filtered + "1");
   const [isActive, setIsActive] = useState("15");
