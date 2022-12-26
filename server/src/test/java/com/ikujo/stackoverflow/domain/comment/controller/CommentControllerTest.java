@@ -63,7 +63,7 @@ class CommentControllerTest {
         String content = gson.toJson(commentPost);
 
         Member member = new Member(1L, "j01039519778@gmail.com", "111222333444", "greatshine",
-                new Profile("동해", "자바 스프링 개발자", "언제나 화이팅"));
+                new Profile("이미지","동해", "자바 스프링 개발자", "언제나 화이팅"));
         Article article = new Article(1L, member, "자바","이거 어떻게 하나요", "Java", 1L, null, null);
 
         memberRepository.save(member);
