@@ -12,15 +12,18 @@ import com.ikujo.stackoverflow.domain.comment.entity.Comment;
 import com.ikujo.stackoverflow.domain.comment.service.CommentService;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.Profile;
+import com.ikujo.stackoverflow.domain.member.entity.dto.MemberIdentityDto;
 import com.ikujo.stackoverflow.global.dto.BaseTimeDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -28,15 +31,19 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CommentController.class)
 @MockBean(JpaMetamodelMappingContext.class)
+@AutoConfigureRestDocs
 public class MockCommentControllerTest {
 
     @Autowired
@@ -61,6 +68,7 @@ public class MockCommentControllerTest {
     void postComment() throws Exception {
 
         //given
+        Article article = createArticle();
         CommentDto commentDto = createCommentDto();
         given(commentService.createComment(anyLong(), any(CommentPost.class)))
                 .willReturn(commentDto.toEntity());
@@ -69,16 +77,30 @@ public class MockCommentControllerTest {
 
         //when
         ResultActions actions =
-                mockMvc.perform(post("/questions/{article-id}/comments", 1L)
+                mockMvc.perform(post("/questions/{article-id}/comments", article.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(content)
-                );
+                        .content(content));
 
         //then
         actions.andExpect(status().isCreated())
                 .andExpect(jsonPath("$.data.content").value(commentDto.content()));
-
+//                .andDo(document("post-Comment",
+//                        preprocessRequest(prettyPrint()),
+//                        preprocessResponse(prettyPrint()),
+//                        requestFields(
+//                                List.of(
+//                                        fieldWithPath("content").type(JsonFieldType.STRING).description("본문")
+//                                )
+//                        ),
+//                        responseFields(
+//                                List.of(
+//                                        fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터"),
+//                                        fieldWithPath("data.commentId").type(JsonFieldType.NUMBER).description("답글 아이디"),
+//                                        fieldWithPath("data.recommendCount").type(JsonFieldType.NUMBER).description("추천 수"),
+//                                        fieldWithPath("data.selection").type(JsonFieldType.BOOLEAN).description("채택 여부")
+//                                )
+//                        )));
     }
 
     @DisplayName("[API][PATCH] 게시글 수정")
@@ -187,7 +209,6 @@ public class MockCommentControllerTest {
 
 
 
-
     private Member createMember() {
         return new Member(1L, "j01039519778@gmail.com", "111222333444", "greatshine",
                 new Profile("이미지","동해", "자바 스프링 개발자", "언제나 화이팅"));
@@ -199,7 +220,7 @@ public class MockCommentControllerTest {
     }
 
     private Comment createComment() {
-        return new Comment(1L, createArticle(), createMember(), "블라블라블라", false, 0,
+        return new Comment(1L, createArticle(), createMember(), "블라블라", false, 0,
                 null);
     }
 
@@ -226,7 +247,7 @@ public class MockCommentControllerTest {
                 "블라블라블라",
                 0,
                 false,
-                createComment().creator(),
+                MemberIdentityDto.of(1L, "일쿠조"),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -238,7 +259,7 @@ public class MockCommentControllerTest {
                 "블라",
                 0,
                 false,
-                createComment().creator(),
+                MemberIdentityDto.of(1L, "일쿠조"),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
