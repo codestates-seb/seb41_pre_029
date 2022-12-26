@@ -3,8 +3,9 @@ import { ReactComponent as Logo } from "../assets/subLogo.svg";
 import { ReactComponent as SvgGit } from "../assets/gitHub.svg";
 import { ReactComponent as Google } from "../assets/google.svg";
 import { ReactComponent as Facebook } from "../assets/facebook.svg";
+import { ReactComponent as Screamer } from "../assets/screamer.svg";
 import Button from "../components/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 //스타일 감싸는 div
@@ -51,6 +52,11 @@ const Span = styled.span`
     bottom: 6px;
     left: 45%;
   }
+  .screamer {
+    position: absolute;
+    bottom: -26px;
+    left: 90%;
+  }
 `;
 const LoginInput = styled.input`
   padding: 8px 9px;
@@ -61,6 +67,9 @@ const LoginInput = styled.input`
   font-size: 13px;
   font-family: inherit;
   width: auto;
+  &.valid {
+    border-color: hsl(358, 62%, 52%);
+  }
 `;
 const Label = styled.div`
   padding: 5px;
@@ -94,6 +103,11 @@ const Form = styled.form`
   justify-content: center;
   box-sizing: inherit;
   margin: 12px;
+  span {
+    font-size: 12px;
+    color: hsl(358, 62%, 52%);
+    text-align: left;
+  }
 `;
 const SinUpdiv = styled.div`
   font-size: 13px;
@@ -103,30 +117,42 @@ const SinUpdiv = styled.div`
 const Loginpage = () => {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
-  //로그인?
-
+  const [isvalid, setIsValid] = useState("");
+  const [emailValid, setEmailValid] = useState("");
+  const [pwdValid, setPwdValid] = useState("");
+  const navigate = useNavigate();
   //정규식 표현 '@' 포함여부와 대문자,소문자를 구분하지않게 표현식끝에 i 사용
   const emailRegex =
     /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
   //최소 8자, 하나의 이상의 대소문자 및 하나의 숫자, 하나의 특수문자
   const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&#]{8,}$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&#]{8,}$/i;
   //test : 대응되는 문자열이 있는지 검사하는 메소드 true 나 false를 반환
   const emailValueCheck = emailRegex.test(email);
   const passwordValueCheck = passwordRegex.test(pwd);
+  //초기화기능
+  const clear = () => {
+    setEmail("");
+    setPwd("");
+    setIsValid("");
+    setPwd("");
+    setPwdValid("");
+  };
+  //폼 제출시 서버통신
   const submitHandler = (e) => {
     e.preventDefault();
-    if (
-      email.trim === "" ||
-      pwd === "" ||
-      !emailValueCheck ||
-      !passwordValueCheck
-    ) {
-      alert("구현중...");
+    if (!emailValueCheck || email.trim() === "") {
+      setIsValid("The email is not a valid email address.");
+      setEmailValid("valid");
+    } else if (!passwordValueCheck || pwd.trim() === "") {
+      setIsValid(" The password is not a valid .");
+      setEmailValid("");
+      setPwdValid("valid");
     } else {
+      clear();
       axios({
         method: "post",
-        url: "요청할 api 주소",
+        url: "요청할 api 주소/members/login",
         data: {
           email,
           password: pwd,
@@ -134,7 +160,11 @@ const Loginpage = () => {
       })
         .then((res) => {
           console.log(res);
+          //토큰저장?
+          localStorage.setItem("isLogin", res.data.token);
+          localStorage.setItem("UserID", res.data.id);
         })
+        .then(navigate("/"))
         .catch((error) => {
           console.log(error);
         });
@@ -171,23 +201,37 @@ const Loginpage = () => {
         <Div className="form">
           <Form>
             <Label>Email</Label>
+            {emailValid && (
+              <Span>
+                <Screamer />
+              </Span>
+            )}
             <LoginInput
               type="text"
+              className={emailValid}
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <Label>Password</Label>
+            {pwdValid && (
+              <Span>
+                <Screamer />
+              </Span>
+            )}
             <LoginInput
+              className={pwdValid}
               type="password"
+              value={pwd}
               onChange={(e) => setPwd(e.target.value)}
             />
+            <span>{isvalid}</span>
             <FormBtn onClick={submitHandler} buttonName={"Log in"}></FormBtn>
           </Form>
         </Div>
         <Div>
           <SinUpdiv>
-            Don’t have an account? <Link>Sign up</Link>
+            Don’t have an account? <Link to={"/signuppage"}>Sign up</Link>
           </SinUpdiv>
-
           <SinUpdiv>
             Are you an employer? <Link>Sign up on Talent</Link>
           </SinUpdiv>

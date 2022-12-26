@@ -3,7 +3,11 @@ import axios from "axios";
 
 const useStore = create((set) => ({
   async getInitialQuestions(url) {
-    const response = await axios.get(url);
+    const response = await axios.get(url, {
+      headers: {
+        "ngrok-skip-browser-warning": "skip", //ngrok오류로 인해 넣어준 헤더
+      },
+    });
     return response.data;
   },
   // async getInitialMembers() {
