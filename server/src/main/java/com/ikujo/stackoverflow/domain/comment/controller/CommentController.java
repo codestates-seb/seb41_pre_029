@@ -25,7 +25,7 @@ public class CommentController {
                 "aaa@gmail.com",
                 "1234",
                 "김회원",
-                new Profile("대한민국", "안녕하세요", "김회원입니다~"));
+                new Profile("이미지", "대한민국", "안녕하세요", "김회원입니다~"));
         Article article = new Article(1L, member,"테스트입니다" ,"블라블라블라", null, 0L, null, null);
 
         Comment comment = new Comment(1L, article, member, "블라블라블라1", false, 0, null);
