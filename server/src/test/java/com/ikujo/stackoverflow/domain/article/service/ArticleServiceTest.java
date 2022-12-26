@@ -162,7 +162,7 @@ class ArticleServiceTest {
                 createMember(),
                 "테스트 제목",
                 "테스트 내용",
-                "#Java#Stack#Over#flow",
+                "##Java##Stack##Over#flow",
                 1L
         );
     }
@@ -173,7 +173,7 @@ class ArticleServiceTest {
                 createMember(),
                 "변경된 제목",
                 "변경된 내용",
-                "#Java#Stack#Over#flow",
+                "##Java##Stack##Over#flow",
                 2L
         );
     }
@@ -190,7 +190,7 @@ class ArticleServiceTest {
         return ArticleRequest.of(
                 "test title",
                 "test content",
-                "#Java#Stack#Over#flow"
+                "##Java##Stack##Over##flow"
         );
     }
 

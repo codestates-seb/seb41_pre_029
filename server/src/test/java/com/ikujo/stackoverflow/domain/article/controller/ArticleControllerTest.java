@@ -193,7 +193,7 @@ class ArticleControllerTest {
                 1L,
                 "첫 제목",
                 "첫 내용",
-                "#Java#Stack#Over#flow",
+                "##Java##Stack##Over##flow",
                 1,
                 11L,
                 BaseTimeDto.of(LocalDateTime.now(), LocalDateTime.now())
@@ -205,7 +205,7 @@ class ArticleControllerTest {
                 (Member) null,
                 "Test Title",
                 "Test Content",
-                "#Java#Stack#Over#flow"
+                "##Java##Stack##Over##flow"
         );
     }
 
@@ -213,7 +213,7 @@ class ArticleControllerTest {
         return ArticleRequest.of(
                 "Test Title",
                 "Test Content",
-                "#Java#Stack#Over#flow"
+                "##Java##Stack##Over##flow"
         );
     }
 

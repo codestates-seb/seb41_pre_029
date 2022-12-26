@@ -43,7 +43,7 @@ public record ArticleResponse(
 
     public static List<String> tagSplit(String tag) {
         List<String> tags = new ArrayList<>();
-        tag = tag.replace("#", " #");
+        tag = tag.replace("##", " #");
         String[] tagSplit = tag.split(" ");
         for (int i = 1; i < tagSplit.length; i++) {
             tags.add(tagSplit[i]);
