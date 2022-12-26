@@ -3,7 +3,6 @@ package com.ikujo.stackoverflow.domain.member.entity.dto;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.Profile;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberLoginPost;
-import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberProfilePatch;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberSignupPost;
 
 import java.time.LocalDateTime;
@@ -31,12 +30,15 @@ public record MemberDto(
     }
 
     public static MemberDto of(MemberSignupPost memberSignupPost) {
+
+        Profile profile = new Profile("https://www.gravatar.com/avatar/571f9b56b9fe58dca664a393b6d2793c?s=192&d=identicon&r=PG", null, null, null);
+
         return new MemberDto(
                 null,
                 memberSignupPost.email(),
                 memberSignupPost.password(),
                 memberSignupPost.nickname(),
-                null,
+                profile,
                 LocalDateTime.now(),
                 LocalDateTime.now()
                 );

@@ -21,7 +21,7 @@ public record CommentResponseDto(Long id,
                 "aaa@gmail.com",
                 "1234",
                 "김회원",
-                new Profile("대한민국", "안녕하세요", "김회원입니다~"));
+                new Profile("이미지", "대한민국", "안녕하세요", "김회원입니다~"));
 
         Long id = comment.getId();
         String content = comment.getContent();

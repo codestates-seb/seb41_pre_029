@@ -11,6 +11,8 @@ import lombok.*;
 @Embeddable
 public class Profile {
 
+    private String image;
+
     private String location;
 
     @Column(length = 30)
