@@ -30,6 +30,7 @@ function App() {
     <div className="App">
       <Router>
         <Header search={setSearchData} />
+
         <Routes>
           <Route path="/" element={<MainPage data={searchData} />} />
           <Route path="/addquestionpage" element={<AddQuestionPage />} />

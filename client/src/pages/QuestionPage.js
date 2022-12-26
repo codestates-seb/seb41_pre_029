@@ -1,37 +1,37 @@
-import axios from 'axios'
-import styled from 'styled-components'
-import { useState, useEffect } from 'react'
-import { useLocation, useParams, useNavigate } from 'react-router-dom'
-import Footer from '../components/Footer'
+import axios from "axios";
+import styled from "styled-components";
+import { useState, useEffect } from "react";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
-import Nav from '../components/Nav'
-import data, { answerData } from '../dummydata'
-import AnswerDetail from '../components/AnswerDetail'
-import Button from '../components/Button'
-import displayedAt from '../util/displayedAt'
-import useStore from '../zustand/store'
-import YellowBox from '../components/YellowBox'
-import GreyBox from '../components/GreyBox'
+import Nav from "../components/Nav";
+import data, { answerData } from "../dummydata";
+import AnswerDetail from "../components/AnswerDetail";
+import Button from "../components/Button";
+import displayedAt from "../util/displayedAt";
+import useStore from "../zustand/store";
+import YellowBox from "../components/YellowBox";
+import GreyBox from "../components/GreyBox";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
 
-const QuestionPageWrapper = styled.div `
+const QuestionPageWrapper = styled.div`
   display: flex;
   margin: 0 320.5px 0 320.5px;
-`
-const PageWrapper = styled.div `
+`;
+const PageWrapper = styled.div`
   padding: 0 24px 0 24px;
- > .bodyWrapper {
-  display: flex;
-  > .sidebar {
-    > * {
-      margin-bottom: 15px;
+  > .bodyWrapper {
+    display: flex;
+    > .sidebar {
+      > * {
+        margin-bottom: 15px;
+      }
     }
   }
- }
-`
+`;
 
-const TitleBar = styled.div `
+const TitleBar = styled.div`
   padding: 24px 0 24px 0;
   > .head {
     height: auto;
@@ -51,7 +51,6 @@ const TitleBar = styled.div `
       max-width: 930px;
     }
     > Button {
-
     }
   }
   > .infoWrapper {
@@ -66,12 +65,10 @@ const TitleBar = styled.div `
       color: #232629;
       line-height: 17px;
     }
-}
-`
-const BodyArticle = styled.article `
-
-`
-const QuestionSection = styled.section `
+  }
+`;
+const BodyArticle = styled.article``;
+const QuestionSection = styled.section`
   display: flex;
   > .recommand {
     display: flex;
@@ -80,7 +77,7 @@ const QuestionSection = styled.section `
     align-items: center;
     > svg {
       :hover {
-        fill: #8A8A8A;
+        fill: #8a8a8a;
         cursor: pointer;
       }
     }
@@ -107,15 +104,15 @@ const QuestionSection = styled.section `
 
         > .summary_meta_tag {
           background: #e1ecf4;
-      
+
           margin-right: 4px;
           padding: 3px 6px;
-      
+
           border-width: 1px;
           border-style: solid;
           border-radius: 3px;
           border-color: #e1ecf4;
-      
+
           font-size: 12px;
           color: #39739d;
         }
@@ -134,7 +131,7 @@ const QuestionSection = styled.section `
           color: #838c95;
           font-size: 13px;
           font-weight: 400;
-          :hover{
+          :hover {
             cursor: pointer;
           }
         }
@@ -176,8 +173,8 @@ const QuestionSection = styled.section `
       }
     }
   }
-`
-const AnswerSection = styled.article `
+`;
+const AnswerSection = styled.article`
   display: flex;
   flex-direction: column;
   > h2 {
@@ -188,109 +185,123 @@ const AnswerSection = styled.article `
     margin-bottom: 12px;
     margin-top: 32px;
   }
-`
-
+`;
 
 const QuestionPage = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const params = useParams();
   const questionId = Number(params.id);
 
-
   const location = useLocation();
 
-  const tihsQuestion = data.filter(el => el.id === questionId);
-  const [ question, setQuestion ] = useState(tihsQuestion[0])
-  const [ answers, setAnswers ] = useState(answerData.data)
+  const tihsQuestion = data.filter((el) => el.id === questionId);
+  const [question, setQuestion] = useState(tihsQuestion[0]);
+  const [answers, setAnswers] = useState(answerData.data);
 
   // 질문 클릭시 해당 질문 id 가져와서 해당하는 질문만 필터해서 가져오도록 하기
-    const { getInitialQuestions } = useStore(state => state);
-  // useEffect(
-  //   getInitialQuestions('/questions')
-  //   .then(res => console.log(res))
-  // , [])
+  const { getInitialQuestions } = useStore((state) => state);
+  useEffect(() => {
+    axios
+      .get(`http://13.124.69.107/questions/${questionId}/comments`)
+      .then((res) => console.log(res));
+  }, []);
 
   const navigateEditpage = (id) => {
-    navigate(`/edit/${id}`)
-  }
+    navigate(`/edit/${id}`);
+  };
 
   return (
     <>
-    <QuestionPageWrapper>
-      <Nav location={location}/>
-      <PageWrapper>
-        <TitleBar>
-          <div className="head">
-            <h1>{question.title}</h1>
-            <Button
-              buttonName="Ask Question"
-              link="/addquestionpage"
-              width="103px"
-             />
-          </div>
-          <div className='infoWrapper'>
-            <div className='createdAt'>asked {displayedAt(question.baseTime.createdAt)}</div>
-            <div className='viewed'>viewed {question.views}</div>
-          </div>
-        </TitleBar>
-        <div className='bodyWrapper'>
-          <BodyArticle>
-            <QuestionSection>
-              <div className='recommand'>
-                <RecommandT fill='#babfc4' />
-                <span>{question.recommendCount}</span>
-                <RecommandB fill='#babfc4' />
+      <QuestionPageWrapper>
+        <Nav location={location} />
+        <PageWrapper>
+          <TitleBar>
+            <div className="head">
+              <h1>{question.title}</h1>
+              <Button
+                buttonName="Ask Question"
+                link="/addquestionpage"
+                width="103px"
+              />
+            </div>
+            <div className="infoWrapper">
+              <div className="createdAt">
+                asked {displayedAt(question.baseTime.createdAt)}
               </div>
-              <div className='post-layout'>
-                <div className='post--body'>{question.content}</div>
-                <div className='post--tags'>
-                  <div className="summary_meta_tags">
-                    {question.tags.map((tag, idx)=>(
-                      <div key={idx} className="summary_meta_tag">{tag}</div>
-                     ))}
-                  </div>
+              <div className="viewed">viewed {question.views}</div>
+            </div>
+          </TitleBar>
+          <div className="bodyWrapper">
+            <BodyArticle>
+              <QuestionSection>
+                <div className="recommand">
+                  <RecommandT fill="#babfc4" />
+                  <span>{question.recommendCount}</span>
+                  <RecommandB fill="#babfc4" />
                 </div>
-                <div className='post--footer'>
-                  <div className='post--footer-button'>
-                      <span className='button'>Share</span>
-                      <span className='button' onClick={() => navigateEditpage(question.id)}>Edit</span>
-                      <span className='button'>Follow</span>
-                  </div>
-                  <div className='post--footer-profile'>
-                    <div className='imgwrapper'>
-                      <img src='https://www.gravatar.com/avatar/580884d16248daa81e53e8a669f60361?s=64&d=identicon&r=PG&f=1'></img>
+                <div className="post-layout">
+                  <div className="post--body">{question.content}</div>
+                  <div className="post--tags">
+                    <div className="summary_meta_tags">
+                      {question.tags.map((tag, idx) => (
+                        <div key={idx} className="summary_meta_tag">
+                          {tag}
+                        </div>
+                      ))}
                     </div>
-                    <div className='profile-wrapper'>
-                      <div className='profile-time'>asked {displayedAt(question.baseTime.createdAt)}</div>
-                        <div className='profile-user'>
-                          <div className='userName'>{question.member.nickname}</div>
-                          <div className='user-follower'>
-                            <span className='follower'>1,120</span>
+                  </div>
+                  <div className="post--footer">
+                    <div className="post--footer-button">
+                      <span className="button">Share</span>
+                      <span
+                        className="button"
+                        onClick={() => navigateEditpage(question.id)}
+                      >
+                        Edit
+                      </span>
+                      <span className="button">Follow</span>
+                    </div>
+                    <div className="post--footer-profile">
+                      <div className="imgwrapper">
+                        <img src="https://www.gravatar.com/avatar/580884d16248daa81e53e8a669f60361?s=64&d=identicon&r=PG&f=1"></img>
+                      </div>
+                      <div className="profile-wrapper">
+                        <div className="profile-time">
+                          asked {displayedAt(question.baseTime.createdAt)}
+                        </div>
+                        <div className="profile-user">
+                          <div className="userName">
+                            {question.member.nickname}
+                          </div>
+                          <div className="user-follower">
+                            <span className="follower">1,120</span>
                           </div>
                         </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </QuestionSection>
-            <AnswerSection>
-              <h2 className='answerAmount'>{answers.length} Answers</h2>
-              {answers.map((el, idx) => <AnswerDetail key={idx} answers={el}/>)}
-            </AnswerSection>
-          </BodyArticle>
-          <div className='sidebar'>
-            <YellowBox />
-            <GreyBox title="Custom Filters"></GreyBox>
-            <GreyBox title="Watched Tags Filters"></GreyBox>
-            <GreyBox title="Ignored Tags"></GreyBox>
-            <GreyBox title="Collectives"></GreyBox>
+              </QuestionSection>
+              <AnswerSection>
+                <h2 className="answerAmount">{answers.length} Answers</h2>
+                {answers.map((el, idx) => (
+                  <AnswerDetail key={idx} answers={el} />
+                ))}
+              </AnswerSection>
+            </BodyArticle>
+            <div className="sidebar">
+              <YellowBox />
+              <GreyBox title="Custom Filters"></GreyBox>
+              <GreyBox title="Watched Tags Filters"></GreyBox>
+              <GreyBox title="Ignored Tags"></GreyBox>
+              <GreyBox title="Collectives"></GreyBox>
+            </div>
           </div>
-        </div>
-      </PageWrapper>
-    </QuestionPageWrapper>
-    <Footer />
-  </>
-  )
-}
+        </PageWrapper>
+      </QuestionPageWrapper>
+      <Footer />
+    </>
+  );
+};
 
 export default QuestionPage;
