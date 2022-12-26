@@ -6,40 +6,40 @@ import axios from "axios";
 import Parser from "../components/Parser";
 
 import Footer from "../components/Footer";
-import Editor from "../components/Editors";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
 import CEditor from "../components/CKEditor";
+
+import useStore from "../zustand/store";
 
 const AddQuestionPage = () => {
   const navigate = useNavigate();
   const [modal, setModal] = useState(false);
   const [tags, setTags] = useState([]);
-  const [firstContent, setFirstContent] = useState("");
-  const [secondContent, setSecondContent] = useState("");
+  const [content, setContent] = useState("");
+  const [submitTags, setSubmitTags] = useState("");
 
-  // const turndownService = new parser();
-  // const markdown = turndownService.turndown(firstContent);
-  // console.log(markdown);
+  // const { createQuestion, questionData } = useStore((state) => state);
 
-  // console.log(parse(firstContent));
 
   const [input, setInput] = useState({
     title: "",
-    firstContent: "",
-    secondContent: "",
+    content: "",
     tags: "",
   });
-  // console.log(input);
 
   useEffect(() => {
     setInput({
       ...input,
-      tags,
-      firstContent,
-      secondContent,
+      submitTags,
+      content,
     });
-  }, [tags, firstContent, secondContent]);
+  }, [submitTags, content]);
+
+  useEffect(() => {
+    setSubmitTags(`#${tags.map((el) => el.replaceAll(" ", "-")).join("#")}`);
+    // console.log("제출용 태그 : " + submitTags);
+  });
 
   const addTags = (event) => {
     let inputValue = event.target.value;
@@ -48,6 +48,10 @@ const AddQuestionPage = () => {
       event.target.value = "";
     }
   };
+
+  // '#123#456#태그-태그#'
+
+  //공백은 하이픈
 
   const removeTags = (indexToRemove) => {
     setTags(
@@ -58,6 +62,25 @@ const AddQuestionPage = () => {
   };
 
   const handleSubmit = () => {
+    // const newQuestion = {
+    //   member: {
+    //     nickname: "2929",
+    //     memberId: 29,
+    //   },
+    //   id: 111,
+    //   title: input.title,
+    //   content: input.firstContent + input.secondContent,
+    //   tags: input.submitTags,
+    //   recommendCount: 0,
+    //   hits: 0,
+    //   baseTime: {
+    //     createAt: new Date(),
+    //     lastModifiedAt: new Date(),
+    //   },
+    // };
+
+    // createQuestion(newQuestion);
+    // console.log(questionData);
     if (window.confirm("Are you sure you want to submit this Question?")) {
       //임시
       axios
@@ -70,7 +93,7 @@ const AddQuestionPage = () => {
             id: 111,
             title: input.title,
             content: input.firstContent + input.secondContent,
-            tags: input.tags,
+            tags: input.submitTags,
             recommendCount: 0,
             hits: 0,
             baseTime: {
@@ -100,6 +123,8 @@ const AddQuestionPage = () => {
       tags: "",
     });
     setTags([]);
+    setContent("");
+
     setModal(false);
   };
 
@@ -161,24 +186,12 @@ const AddQuestionPage = () => {
             Introduce the problem and expand on what you put in the title.
             Minimum 20 characters.
           </div>
-          {/* <Editor set={setFirstContent} get={firstContent} /> */}
-          <CEditor onChange={setFirstContent} data={firstContent} />
-          <Parser html={firstContent} />
+          <div className="editor">
+            <CEditor onChange={setContent} data={content} />
+            {/* <Parser html={content} /> */}
+          </div>
         </InputBox>
-        <InputBox>
-          <div className="title">
-            What did you try and what were you expecting?
-          </div>
-          <div className="content">
-            Describe what you tried, what you expected to happen, and what
-            actually resulted. Minimum 20 characters.
-          </div>
-          <div>
-            <CEditor onChange={setSecondContent} data={secondContent} />
-            <Parser html={secondContent} />
-          </div>
-          {/* <Editor set={setSecondContent} get={secondContent} /> */}
-        </InputBox>
+
         <InputBox className="tag_box">
           <div className="title">Tags</div>
           <div className="content">
@@ -209,7 +222,7 @@ const AddQuestionPage = () => {
               placeholder="Press enter to add tags"
             />
           </TagsInput>
-          <Button className="next_button" buttonName={"Next"} />
+          {/* <Button className="next_button" buttonName={"Next"} /> */}
         </InputBox>
         <SubmitContainer>
           <Button

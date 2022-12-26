@@ -19,9 +19,9 @@ const StyledButton = styled.button`
 
 const Button = ({ buttonName, link, ...rest }) => {
   return (
-    // <Link to={link}>
-    <StyledButton {...rest}>{buttonName}</StyledButton>
-    // {/* </Link> */}
+    <Link to={link}>
+      <StyledButton {...rest}>{buttonName}</StyledButton>
+    </Link>
   );
 };
 

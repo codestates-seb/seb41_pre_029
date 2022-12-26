@@ -1,7 +1,7 @@
 import axios from 'axios'
 import styled from 'styled-components'
 import { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useParams, useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer'
 
 import Nav from '../components/Nav'
@@ -12,6 +12,8 @@ import displayedAt from '../util/displayedAt'
 import useStore from '../zustand/store'
 import YellowBox from '../components/YellowBox'
 import GreyBox from '../components/GreyBox'
+import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
+import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
 
 const QuestionPageWrapper = styled.div `
   display: flex;
@@ -32,8 +34,7 @@ const PageWrapper = styled.div `
 const TitleBar = styled.div `
   padding: 24px 0 24px 0;
   > .head {
-    height: 38px;
-    margin-bottom: 24px;
+    height: auto;
 
     display: flex;
     flex-direction: row;
@@ -46,6 +47,8 @@ const TitleBar = styled.div `
       line-height: 35px;
       text-align: left;
       letter-spacing: normal;
+      overflow-wrap: normal;
+      max-width: 930px;
     }
     > Button {
 
@@ -71,7 +74,21 @@ const BodyArticle = styled.article `
 const QuestionSection = styled.section `
   display: flex;
   > .recommand {
+    display: flex;
+    flex-direction: column;
     padding-right: 16px;
+    align-items: center;
+    > svg {
+      :hover {
+        fill: #8A8A8A;
+        cursor: pointer;
+      }
+    }
+    > span {
+      margin: 2px;
+      font-size: 21px;
+      padding: 4px 0 4px 0;
+    }
   }
   > .post-layout {
     > .post--body {
@@ -117,6 +134,9 @@ const QuestionSection = styled.section `
           color: #838c95;
           font-size: 13px;
           font-weight: 400;
+          :hover{
+            cursor: pointer;
+          }
         }
       }
       > .post--footer-profile {
@@ -160,10 +180,22 @@ const QuestionSection = styled.section `
 const AnswerSection = styled.article `
   display: flex;
   flex-direction: column;
+  > h2 {
+    font-size: 19px;
+    color: #232629;
+    font-weight: bold;
+    padding: 8px 0 8px 0;
+    margin-bottom: 12px;
+    margin-top: 32px;
+  }
 `
 
 
-const QuestionPage = ({ questionId = 1 }) => {
+const QuestionPage = () => {
+  const navigate = useNavigate()
+  const params = useParams();
+  const questionId = Number(params.id);
+
 
   const location = useLocation();
 
@@ -177,6 +209,10 @@ const QuestionPage = ({ questionId = 1 }) => {
   //   getInitialQuestions('/questions')
   //   .then(res => console.log(res))
   // , [])
+
+  const navigateEditpage = (id) => {
+    navigate(`/edit/${id}`)
+  }
 
   return (
     <>
@@ -200,7 +236,11 @@ const QuestionPage = ({ questionId = 1 }) => {
         <div className='bodyWrapper'>
           <BodyArticle>
             <QuestionSection>
-              <div className='recommand'>추천</div>
+              <div className='recommand'>
+                <RecommandT fill='#babfc4' />
+                <span>{question.recommendCount}</span>
+                <RecommandB fill='#babfc4' />
+              </div>
               <div className='post-layout'>
                 <div className='post--body'>{question.content}</div>
                 <div className='post--tags'>
@@ -213,7 +253,7 @@ const QuestionPage = ({ questionId = 1 }) => {
                 <div className='post--footer'>
                   <div className='post--footer-button'>
                       <span className='button'>Share</span>
-                      <span className='button'>Edit</span>
+                      <span className='button' onClick={() => navigateEditpage(question.id)}>Edit</span>
                       <span className='button'>Follow</span>
                   </div>
                   <div className='post--footer-profile'>
@@ -234,6 +274,7 @@ const QuestionPage = ({ questionId = 1 }) => {
               </div>
             </QuestionSection>
             <AnswerSection>
+              <h2 className='answerAmount'>{answers.length} Answers</h2>
               {answers.map((el, idx) => <AnswerDetail key={idx} answers={el}/>)}
             </AnswerSection>
           </BodyArticle>
