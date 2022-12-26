@@ -90,7 +90,7 @@ const ContentsWrapper = styled.div`
           color: #ffffff;
         }
         > .active {
-          background-color: #da680b;
+          background-color: #f48225;
           color: #ffffff;
           :hover {
             background-color: #da680b;

@@ -75,6 +75,8 @@ const QuestionSection = styled.section `
   }
   > .post-layout {
     > .post--body {
+      min-width: 718px;
+      max-width: 720px;
       word-break: keep-all;
       word-wrap: normal;
       line-height: 22.5px;
@@ -155,8 +157,9 @@ const QuestionSection = styled.section `
     }
   }
 `
-const AnswerSection = styled.section `
-
+const AnswerSection = styled.article `
+  display: flex;
+  flex-direction: column;
 `
 
 

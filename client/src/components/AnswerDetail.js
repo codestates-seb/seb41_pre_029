@@ -8,14 +8,36 @@ const AnswerSection = styled.section `
     padding-right: 16px;
   }
   > .post-layout {
-    display: flex;
-    justify-content: space-between;
     > .post--body {
+      min-width: 718px;
+      max-width: 720px;
       word-break: keep-all;
       word-wrap: normal;
       line-height: 22.5px;
     }
-    
+    > .post--tags {
+      margin: 24px 0 12px 0;
+      > .summary_meta_tags {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        > .summary_meta_tag {
+          background: #e1ecf4;
+      
+          margin-right: 4px;
+          padding: 3px 6px;
+      
+          border-width: 1px;
+          border-style: solid;
+          border-radius: 3px;
+          border-color: #e1ecf4;
+      
+          font-size: 12px;
+          color: #39739d;
+        }
+      }
+    }
     > .post--footer {
       margin-top: 32px;
       display: flex;
