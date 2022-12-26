@@ -95,7 +95,9 @@ const IconLi = styled.li`
   }
 `;
 const Header = ({ search }) => {
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(
+    (localStorage.getItem("UserID") && true) || false
+  );
   const [data, setData] = useState("");
   const changeValue = (e) => {
     setData(e.target.value);
@@ -107,16 +109,7 @@ const Header = ({ search }) => {
     }
   };
   const navigate = useNavigate();
-  const clickBtn = (value) => {
-    if (value === "Log Out") {
-      // navigate("/logoutpage");
-    } else if (value === "Log In") {
-      navigate("/loginpage");
-      //
-    } else if (value === "Sign Up") {
-      // navigate("/signuppage");
-    }
-  };
+
   return (
     <HeaderSearch>
       <Container>
@@ -223,23 +216,18 @@ const Header = ({ search }) => {
                 </IconLi>
               </IconUl>
 
-              <Button
-                buttonName={"Log Out"}
-                onClick={(e) => clickBtn(e.target.textContent)}
-              />
+              <Button link={"/logoutpage"} buttonName={"Log Out"} />
             </>
           ) : (
             <Div>
               <Button
-                onClick={(e) => clickBtn(e.target.textContent)}
+                link={"/loginpage"}
                 buttonName={"Log In"}
                 background={"#E1ECF4"}
                 color={"#39739D"}
               />
-              <Button
-                onClick={(e) => clickBtn(e.target.textContent)}
-                buttonName={"Sign Up"}
-              />
+
+              <Button link={"/signuppage"} buttonName={"Sign Up"} />
             </Div>
           )}
         </Flex>
