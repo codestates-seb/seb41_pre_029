@@ -59,9 +59,9 @@ public class CommentService {
         Article article = findVerifiedArticle(articleId);
 
         return article.getCommentList()
-                .stream()
-                .map(CommentResponse::from)
-                .toList();
+                      .stream()
+                      .map(CommentResponse::from)
+                      .toList();
 
     }
 
@@ -101,5 +101,4 @@ public class CommentService {
         return findComment;
 
     }
-
 }
