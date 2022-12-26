@@ -66,4 +66,8 @@ public class Article extends BaseTime {
         return new Article(member, title, content, tag, hits);
     }
 
+    public void visitCount() {
+        this.hits++;
+    }
+
 }
