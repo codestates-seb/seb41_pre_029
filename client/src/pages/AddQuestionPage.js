@@ -21,7 +21,6 @@ const AddQuestionPage = () => {
 
   // const { createQuestion, questionData } = useStore((state) => state);
 
-
   const [input, setInput] = useState({
     title: "",
     content: "",
@@ -84,29 +83,32 @@ const AddQuestionPage = () => {
     if (window.confirm("Are you sure you want to submit this Question?")) {
       //임시
       axios
-        .post("https://jsonplaceholder.typicode.com/posts", {
-          data: {
-            member: {
-              nickname: "2929",
-              memberId: 29,
+        .post(
+          "http://13.124.69.107/questions",
+          { withCredentials: true },
+          {
+            data: {
+              member: {
+                nickname: "2929",
+                memberId: 29,
+              },
+              title: input.title,
+              content: input.firstContent + input.secondContent,
+              tags: input.submitTags,
+              recommendCount: 0,
+              hits: 0,
+              baseTime: {
+                createAt: new Date(),
+                lastModifiedAt: new Date(),
+              },
             },
-            id: 111,
-            title: input.title,
-            content: input.firstContent + input.secondContent,
-            tags: input.submitTags,
-            recommendCount: 0,
-            hits: 0,
-            baseTime: {
-              createAt: new Date(),
-              lastModifiedAt: new Date(),
-            },
-          },
-        })
+          }
+        )
         .then((res) => console.log(res.data));
       navigate("/");
     }
   };
-
+  console.log(input);
   const handleChange = (e) => {
     setInput({
       ...input,

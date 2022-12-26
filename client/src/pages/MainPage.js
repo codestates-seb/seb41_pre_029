@@ -69,7 +69,7 @@ const MainPage = ({ data }) => {
             <Button
               className="go_add_question"
               buttonName="Ask Question"
-              onClick={() => navigate("/addquestionpage")}
+              link="/addquestionpage"
               width="103px"
             />
           </div>
