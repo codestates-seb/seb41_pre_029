@@ -25,6 +25,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -100,6 +102,7 @@ public class MockCommentControllerTest {
         //then
         actions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.content").value(commentDto.content()));
+
     }
 
     @DisplayName("[API][GET] 게시글 단일 조회")
@@ -132,7 +135,53 @@ public class MockCommentControllerTest {
     @DisplayName("[API][GET] 게시글 조회")
     @Test
     void getComments() throws Exception {
+
         //given
+        Long articleId = 1L;
+        CommentResponse commentResponse1 = createCommentResponse1();
+        CommentResponse commentResponse2 = createCommentResponse2();
+        List<CommentResponse> commentResponseList = new ArrayList<>();
+
+        commentResponseList.add(commentResponse1);
+        commentResponseList.add(commentResponse2);
+
+        given(commentService.findComments(articleId))
+                .willReturn(commentResponseList);
+
+        String content = gson.toJson(commentResponseList);
+
+        //when
+        ResultActions actions =
+                mockMvc.perform(get("/questions/{article-id}/comments", articleId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+                );
+
+        //then
+        actions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[-1:].content").value(commentResponseList.get(1).content()));
+
+    }
+
+    @DisplayName("[API][DELETE] 게시글 삭제")
+    @Test
+    void deleteComment() throws Exception {
+
+        //given
+        Long commentId = 1L;
+        willDoNothing().given(commentService).deleteComment(commentId);
+
+        //when
+        ResultActions actions =
+                mockMvc.perform(delete("/questions/{article-id}/comments/{comment-id}", 1L, commentId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON));
+
+        //then
+        actions.andExpect(status().isNoContent());
+        then(commentService).should().deleteComment(commentId);
+
     }
 
 
@@ -171,10 +220,22 @@ public class MockCommentControllerTest {
         );
     }
 
-    private CommentResponse createCommentResponse() {
+    private CommentResponse createCommentResponse1() {
         return CommentResponse.of(
                 1L,
                 "블라블라블라",
+                0,
+                false,
+                createComment().creator(),
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+    }
+
+    private CommentResponse createCommentResponse2() {
+        return CommentResponse.of(
+                2L,
+                "블라",
                 0,
                 false,
                 createComment().creator(),
