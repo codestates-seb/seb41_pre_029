@@ -62,7 +62,7 @@ public class CommentController {
         List<CommentResponse> commentResponseList = commentService.findComments(articleId);
 
         if(commentResponseList.isEmpty()) {
-            return new ResponseEntity<>(commentResponseList, HttpStatus.OK);
+            return new ResponseEntity<>(commentResponseList, HttpStatus.NO_CONTENT);
         }
 
         return new ResponseEntity<>(
