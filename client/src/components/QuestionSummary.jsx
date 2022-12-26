@@ -2,13 +2,15 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 import displayedAt from "../util/displayedAt";
+import axios from "axios";
 
 const QuestionSummary = ({ props }) => {
+
   const navigate = useNavigate();
   const navigateDetailPage = (id) => {
     navigate(`/questionpage/${id}`)
   }
-  
+
   return (
     <QuestionSummaryContainer id="question_sumamry_{props.id}">
       <SummaryStats>

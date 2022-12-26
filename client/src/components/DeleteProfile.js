@@ -17,14 +17,14 @@ const DeleteProfileContainer = styled.div`
     font-size: 13px;
   }
 
-  > .normal {
+  > div > .normal {
     background-color: rgba(212, 104, 107, 0.8);
     border: none;
     border-radius: 3px;
     height: 38px;
   }
 
-  > .active {
+  > div > .active {
     border: none;
     border-radius: 3.5px;
     height: 38px;
@@ -83,6 +83,7 @@ const DeleteProfile = () => {
   const navigate = useNavigate();
 
   const [active, setActive] = useState(false);
+  console.log("params:" + params);
   console.log(active);
 
   const handleActive = () => {
@@ -91,16 +92,18 @@ const DeleteProfile = () => {
 
   //회원 탈퇴 기능
   const handleDeleteProfile = (id) => {
+    console.log("clicked!");
     if (active) {
       if (window.confirm("정말 삭제하시겠습니까?")) {
         //상태 로그아웃으로 만들기
-        axios
-          .delete(`http://localhost:8080/members/{member-${id}}`)
-          .then(() => {
-            alert("그동안 이용해주셔서 감사합니다.");
-            navigate("/");
-          })
-          .catch((err) => console.log("error!!"));
+        // axios
+        //   .delete(`http://localhost:8080/members/{member-${id}}`)
+        //   .then(() => {
+        //     alert("그동안 이용해주셔서 감사합니다.");
+        //     navigate("/");
+        //   })
+        //   .catch((err) => console.log("error!!"));
+        console.log("???");
       } else {
         return;
       }
@@ -145,13 +148,14 @@ const DeleteProfile = () => {
           </p>
         </div>
       </FlexItem>
-      <Button
-        buttonName={"Delete profile"}
-        width="104.03"
-        background="#D43A40"
-        className={active ? "active" : "normal"}
-        onClick={handleDeleteProfile(params)}
-      ></Button>
+      <div onClick={() => handleDeleteProfile(params)}>
+        <Button
+          buttonName={"Delete profile"}
+          width="104.03"
+          background="#D43A40"
+          className={active ? "active" : "normal"}
+        ></Button>
+      </div>
     </DeleteProfileContainer>
   );
 };
