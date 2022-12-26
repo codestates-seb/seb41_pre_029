@@ -1,8 +1,9 @@
 import create from "zustand"; // create로 zustand를 불러옵니다.
 import axios from "axios";
 
-const useStore = create((set) => ({
+//로그인정보, 다크모드
 
+const useStore = create((set) => ({
   questionData: [
     {
       member: {
@@ -113,6 +114,8 @@ const useStore = create((set) => ({
     ],
     size: 3,
   },
+
+  /* axios get 요청 */
   // async getInitialQuestions(url) {
   //   const response = await axios.get(url, {
   //     headers: {
@@ -121,10 +124,15 @@ const useStore = create((set) => ({
   //   });
   //   return response.data;
   // },
-  createQuestion: (question) => {
-    console.log("들어옴? :" + question);
-    set((state) => ({ questionData: state.questionData.push(question) }));
-  },
+
+  // createQuestion: (question) => {
+  //   console.log("들어옴? :" + question);
+  //   set((state) => ({ questionData: state.questionData.push(question) }));
+  // },
+  // post 요청 => 데이터를 받음 => 원래데이터.push(새로운 데이터)
+  // 기존 게시물 변경(patch) =>  변경된 데이터 3번 => [...원래 데이터(123), 변경된 데이터(2)]
+  // 삭제(delete)요청으로 id 보내주면  =>  메인 페이지로 이동(get요청 보내서 이거 빼고 띄워줌)
+
   // async getInitialMembers() {
   //   const response = await axios.get("/members/1");
   //   return response.data;
