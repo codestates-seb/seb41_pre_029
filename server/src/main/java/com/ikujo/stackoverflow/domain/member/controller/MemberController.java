@@ -1,7 +1,6 @@
 package com.ikujo.stackoverflow.domain.member.controller;
 
 import com.ikujo.stackoverflow.domain.member.entity.Member;
-import com.ikujo.stackoverflow.domain.member.entity.Profile;
 import com.ikujo.stackoverflow.domain.member.entity.dto.MemberDto;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberLoginPost;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberProfilePatch;
@@ -22,6 +21,10 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
+
+    /**
+     * 테스트 후 주석 달기
+     */
 
     @GetMapping("/{id}")
     public ResponseEntity getMemberProfile(@PathVariable("id") Long id) {

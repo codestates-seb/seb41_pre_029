@@ -1,11 +1,31 @@
 import styled from "styled-components";
 
 import displayedAt from "../util/displayedAt";
+import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
+import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
 
 const AnswerSection = styled.section `
   display: flex;
+  padding: 16px 0 16px 0;
+  border-bottom: 1px solid hsl(210deg 8% 90%);
+  max-width: 930px;
   > .recommand {
     padding-right: 16px;
+    display: flex;
+    flex-direction: column;
+    padding-right: 16px;
+    align-items: center;
+    > svg {
+      :hover {
+        fill: #8A8A8A;
+        cursor: pointer;
+      }
+    }
+    > span {
+      margin: 2px;
+      font-size: 21px;
+      padding: 4px 0 4px 0;
+    }
   }
   > .post-layout {
     > .post--body {
@@ -96,32 +116,36 @@ const AnswerDetail = (answer) => {
   answer = answer.answers
   return (
     <AnswerSection>
-              <div className='recommand'>추천</div>
-              <div className='post-layout'>
-                <div className='post--body'>{answer.content}</div>
-                <div className='post--footer'>
-                  <div className='post--footer-button'>
-                      <span className='button'>Share</span>
-                      <span className='button'>Edit</span>
-                      <span className='button'>Follow</span>
-                  </div>
-                  <div className='post--footer-profile'>
-                    <div className='imgwrapper'>
-                      <img src='https://www.gravatar.com/avatar/580884d16248daa81e53e8a669f60361?s=64&d=identicon&r=PG&f=1'></img>
-                    </div>
-                    <div className='profile-wrapper'>
-                      <div className='profile-time'>asked {displayedAt(answer.createdAt)}</div>
-                        <div className='profile-user'>
-                          <div className='userName'>{answer.member.nickName}</div>
-                          <div className='user-follower'>
-                            <span className='follower'>1,120</span>
-                          </div>
-                        </div>
-                    </div>
+      <div className='recommand'>
+        <RecommandT fill='#babfc4' />
+        <span>{answer.recommendCount}</span>
+        <RecommandB fill='#babfc4' />
+      </div>
+      <div className='post-layout'>
+        <div className='post--body'>{answer.content}</div>
+        <div className='post--footer'>
+          <div className='post--footer-button'>
+              <span className='button'>Share</span>
+              <span className='button'>Edit</span>
+              <span className='button'>Follow</span>
+          </div>
+          <div className='post--footer-profile'>
+            <div className='imgwrapper'>
+              <img src='https://www.gravatar.com/avatar/580884d16248daa81e53e8a669f60361?s=64&d=identicon&r=PG&f=1'></img>
+            </div>
+            <div className='profile-wrapper'>
+              <div className='profile-time'>asked {displayedAt(answer.createdAt)}</div>
+                <div className='profile-user'>
+                  <div className='userName'>{answer.member.nickName}</div>
+                  <div className='user-follower'>
+                    <span className='follower'>1,120</span>
                   </div>
                 </div>
-              </div>
-            </AnswerSection>
+            </div>
+          </div>
+        </div>
+      </div>
+    </AnswerSection>
   )
 }
 
