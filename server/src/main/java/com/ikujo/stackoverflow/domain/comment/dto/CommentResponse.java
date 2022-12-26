@@ -2,7 +2,6 @@ package com.ikujo.stackoverflow.domain.comment.dto;
 
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
-import com.ikujo.stackoverflow.domain.member.entity.Profile;
 
 import java.time.LocalDateTime;
 

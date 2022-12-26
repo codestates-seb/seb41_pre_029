@@ -1,18 +1,17 @@
 package com.ikujo.stackoverflow.domain.comment.controller;
 
-import com.ikujo.stackoverflow.domain.article.entity.Article;
 import com.ikujo.stackoverflow.domain.comment.dto.*;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
 import com.ikujo.stackoverflow.domain.comment.service.CommentService;
 
-import com.ikujo.stackoverflow.domain.member.entity.Member;
-import com.ikujo.stackoverflow.domain.member.entity.Profile;
 import com.ikujo.stackoverflow.global.dto.SingleResponseDto;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/questions/{article-id}/comments")
@@ -45,20 +44,32 @@ public class CommentController {
 
     }
 
-    @GetMapping
-    public ResponseEntity getComment(@PathVariable("article-id") @Positive Long articleId) {
-        // 답글이 없을 경우엔? Know someone who can answer? Share a link to this question via email, Twitter, or Facebook.
-        // 이라는 글이 보이고 있다..
-        // 해당 폼은 게시글 쪽에서 관리해야 하는가?
+    @GetMapping("/{comment-id}")
+    public ResponseEntity getComment(@PathVariable("article-id") @Positive Long articleId,
+                                     @PathVariable("comment-id") @Positive Long commentId) {
 
-        return null;
+        Comment comment = commentService.findComment(commentId);
+        CommentResponse commentResponse = CommentResponse.from(comment);
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(commentResponse), HttpStatus.OK);
+
+    }
+
+    @GetMapping
+    public ResponseEntity getComments(@PathVariable("article-id") @Positive Long articleId) {
+
+        List<CommentResponse> commentResponseList = commentService.findComments(articleId);
+
+        return new ResponseEntity<>(
+                new CommentMultiResponseDto<>(commentResponseList.size(), commentResponseList), HttpStatus.OK);
     }
 
     @DeleteMapping("/{comment-id}")
     public ResponseEntity deleteComment(@PathVariable("article-id") @Positive Long articleId,
                                         @PathVariable("comment-id") @Positive Long commentId) {
 
-        commentService.deleteComment(articleId, commentId);
+        commentService.deleteComment(commentId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
