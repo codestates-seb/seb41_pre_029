@@ -163,6 +163,7 @@ const AddQuestionPage = () => {
           </div>
           {/* <Editor set={setFirstContent} get={firstContent} /> */}
           <CEditor onChange={setFirstContent} data={firstContent} />
+          <Parser html={firstContent} />
         </InputBox>
         <InputBox>
           <div className="title">
@@ -173,7 +174,8 @@ const AddQuestionPage = () => {
             actually resulted. Minimum 20 characters.
           </div>
           <div>
-            <Parser html={firstContent} />
+            <CEditor onChange={setSecondContent} data={secondContent} />
+            <Parser html={secondContent} />
           </div>
           {/* <Editor set={setSecondContent} get={secondContent} /> */}
         </InputBox>
