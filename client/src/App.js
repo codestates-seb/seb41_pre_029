@@ -11,6 +11,7 @@ import MyPage from "./pages/MyPage";
 import QuestionPage from "./pages/QuestionPage";
 import SignoutPage from "./pages/SignoutPage";
 import SignupPage from "./pages/SignupPage";
+import EditQuestionPage from "./pages/EditQuestionPage";
 
 import useStore from "./zustand/store.js";
 
@@ -39,6 +40,7 @@ function App() {
           <Route path="/questionpage/:id" element={<QuestionPage />} />
           {/* <Route path="/signoutpage" element={<SignoutPage />} /> */}
           {/* <Route path="/signuppage" element={<SignupPage />} /> */}
+          <Route path="/edit/:id" element={<EditQuestionPage />} />
         </Routes>
       </Router>
     </div>

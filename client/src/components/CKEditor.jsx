@@ -3,6 +3,8 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import styled from "styled-components";
 
+
+
 const Edit = styled.div`
   .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
     padding: 10px;
