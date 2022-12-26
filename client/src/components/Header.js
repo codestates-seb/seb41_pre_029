@@ -94,14 +94,18 @@ const IconLi = styled.li`
     height: 24px;
   }
 `;
-const Header = () => {
-  const [searchdata, setSearchData] = useState("");
+const Header = ({ search }) => {
   const [isLogin, setIsLogin] = useState(false);
+  const [data, setData] = useState("");
   const changeValue = (e) => {
-    setSearchData(e.target.value);
-    console.log(searchdata);
+    setData(e.target.value);
   };
-
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      search(data);
+      setData("");
+    }
+  };
   const navigate = useNavigate();
   const clickBtn = (value) => {
     if (value === "Log Out") {
@@ -169,8 +173,9 @@ const Header = () => {
           <InputDiv>
             <Input
               placeholder="Search…"
-              value={searchdata}
               onChange={changeValue}
+              onKeyPress={handleKeyPress}
+              value={data}
             />
           </InputDiv>
           {isLogin ? (
