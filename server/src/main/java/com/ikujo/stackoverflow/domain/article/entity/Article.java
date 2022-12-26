@@ -53,8 +53,8 @@ public class Article extends BaseTime {
         }
     }
 
-    public Article(Member member, String title, String content, String tag, Long hits) {
-        this.id = null;
+    public Article(Long id, Member member, String title, String content, String tag, Long hits) {
+        this.id = id;
         this.member = member;
         this.title = title;
         this.content = content;
@@ -62,8 +62,8 @@ public class Article extends BaseTime {
         this.hits = hits;
     }
 
-    public static Article of(Member member, String title, String content, String tag, Long hits) {
-        return new Article(member, title, content, tag, hits);
+    public static Article of(Long id, Member member, String title, String content, String tag, Long hits) {
+        return new Article(id, member, title, content, tag, hits);
     }
 
     public void visitCount() {

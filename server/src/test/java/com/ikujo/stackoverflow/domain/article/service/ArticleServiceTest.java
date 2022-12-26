@@ -3,6 +3,7 @@ package com.ikujo.stackoverflow.domain.article.service;
 import com.ikujo.stackoverflow.domain.article.dto.ArticleDto;
 import com.ikujo.stackoverflow.domain.article.dto.request.ArticleRequest;
 import com.ikujo.stackoverflow.domain.article.dto.response.ArticleDetailResponse;
+import com.ikujo.stackoverflow.domain.article.dto.response.ArticlePatchResponse;
 import com.ikujo.stackoverflow.domain.article.dto.response.ArticleResponse;
 import com.ikujo.stackoverflow.domain.article.entity.Article;
 import com.ikujo.stackoverflow.domain.article.repository.ArticleRepository;
@@ -58,7 +59,7 @@ class ArticleServiceTest {
     void findArticle() {
         //given
         Long articleId = 1L;
-        Article article = createArticle();
+        Article article = createArticle1();
 
         given(articleRepository.findById(articleId))
                 .willReturn(Optional.of(article));
@@ -79,11 +80,11 @@ class ArticleServiceTest {
         //given
         Long articleId = 1L;
         ArticleRequest articleRequest = createArticleRequest();
-        Article article = createArticle();
+        Article article = createArticle1();
         Member member = createMember();
 
-        given(memberRepository.getReferenceById(articleId))
-                .willReturn(member);
+        given(memberRepository.findById(articleId))
+                .willReturn(Optional.of(member));
         given(articleRepository.save(any(Article.class)))
                 .willReturn(article);
 
@@ -94,7 +95,7 @@ class ArticleServiceTest {
         assertThat(actual)
                 .hasFieldOrPropertyWithValue("title", article.getTitle())
                 .hasFieldOrPropertyWithValue("content", article.getContent());
-        then(memberRepository).should().getReferenceById(articleId);
+        then(memberRepository).should().findById(articleId);
     }
 
     @Disabled("현재 이 테스트는 DB에 삭제할 게시글이 없어 에러를 발생한다.")
@@ -112,13 +113,68 @@ class ArticleServiceTest {
         then(articleRepository).should().deleteById(articleId);
     }
 
-    private Article createArticle() {
+    @Disabled("추후 고칠 예정.")
+    @DisplayName("게시글 아이디값과 수정값을 받아 수정하고, 로그만 남기고 아무것도 변환하지 않는다.")
+    @Test
+    void patchArticle(){
+        //given
+        Long articleId = 1L;
+        Article article1 = createArticle1();
+        Article article2 = createArticle2();
+        ArticleRequest articleRequest = createArticleRequest();
+
+        given(articleRepository.findById(anyLong()))
+                .willReturn(Optional.of(article1));
+        willDoNothing().given(articleRepository).save(article2);
+
+        //when
+        articleService.patchArticle(articleId, articleRequest);
+
+        //then
+        then(articleRepository).should().findById(anyLong());
+        then(articleRepository).should().save(article2);
+
+    }
+
+    @DisplayName("게시글 아이디를 받으면, 기존에 작성된 글을 반환한다.")
+    @Test
+    void patchFindArticle(){
+        //given
+        Long articleId = 1L;
+        Article article = createArticle1();
+
+        given(articleRepository.findById(articleId))
+                .willReturn(Optional.of(article));
+
+        //when
+        ArticlePatchResponse actual = articleService.patchFindArticle(articleId);
+
+        //then
+        assertThat(actual)
+                .hasFieldOrPropertyWithValue("title", article.getTitle())
+                .hasFieldOrPropertyWithValue("content", article.getContent());
+        then(articleRepository).should().findById(articleId);
+    }
+
+    private Article createArticle1() {
         return Article.of(
+                1L,
                 createMember(),
                 "테스트 제목",
                 "테스트 내용",
                 "#Java#Stack#Over#flow",
                 1L
+        );
+    }
+
+    private Article createArticle2() {
+        return Article.of(
+                1L,
+                createMember(),
+                "변경된 제목",
+                "변경된 내용",
+                "#Java#Stack#Over#flow",
+                2L
         );
     }
 

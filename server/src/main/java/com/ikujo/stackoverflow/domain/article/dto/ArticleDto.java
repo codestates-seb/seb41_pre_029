@@ -39,6 +39,7 @@ public record ArticleDto(
 
     public Article toEntity() {
         return Article.of(
+                id,
                 member,
                 title,
                 content,

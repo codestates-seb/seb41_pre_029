@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleRepository articleRepository;
-    //    private final ArticleDummyRepository articleRepository;
     private final MemberRepository memberRepository;
 
     @Transactional(readOnly = true)
@@ -46,7 +45,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public ArticleDto saveArticle(ArticleRequest articleRequest, Long memberId) {
-        Member member = memberRepository.getReferenceById(memberId);
+        Member member = memberRepository.findById(memberId).get();
         Article article = articleRepository.save(articleRequest.toDto(member).toEntity());
 
         return ArticleDto.from(article);
@@ -66,6 +65,7 @@ public class ArticleServiceImpl implements ArticleService {
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 게시글 입니다. articleId : " + articleId));
 
         articleRepository.save(articleRequest.toDto(article).toEntity());
+        log.info("patchArticle() 정상 작동.");
     }
 
     @Override
