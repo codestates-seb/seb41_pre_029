@@ -1,7 +1,7 @@
 import axios from 'axios'
 import styled from 'styled-components'
 import { useState, useEffect } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation, useParams, useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer'
 
 import Nav from '../components/Nav'
@@ -134,6 +134,9 @@ const QuestionSection = styled.section `
           color: #838c95;
           font-size: 13px;
           font-weight: 400;
+          :hover{
+            cursor: pointer;
+          }
         }
       }
       > .post--footer-profile {
@@ -189,6 +192,7 @@ const AnswerSection = styled.article `
 
 
 const QuestionPage = () => {
+  const navigate = useNavigate()
   const params = useParams();
   const questionId = Number(params.id);
 
@@ -205,6 +209,10 @@ const QuestionPage = () => {
   //   getInitialQuestions('/questions')
   //   .then(res => console.log(res))
   // , [])
+
+  const navigateEditpage = (id) => {
+    navigate(`/edit/${id}`)
+  }
 
   return (
     <>
@@ -245,7 +253,7 @@ const QuestionPage = () => {
                 <div className='post--footer'>
                   <div className='post--footer-button'>
                       <span className='button'>Share</span>
-                      <span className='button'>Edit</span>
+                      <span className='button' onClick={() => navigateEditpage(question.id)}>Edit</span>
                       <span className='button'>Follow</span>
                   </div>
                   <div className='post--footer-profile'>
