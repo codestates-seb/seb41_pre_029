@@ -192,6 +192,13 @@ const AnswerSection = styled.article `
 
 
 const QuestionPage = () => {
+
+  // useEffect( () => {
+  //   axios
+  //   .get(`http://13.124.69.107/questions/1`)
+  //   .then((res) => console.log(res.data))
+  // }, [])
+
   const navigate = useNavigate()
   const params = useParams();
   const questionId = Number(params.id);
@@ -205,10 +212,11 @@ const QuestionPage = () => {
 
   // 질문 클릭시 해당 질문 id 가져와서 해당하는 질문만 필터해서 가져오도록 하기
     const { getInitialQuestions } = useStore(state => state);
-  // useEffect(
-  //   getInitialQuestions('/questions')
-  //   .then(res => console.log(res))
-  // , [])
+
+    useEffect(() => {
+      axios.get(`http://13.124.69.107/questions/${questionId}/comments`)
+      .then((res) => setAnswers(res.data.data))
+    }, [])
 
   const navigateEditpage = (id) => {
     navigate(`/edit/${id}`)
