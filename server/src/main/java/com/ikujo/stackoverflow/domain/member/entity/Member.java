@@ -2,10 +2,7 @@ package com.ikujo.stackoverflow.domain.member.entity;
 
 import com.ikujo.stackoverflow.global.entity.BaseTime;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -23,24 +20,26 @@ public class Member extends BaseTime {
     @Column(nullable = false, length = 20)
     private String password;
 
+    @Setter
     @Column(nullable = false, length = 20)
     private String nickname;
 
+    @Setter
     @Embedded
     private Profile profile;
 
     /**
-     * MemberSignupPostDto 사용을 위한 생성자
+     * MemberDto 사용을 위한 생성자 및 of 메서드
      */
-    public Member(String email, String password, String nickname) {
+    public Member(String email, String password, String nickname, Profile profile) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
+        this.profile = profile;
     }
 
-    public static Member of(String email, String password, String nickname) {
-
-        return new Member(email, password, nickname);
+    public static Member of(String email, String password, String nickname, Profile profile) {
+        return new Member(email, password, nickname, profile);
     }
 
 }

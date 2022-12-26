@@ -1,6 +1,5 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import QuestionList from "../components/QuestionList";
@@ -32,6 +31,11 @@ const MainBar = styled.div`
       text-align: left;
       letter-spacing: normal;
     }
+    > .go_add_question {
+      :hover {
+        background-color: #f5704a;
+      }
+    }
   }
 
   & .data_controller {
@@ -51,8 +55,9 @@ const SideBar = styled.div`
   }
 `;
 
-const MainPage = () => {
+const MainPage = ({ data }) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -62,15 +67,16 @@ const MainPage = () => {
           <div className="head">
             <h1>All Questions</h1>
             <Button
+              className="go_add_question"
               buttonName="Ask Question"
-              link="/addquestionpage"
+              onClick={() => navigate("/addquestionpage")}
               width="103px"
             />
           </div>
           <div className="data_controller">
             <div className="question_count">123154 questions</div>
           </div>
-          <QuestionList />
+          <QuestionList data={data} />
         </MainBar>
         <SideBar>
           <YellowBox />

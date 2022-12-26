@@ -53,6 +53,8 @@ function Editor({ set, get }) {
     // console.log(JSON.stringify(editor.getContents())); // delta 사용시
     // setValue(editor.getHTML());
     set(content);
+
+    // set(editor.getHTML());
   };
 
   return (

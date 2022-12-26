@@ -94,12 +94,20 @@ const IconLi = styled.li`
     height: 24px;
   }
 `;
-const Header = () => {
-  const [isLogin, setIslogin] = useState(false);
-
+const Header = ({ search }) => {
+  const [isLogin, setIsLogin] = useState(false);
+  const [data, setData] = useState("");
+  const changeValue = (e) => {
+    setData(e.target.value);
+  };
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      search(data);
+      setData("");
+    }
+  };
   const navigate = useNavigate();
   const clickBtn = (value) => {
-    console.log(value);
     if (value === "Log Out") {
       // navigate("/logoutpage");
     } else if (value === "Log In") {
@@ -163,7 +171,12 @@ const Header = () => {
             <Li>For Teams</Li>
           </Ul>
           <InputDiv>
-            <Input placeholder="Search…" />
+            <Input
+              placeholder="Search…"
+              onChange={changeValue}
+              onKeyPress={handleKeyPress}
+              value={data}
+            />
           </InputDiv>
           {isLogin ? (
             <>
