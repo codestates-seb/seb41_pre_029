@@ -98,15 +98,13 @@ public class MemberService {
     }
 
     /**
-     * 회원 조회 검증 (코드 단순화)
+     * 회원 조회 검증
      */
     @Transactional(readOnly = true)
     public Member findVerifiedMember(Long id) {
-        Optional<Member> findMember = memberRepository.findById(id);
-
-        Member member = findMember.orElseThrow(() ->
+        Member findMember = memberRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("잘못된 회원 정보입니다."));
 
-        return member;
+        return findMember;
     }
 }

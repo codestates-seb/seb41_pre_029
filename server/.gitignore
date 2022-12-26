@@ -17,7 +17,8 @@ application.yml
 application-local.yml
 application-server.yml
 
-
+# data
+data.sql
 
 # AWS User-specific
 .idea/**/aws.xml
