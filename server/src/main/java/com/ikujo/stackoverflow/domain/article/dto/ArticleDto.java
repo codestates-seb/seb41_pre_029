@@ -20,6 +20,10 @@ public record ArticleDto(
         return new ArticleDto(null, member, title, content, tag, null, null, null);
     }
 
+    public static ArticleDto of(Article article, String title, String content, String tag) {
+        return new ArticleDto(article.getId(), article.getMember(), title, content, tag, article.getId(), article.getCreatedAt(), null);
+    }
+
     public static ArticleDto from(Article article){
         return new ArticleDto(
                 article.getId(),
