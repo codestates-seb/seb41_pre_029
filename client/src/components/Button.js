@@ -20,7 +20,7 @@ const StyledButton = styled.button`
 const Button = ({ buttonName, link, ...rest }) => {
   return (
     <Link to={link}>
-    <StyledButton {...rest}>{buttonName}</StyledButton>
+      <StyledButton {...rest}>{buttonName}</StyledButton>
     </Link>
   );
 };
