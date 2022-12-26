@@ -2,7 +2,7 @@ import create from "zustand"; // create로 zustand를 불러옵니다.
 import axios from "axios";
 
 const useStore = create((set) => ({
-  data: [
+  questionData: [
     {
       member: {
         nickname: "1쿠조",
@@ -112,13 +112,17 @@ const useStore = create((set) => ({
     ],
     size: 3,
   },
-  async getInitialQuestions(url) {
-    const response = await axios.get(url, {
-      headers: {
-        "ngrok-skip-browser-warning": "skip", //ngrok오류로 인해 넣어준 헤더
-      },
-    });
-    return response.data;
+  // async getInitialQuestions(url) {
+  //   const response = await axios.get(url, {
+  //     headers: {
+  //       "ngrok-skip-browser-warning": "skip", //ngrok오류로 인해 넣어준 헤더
+  //     },
+  //   });
+  //   return response.data;
+  // },
+  createQuestion: (question) => {
+    console.log("들어옴? :" + question);
+    set((state) => ({ questionData: state.questionData.push(question) }));
   },
 
   // async getInitialMembers() {

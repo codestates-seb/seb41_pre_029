@@ -9,25 +9,19 @@ const EditQuestionPage = () =>{
     const {id} = useParams();
 
     const navigate = useNavigate();
-    const {data} =  useStore((state) => state)
+    const {questionData} =  useStore((state) => state)
 
-
-    useEffect (()=>{
-      setOriginData(data)
-    },[])
-    // console.log(data)
-
-    // useEffect(()=>{
-    //     if(data.length>= 1) {
-    //         const targetQuestion =data.find((it)=>parseInt(it.id) === parseInt(id))
-        
-    //     if(targetQuestion) {
-    //         setOriginData(targetQuestion)
-    //     } else {
-    //         navigate('/',{replace:true})
-    //     }
-    // }
-    // },[id,data]);
+    useEffect(()=>{
+        if(questionData.length>= 1) {
+            const targetQuestion =questionData.find((it)=>parseInt(it.id) === parseInt(id))
+         console.log(targetQuestion)
+        if(targetQuestion) {
+            setOriginData(targetQuestion)
+        } else {
+            navigate('/',{replace:true})
+        }
+    }
+    },[id,questionData]);
     return <div>
       {originData && <EditQuestion originData={originData}/>}
 
