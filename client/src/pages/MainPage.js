@@ -50,7 +50,7 @@ const SideBar = styled.div`
   }
 `;
 
-const MainPage = () => {
+const MainPage = ({ data }) => {
   const location = useLocation();
 
   return (
@@ -69,7 +69,7 @@ const MainPage = () => {
           <div className="data_controller">
             <div className="question_count">123154 questions</div>
           </div>
-          <QuestionList />
+          <QuestionList data={data} />
         </MainBar>
         <SideBar>
           <YellowBox />

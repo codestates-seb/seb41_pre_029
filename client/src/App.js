@@ -1,4 +1,5 @@
 import "./App.css";
+import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import MainPage from "./pages/MainPage";
@@ -22,15 +23,16 @@ function App() {
   //   const { data } = await getInitialQuestions();
   //   console.log(data);
   // })();
+  const [searchData, setSearchData] = useState("");
 
   return (
     <div className="App">
       <Router>
-        <Header />
+        <Header search={setSearchData} />
         <Routes>
-          <Route path="/" element={<MainPage />} />
+          <Route path="/" element={<MainPage data={searchData} />} />
           <Route path="/addquestionpage" element={<AddQuestionPage />} />
-          {/* <Route path="/errorpage" element={<ErrorPage />} /> */}
+          <Route path="/*" element={<ErrorPage />} />
           <Route path="/loginpage" element={<LoginPage />} />
           {/* <Route path="/logoutpage" element={<LogoutPage />} /> */}
           <Route path="/mypage" element={<MyPage />} />
