@@ -1,49 +1,81 @@
 package com.ikujo.stackoverflow.domain.comment.controller;
 
-import com.ikujo.stackoverflow.domain.article.entity.Article;
-import com.ikujo.stackoverflow.domain.comment.dto.CommentResponseDto;
-import com.ikujo.stackoverflow.domain.comment.dto.CommentMultiResponseDto;
+import com.ikujo.stackoverflow.domain.comment.dto.*;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
-import com.ikujo.stackoverflow.domain.member.entity.Member;
-import com.ikujo.stackoverflow.domain.member.entity.Profile;
+import com.ikujo.stackoverflow.domain.comment.service.CommentService;
 
+import com.ikujo.stackoverflow.global.dto.SingleResponseDto;
+import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/questions/{article-id}/comments")
+@RequiredArgsConstructor
 public class CommentController {
 
-    @GetMapping
-    public ResponseEntity getComments(@PathVariable("article-id") Long id) {
+    private final CommentService commentService;
 
-        Member member = new Member(1L,
-                "aaa@gmail.com",
-                "1234",
-                "김회원",
-                new Profile("대한민국", "안녕하세요", "김회원입니다~"));
-        Article article = new Article(1L, member, "블라블라블라", null, 0, null);
+    @PostMapping
+    public ResponseEntity postComment(@PathVariable("article-id") @Positive Long articleId,
+                                      @RequestBody CommentPost commentPost) {
 
-        Comment comment = new Comment(1L, article, member, "블라블라블라1", false, 0, null);
-        Comment comment1 = new Comment(2L, article, member, "블라라2", false, 0, null);
-        Comment comment2 = new Comment(3L, article, member, "블라블라3", false, 0, null);
-
-        CommentResponseDto commentResponseDto = CommentResponseDto.of(comment);
-        CommentResponseDto commentResponseDto1 = CommentResponseDto.of(comment1);
-        CommentResponseDto commentResponseDto2 = CommentResponseDto.of(comment2);
-
-        List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
-
-        commentResponseDtoList.add(commentResponseDto);
-        commentResponseDtoList.add(commentResponseDto1);
-        commentResponseDtoList.add(commentResponseDto2);
+        Comment comment = commentService.createComment(articleId, commentPost);
+        CommentResponse commentResponse = CommentResponse.from(comment);
 
         return new ResponseEntity<>(
-                new CommentMultiResponseDto<>(commentResponseDtoList.size(),commentResponseDtoList), HttpStatus.OK);
+                new SingleResponseDto<>(commentResponse), HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{comment-id}")
+    public ResponseEntity patchComment(@PathVariable("article-id") @Positive Long articleId,
+                                       @PathVariable("comment-id") @Positive Long commentId,
+                                       @RequestBody CommentPatch commentPatch) {
+
+        Comment comment = commentService.updateComment(articleId, commentId, commentPatch);
+        CommentResponse commentResponse = CommentResponse.from(comment);
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(commentResponse), HttpStatus.OK);
 
     }
+
+    @GetMapping("/{comment-id}")
+    public ResponseEntity getComment(@PathVariable("article-id") @Positive Long articleId,
+                                     @PathVariable("comment-id") @Positive Long commentId) {
+
+        Comment comment = commentService.findComment(commentId);
+        CommentResponse commentResponse = CommentResponse.from(comment);
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(commentResponse), HttpStatus.OK);
+
+    }
+
+    @GetMapping
+    public ResponseEntity getComments(@PathVariable("article-id") @Positive Long articleId) {
+
+        List<CommentResponse> commentResponseList = commentService.findComments(articleId);
+
+        if(commentResponseList.isEmpty()) {
+            return new ResponseEntity<>(commentResponseList, HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(
+                new CommentMultiResponseDto<>(commentResponseList.size(), commentResponseList), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{comment-id}")
+    public ResponseEntity deleteComment(@PathVariable("article-id") @Positive Long articleId,
+                                        @PathVariable("comment-id") @Positive Long commentId) {
+
+        commentService.deleteComment(commentId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

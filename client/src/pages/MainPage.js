@@ -1,9 +1,11 @@
+import { useLocation, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import QuestionList from "../components/QuestionList";
 import Button from "../components/Button";
-
-import styled from "styled-components";
+import GreyBox from "../components/GreyBox";
+import YellowBox from "../components/YellowBox";
 
 const MainPageContainer = styled.div`
   display: flex;
@@ -29,6 +31,11 @@ const MainBar = styled.div`
       text-align: left;
       letter-spacing: normal;
     }
+    > .go_add_question {
+      :hover {
+        background-color: #f5704a;
+      }
+    }
   }
 
   & .data_controller {
@@ -40,29 +47,43 @@ const MainBar = styled.div`
   }
 `;
 
-const SideBar = styled.div``;
+const SideBar = styled.div`
+  margin-top: 20.2px;
 
-const MainPage = () => {
+  > * {
+    margin-bottom: 15px;
+  }
+`;
+
+const MainPage = ({ data }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   return (
     <>
       <MainPageContainer>
-        <Nav />
+        <Nav location={location} />
         <MainBar>
           <div className="head">
             <h1>All Questions</h1>
             <Button
+              className="go_add_question"
               buttonName="Ask Question"
-              link="/addquestionpage"
+              onClick={() => navigate("/addquestionpage")}
               width="103px"
             />
           </div>
           <div className="data_controller">
             <div className="question_count">123154 questions</div>
           </div>
-          <QuestionList />
+          <QuestionList data={data} />
         </MainBar>
         <SideBar>
-          <div>widget</div>
+          <YellowBox />
+          <GreyBox title="Custom Filters"></GreyBox>
+          <GreyBox title="Watched Tags Filters"></GreyBox>
+          <GreyBox title="Ignored Tags"></GreyBox>
+          <GreyBox title="Collectives"></GreyBox>
         </SideBar>
       </MainPageContainer>
       <Footer />

@@ -1,21 +1,21 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useStore from "../zustand/store.js";
 
-//주석
+import dummydata from "../dummydata";
 
-import data from "../dummydata";
 import QuestionSummary from "./QuestionSummary";
 import Pagination from "./Pagination";
 
 const QuestionListContainer = styled.div`
-    border-top: solid 1px #d6d9dc;
+  border-top: solid 1px #d6d9dc;
 `;
 
 const PageContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 20px 0;
-  
+
   & .select_buttons {
     width: 184px;
     height: 27px;
@@ -56,9 +56,20 @@ const PageContainer = styled.div`
   }
 `;
 
-const QuestionList = () => {
-  const questionData = data;
-  const [questions, setQuestions] = useState(questionData);
+const QuestionList = ({ data }) => {
+  const { getInitialQuestions } = useStore((state) => state);
+  const [questions, setQuestions] = useState(dummydata);
+  console.log(data);
+  //  useEffect(() => {
+  // getInitialQuestions('/questions').then((data)=>setQuestions(data.data))
+  //  },[])
+  // console.log(questions);
+  const filtered = questions.filter(
+    (el) => el.content.includes(data) || el.title.includes(data)
+  );
+  console.log(filtered);
+
+  console.log(filtered + "1");
   const [isActive, setIsActive] = useState("15");
 
   //페이지 당 게시물 수
@@ -79,9 +90,17 @@ const QuestionList = () => {
 
   return (
     <QuestionListContainer>
-      {questions.slice(offset, offset + limit).map((question) => (
-        <QuestionSummary key={question.id} props={question} />
-      ))}
+      {filtered
+        ? filtered
+            .slice(offset, offset + limit)
+            .map((question) => (
+              <QuestionSummary key={question.id} props={question} />
+            ))
+        : questions
+            .slice(offset, offset + limit)
+            .map((question) => (
+              <QuestionSummary key={question.id} props={question} />
+            ))}
       <PageContainer>
         <Pagination
           total={questions.length}

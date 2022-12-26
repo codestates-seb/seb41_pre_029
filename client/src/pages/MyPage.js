@@ -1,17 +1,18 @@
 // about 내용, 아이콘 날짜 정보 받아와야 함
 import styled from "styled-components";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import EditProfile from "../components/EditProfile";
 import DeleteProfile from "../components/DeleteProfile";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 
-const PageWrapper = styled.div `
+const PageWrapper = styled.div`
   display: flex;
   margin: 0 320.5px 0 320.5px;
-`
-const ContentsWrapper = styled.div `
+`;
+const ContentsWrapper = styled.div`
   width: 100%;
   max-width: 1100px;
   padding: 24px 24px 24px 24px;
@@ -28,7 +29,8 @@ const ContentsWrapper = styled.div `
     }
     > .content-userBar--flexItems {
       > .username {
-        font-family: "system-ui", "Segoe UI Adjusted", "Segoe UI", "Liberation Sans", sans-serif;
+        font-family: "system-ui", "Segoe UI Adjusted", "Segoe UI",
+          "Liberation Sans", sans-serif;
         font-size: 34px;
         margin-left: 5px;
         margin-bottom: 12px;
@@ -56,7 +58,8 @@ const ContentsWrapper = styled.div `
       margin-right: 32px;
       > ul {
         top: 64px;
-        font-family: "system-ui", "Segoe UI Adjusted", "Segoe UI", "Liberation Sans", sans-serif;
+        font-family: "system-ui", "Segoe UI Adjusted", "Segoe UI",
+          "Liberation Sans", sans-serif;
         font-size: 13px;
         > .title {
           padding: 6px 48px 6px 12px;
@@ -87,7 +90,7 @@ const ContentsWrapper = styled.div `
           color: #ffffff;
         }
         > .active {
-          background-color: #da680b;
+          background-color: #f48225;
           color: #ffffff;
           :hover {
             background-color: #da680b;
@@ -124,144 +127,184 @@ const ContentsWrapper = styled.div `
         }
       }
       > .content-interface {
-
       }
     }
   }
-`
+`;
 
 const MyPage = () => {
-  const [ activeTheme, setActiveTheme ] = useState(true);
-  const [ activeEdit, setActiveEdit ] = useState(false);
-  const [ activeDel, setActiveDel ] = useState(false);
-  const [ page, setPage ] = useState('theme');
+  const [activeTheme, setActiveTheme] = useState(true);
+  const [activeEdit, setActiveEdit] = useState(false);
+  const [activeDel, setActiveDel] = useState(false);
+  const [page, setPage] = useState("theme");
+
+  const location = useLocation();
 
   const handleClickEdit = () => {
-    if(!activeEdit) {
+    if (!activeEdit) {
       setActiveEdit(true);
       setActiveDel(false);
       setActiveTheme(false);
-      setPage('edit');
+      setPage("edit");
     }
-  }
+  };
   const handleClickDel = () => {
-    if(!activeDel) {
+    if (!activeDel) {
       setActiveDel(true);
       setActiveTheme(false);
       setActiveEdit(false);
-      setPage('delete');
+      setPage("delete");
     }
-  }
+  };
 
   const handleClickTheme = () => {
-    if(!activeTheme) {
+    if (!activeTheme) {
       setActiveTheme(true);
       setActiveDel(false);
       setActiveEdit(false);
-      setPage('theme');
+      setPage("theme");
     }
-  }
+  };
 
   return (
     <>
-    <PageWrapper>
-      <Nav />
-      <ContentsWrapper>
-        <div className="content-userBar">
-          <img src="https://lh3.googleusercontent.com/a/AATXAJzbbtvOgySkjfLmq_p28xd-Cr4PnWtRXCDJpVx4=k-s256"></img>
-          <div className="content-userBar--flexItems">
-            <div className="username">{'userName'}</div>
-            <ul className="icons">
-              <li className="icons-wrapper">
-                <svg fill="#6a737c" aria-hidden="true" className="svg-icon iconCake" width="18" height="18" viewBox="0 0 18 18"><path d="M9 4.5a1.5 1.5 0 0 0 1.28-2.27L9 0 7.72 2.23c-.14.22-.22.48-.22.77 0 .83.68 1.5 1.5 1.5Zm3.45 7.5-.8-.81-.81.8c-.98.98-2.69.98-3.67 0l-.8-.8-.82.8c-.49.49-1.14.76-1.83.76-.55 0-1.3-.17-1.72-.46V15c0 1.1.9 2 2 2h10a2 2 0 0 0 2-2v-2.7c-.42.28-1.17.45-1.72.45-.69 0-1.34-.27-1.83-.76Zm1.3-5H10V5H8v2H4.25C3 7 2 8 2 9.25v.9c0 .81.91 1.47 1.72 1.47.39 0 .77-.14 1.03-.42l1.61-1.6 1.6 1.6a1.5 1.5 0 0 0 2.08 0l1.6-1.6 1.6 1.6c.28.28.64.43 1.03.43.81 0 1.73-.67 1.73-1.48v-.9C16 8.01 15 7 13.75 7Z"/></svg>
-                <span>Member for {9} months</span>
-              </li>
-              <li className="icons-wrapper">
-                <svg fill="#6a737c" aria-hidden="true" className="svg-icon iconClock" width="18" height="18" viewBox="0 0 18 18"><path d="M9 17c-4.36 0-8-3.64-8-8 0-4.36 3.64-8 8-8 4.36 0 8 3.64 8 8 0 4.36-3.64 8-8 8Zm0-2c3.27 0 6-2.73 6-6s-2.73-6-6-6-6 2.73-6 6 2.73 6 6 6ZM8 5h1.01L9 9.36l3.22 2.1-.6.93L8 10V5Z"/></svg>
-                <span>Last seen {'this week'}</span>
-              </li>
-              <li className="icons-wrapper">
-                <svg fill="#6a737c" aria-hidden="true" className="svg-icon iconCalendar" width="18" height="18" viewBox="0 0 18 18"><path d="M14 2h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2h1V0h2v2h6V0h2v2ZM3 6v9h12V6H3Zm2 2h2v2H5V8Zm0 3h2v2H5v-2Zm3 0h2v2H8v-2Zm3 0h2v2h-2v-2Zm0-3h2v2h-2V8ZM8 8h2v2H8V8Z"/></svg>
-                <span>Visited {7} days ago</span>
-              </li>
-            </ul>
+      <PageWrapper>
+        <Nav location={location} />
+        <ContentsWrapper>
+          <div className="content-userBar">
+            <img src="https://lh3.googleusercontent.com/a/AATXAJzbbtvOgySkjfLmq_p28xd-Cr4PnWtRXCDJpVx4=k-s256"></img>
+            <div className="content-userBar--flexItems">
+              <div className="username">{"userName"}</div>
+              <ul className="icons">
+                <li className="icons-wrapper">
+                  <svg
+                    fill="#6a737c"
+                    aria-hidden="true"
+                    className="svg-icon iconCake"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                  >
+                    <path d="M9 4.5a1.5 1.5 0 0 0 1.28-2.27L9 0 7.72 2.23c-.14.22-.22.48-.22.77 0 .83.68 1.5 1.5 1.5Zm3.45 7.5-.8-.81-.81.8c-.98.98-2.69.98-3.67 0l-.8-.8-.82.8c-.49.49-1.14.76-1.83.76-.55 0-1.3-.17-1.72-.46V15c0 1.1.9 2 2 2h10a2 2 0 0 0 2-2v-2.7c-.42.28-1.17.45-1.72.45-.69 0-1.34-.27-1.83-.76Zm1.3-5H10V5H8v2H4.25C3 7 2 8 2 9.25v.9c0 .81.91 1.47 1.72 1.47.39 0 .77-.14 1.03-.42l1.61-1.6 1.6 1.6a1.5 1.5 0 0 0 2.08 0l1.6-1.6 1.6 1.6c.28.28.64.43 1.03.43.81 0 1.73-.67 1.73-1.48v-.9C16 8.01 15 7 13.75 7Z" />
+                  </svg>
+                  <span>Member for {9} months</span>
+                </li>
+                <li className="icons-wrapper">
+                  <svg
+                    fill="#6a737c"
+                    aria-hidden="true"
+                    className="svg-icon iconClock"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                  >
+                    <path d="M9 17c-4.36 0-8-3.64-8-8 0-4.36 3.64-8 8-8 4.36 0 8 3.64 8 8 0 4.36-3.64 8-8 8Zm0-2c3.27 0 6-2.73 6-6s-2.73-6-6-6-6 2.73-6 6 2.73 6 6 6ZM8 5h1.01L9 9.36l3.22 2.1-.6.93L8 10V5Z" />
+                  </svg>
+                  <span>Last seen {"this week"}</span>
+                </li>
+                <li className="icons-wrapper">
+                  <svg
+                    fill="#6a737c"
+                    aria-hidden="true"
+                    className="svg-icon iconCalendar"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                  >
+                    <path d="M14 2h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2h1V0h2v2h6V0h2v2ZM3 6v9h12V6H3Zm2 2h2v2H5V8Zm0 3h2v2H5v-2Zm3 0h2v2H8v-2Zm3 0h2v2h-2v-2Zm0-3h2v2h-2V8ZM8 8h2v2H8V8Z" />
+                  </svg>
+                  <span>Visited {7} days ago</span>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-        <div className="content-body">
-          <nav>
-            <ul>
-              <li className="title">
-                <span>PERSONAL INFORMATION</span>
-              </li>
-              <li className={`button ${activeTheme ? 'active' : ''}`} onClick={handleClickTheme}>
-                <span>Theme</span>
-              </li>
-              <li className={`button ${activeEdit ? 'active' : ''}`} onClick={handleClickEdit}>
-                <span>Edit profile</span>
-              </li>
-              <li className={`button ${activeDel ? 'active' : ''}`} onClick={handleClickDel}>
-                <span>Delete profile</span>
-              </li>
-              <li className="title">
-                <span>EMAIL SETTINGS</span>
-              </li>
-              <li className="button">
-                <span>Edit email settings</span>
-              </li>
-              <li className="button">
-                <span>Tag watching & ignoring</span>
-              </li>
-              <li className="button">
-                <span>Community digests</span>
-              </li>
-              <li className="button">
-                <span>Question subscriptions</span>
-              </li>
-              <li className="title">
-                <span>SITE SETTINGS</span>
-              </li>
-              <li className="button">
-                <span>Preferences</span>
-              </li>
-              <li className="button">
-                <span>Flair</span>
-              </li>
-              <li className="button">
-                <span>Hide communities</span>
-              </li>
-              <li className="title">
-                <span>ACCESS</span>
-              </li>
-              <li className="button">
-                <span>Your Collectives</span>
-              </li>
-              <li className="button">
-                <span>Your logins</span>
-              </li>
-              <li className="title">
-                <span>API</span>
-              </li>
-              <li className="button">
-                <span>Authorized applications</span>
-              </li>
-            </ul>
-          </nav>
-          <div className="content-wrapper">
-            <div className="content-about">
-              <div className="content-about--title">About</div>
-              <div className="content-about--body">
-                <p>자꾸 눈이 감긴다.Your about me section is currently blank. Would you like to add one? Edit profile</p>
+          <div className="content-body">
+            <nav>
+              <ul>
+                <li className="title">
+                  <span>PERSONAL INFORMATION</span>
+                </li>
+                <li
+                  className={`button ${activeTheme ? "active" : ""}`}
+                  onClick={handleClickTheme}
+                >
+                  <span>Theme</span>
+                </li>
+                <li
+                  className={`button ${activeEdit ? "active" : ""}`}
+                  onClick={handleClickEdit}
+                >
+                  <span>Edit profile</span>
+                </li>
+                <li
+                  className={`button ${activeDel ? "active" : ""}`}
+                  onClick={handleClickDel}
+                >
+                  <span>Delete profile</span>
+                </li>
+                <li className="title">
+                  <span>EMAIL SETTINGS</span>
+                </li>
+                <li className="button">
+                  <span>Edit email settings</span>
+                </li>
+                <li className="button">
+                  <span>Tag watching & ignoring</span>
+                </li>
+                <li className="button">
+                  <span>Community digests</span>
+                </li>
+                <li className="button">
+                  <span>Question subscriptions</span>
+                </li>
+                <li className="title">
+                  <span>SITE SETTINGS</span>
+                </li>
+                <li className="button">
+                  <span>Preferences</span>
+                </li>
+                <li className="button">
+                  <span>Flair</span>
+                </li>
+                <li className="button">
+                  <span>Hide communities</span>
+                </li>
+                <li className="title">
+                  <span>ACCESS</span>
+                </li>
+                <li className="button">
+                  <span>Your Collectives</span>
+                </li>
+                <li className="button">
+                  <span>Your logins</span>
+                </li>
+                <li className="title">
+                  <span>API</span>
+                </li>
+                <li className="button">
+                  <span>Authorized applications</span>
+                </li>
+              </ul>
+            </nav>
+            <div className="content-wrapper">
+              <div className="content-about">
+                <div className="content-about--title">About</div>
+                <div className="content-about--body">
+                  <p>
+                    자꾸 눈이 감긴다.Your about me section is currently blank.
+                    Would you like to add one? Edit profile
+                  </p>
+                </div>
+              </div>
+              <div className="content-interface">
+                {page === "theme" && <div>theme</div>}
+                {page === "edit" && <EditProfile />}
+                {page === "delete" && <DeleteProfile />}
               </div>
             </div>
-            <div className="content-interface">
-              {page === 'theme' && <div>theme</div>}
-              {page === 'edit' && <EditProfile />}
-              {page === 'delete' && <DeleteProfile />}
-            </div>
           </div>
-        </div>
-      </ContentsWrapper>
-    </PageWrapper>
+        </ContentsWrapper>
+      </PageWrapper>
       <Footer />
     </>
   );

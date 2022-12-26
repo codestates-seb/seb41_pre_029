@@ -1,54 +1,63 @@
 package com.ikujo.stackoverflow.domain.article.controller;
 
-import com.ikujo.stackoverflow.domain.article.dto.response.dummy.ArticleDummyResponseDto;
-import com.ikujo.stackoverflow.domain.article.dto.response.dummy.ArticleMultiDummyResponseDto;
-import com.ikujo.stackoverflow.domain.article.service.impl.ArticleDummyServiceImpl;
+import com.ikujo.stackoverflow.domain.article.dto.ArticleDto;
+import com.ikujo.stackoverflow.domain.article.dto.request.ArticleRequest;
+import com.ikujo.stackoverflow.domain.article.dto.response.ArticleDetailResponse;
+import com.ikujo.stackoverflow.domain.article.dto.response.ArticleResponse;
+import com.ikujo.stackoverflow.domain.article.service.ArticleService;
 import com.ikujo.stackoverflow.global.dto.MultiResponseDto;
 import com.ikujo.stackoverflow.global.dto.SingleResponseDto;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/questions")
 public class ArticleController {
 
-//    private final ArticleService articleService;
-    private final ArticleDummyServiceImpl articleService;
+    private final ArticleService articleService;
 
     @GetMapping
-    public ResponseEntity getQuestions(@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        List<ArticleMultiDummyResponseDto> articleMultiDummyResponseDtoList = articleService.findArticles();
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), articleMultiDummyResponseDtoList.size());
-
-        Page page = new PageImpl(articleMultiDummyResponseDtoList.subList(start, end), pageable, 300);
+    public ResponseEntity getQuestions(@PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<ArticleResponse> articleResponsePage = articleService.findArticles(pageable);
 
         return new ResponseEntity<>(
-                new MultiResponseDto<>(page.getContent(), page),
+                new MultiResponseDto (articleResponsePage.getContent(), articleResponsePage),
                 HttpStatus.OK);
     }
 
     @GetMapping("{article-id}")
-    public ResponseEntity getQuestion(@PathVariable("article-id") Long articleId) {
-
-        ArticleDummyResponseDto article = articleService.findArticle(articleId);
+    public ResponseEntity getQuestion(@Positive @PathVariable("article-id") Long articleId) {
+        ArticleDetailResponse articleDetailDto = articleService.findArticle(articleId);
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(article),
+                new SingleResponseDto<>(articleDetailDto),
                 HttpStatus.OK);
     }
 
+    @PostMapping()
+    public ResponseEntity postArticle(@Valid @RequestBody ArticleRequest articlePost) {
+        // FIXME : 회원 아이디를 어떻게 받을지 결정되면 이 부분만 수정하면 된다.
+        Long memberId = 1L ;
+        ArticleDto articleDto = articleService.saveArticle(articlePost, memberId);
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(articleDto),
+                HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("{article-id}")
+    public ResponseEntity deleteArticle(@Positive @PathVariable("article-id") Long articleId) {
+        articleService.deleteArticle(articleId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

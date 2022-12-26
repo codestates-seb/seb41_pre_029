@@ -17,19 +17,19 @@ public class StubMemberRepository {
                             "aaa@gmail.com",
                             "1234",
                             "김회원",
-                            new Profile("대한민국", "안녕하세요", "김회원입니다~")),
+                            new Profile("이미지", "대한민국", "안녕하세요", "김회원입니다~")),
 
                     new Member(2L,
                             "bbb@gmail.com",
                             "1234",
                             "이회원",
-                            new Profile("서울", "주니어 개발자", "이회원입니다!")),
+                            new Profile("이미지", "서울", "주니어 개발자", "이회원입니다!")),
 
                     new Member(3L,
                             "ccc@gmail.com",
                             "1234",
                             "박회원",
-                            new Profile("부산", "시니어 개발자", "박회원이예요"))
+                            new Profile("이미지", "부산", "시니어 개발자", "박회원이예요"))
             )
     );
 
