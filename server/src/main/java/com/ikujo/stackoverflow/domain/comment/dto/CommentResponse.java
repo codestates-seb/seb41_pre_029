@@ -9,22 +9,28 @@ public record CommentResponse(Long id,
                               String content,
                               Integer recommendCount,
                               Boolean selection,
+                              Member member,
                               LocalDateTime createdAt,
-                              LocalDateTime lastModifiedAt,
-                              Member member) {
+                              LocalDateTime lastModifiedAt
+) {
+
+    public static CommentResponse of(Long id, String content, Integer recommendCount, Boolean selection,
+                                     Member member, LocalDateTime createdAt, LocalDateTime lastModifiedAt) {
+        return new CommentResponse(
+                id, content, recommendCount, selection, member, createdAt, lastModifiedAt
+        );
+    }
 
     public static CommentResponse from(Comment comment) {
 
         return new CommentResponse(
-
                 comment.getId(),
                 comment.getContent(),
                 comment.getRecommendCount(),
                 comment.getSelection(),
+                comment.creator(),
                 comment.getCreatedAt(),
-                comment.getLastModifiedAt(),
-                comment.creator()
-
+                comment.getLastModifiedAt()
         );
     }
 
