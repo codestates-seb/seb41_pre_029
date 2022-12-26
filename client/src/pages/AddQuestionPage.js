@@ -6,7 +6,6 @@ import axios from "axios";
 import Parser from "../components/Parser";
 
 import Footer from "../components/Footer";
-import Editor from "../components/Editors";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
 import CEditor from "../components/CKEditor";
@@ -18,19 +17,12 @@ const AddQuestionPage = () => {
   const [firstContent, setFirstContent] = useState("");
   const [secondContent, setSecondContent] = useState("");
 
-  // const turndownService = new parser();
-  // const markdown = turndownService.turndown(firstContent);
-  // console.log(markdown);
-
-  // console.log(parse(firstContent));
-
   const [input, setInput] = useState({
     title: "",
     firstContent: "",
     secondContent: "",
     tags: "",
   });
-  // console.log(input);
 
   useEffect(() => {
     setInput({
@@ -48,6 +40,10 @@ const AddQuestionPage = () => {
       event.target.value = "";
     }
   };
+
+  // '#123#456#태그-태그#'
+
+  //공백은 하이픈
 
   const removeTags = (indexToRemove) => {
     setTags(
@@ -100,6 +96,8 @@ const AddQuestionPage = () => {
       tags: "",
     });
     setTags([]);
+    setFirstContent("");
+    setSecondContent("");
     setModal(false);
   };
 
@@ -161,9 +159,11 @@ const AddQuestionPage = () => {
             Introduce the problem and expand on what you put in the title.
             Minimum 20 characters.
           </div>
-          {/* <Editor set={setFirstContent} get={firstContent} /> */}
-          <CEditor onChange={setFirstContent} data={firstContent} />
-          <Parser html={firstContent} />
+          <div className="editor">
+            {/* <Editor set={setFirstContent} get={firstContent} /> */}
+            <CEditor onChange={setFirstContent} data={firstContent} />
+            <Parser html={firstContent} />
+          </div>
         </InputBox>
         <InputBox>
           <div className="title">
@@ -173,7 +173,7 @@ const AddQuestionPage = () => {
             Describe what you tried, what you expected to happen, and what
             actually resulted. Minimum 20 characters.
           </div>
-          <div>
+          <div className="editor">
             <CEditor onChange={setSecondContent} data={secondContent} />
             <Parser html={secondContent} />
           </div>

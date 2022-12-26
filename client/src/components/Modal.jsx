@@ -34,6 +34,7 @@ const ModalContainer = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 10000;
 `
 
 const ModalWrapper = styled.div`
@@ -45,6 +46,8 @@ const ModalWrapper = styled.div`
   max-width: 100%;
   width:430px;
   height:125px;
+
+  z-index:1050;
   
   display: flex;
   flex-direction: column;
