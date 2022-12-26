@@ -3,10 +3,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import Parser from "../components/Parser";
+
 import Footer from "../components/Footer";
 import Editor from "../components/Editors";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
+import CEditor from "../components/CKEditor";
 
 const AddQuestionPage = () => {
   const navigate = useNavigate();
@@ -14,6 +17,12 @@ const AddQuestionPage = () => {
   const [tags, setTags] = useState([]);
   const [firstContent, setFirstContent] = useState("");
   const [secondContent, setSecondContent] = useState("");
+
+  // const turndownService = new parser();
+  // const markdown = turndownService.turndown(firstContent);
+  // console.log(markdown);
+
+  // console.log(parse(firstContent));
 
   const [input, setInput] = useState({
     title: "",
@@ -93,6 +102,7 @@ const AddQuestionPage = () => {
     setTags([]);
     setModal(false);
   };
+
   return (
     <>
       {modal ? (
@@ -151,7 +161,8 @@ const AddQuestionPage = () => {
             Introduce the problem and expand on what you put in the title.
             Minimum 20 characters.
           </div>
-          <Editor set={setFirstContent} get={firstContent} />
+          {/* <Editor set={setFirstContent} get={firstContent} /> */}
+          <CEditor onChange={setFirstContent} data={firstContent} />
         </InputBox>
         <InputBox>
           <div className="title">
@@ -161,7 +172,10 @@ const AddQuestionPage = () => {
             Describe what you tried, what you expected to happen, and what
             actually resulted. Minimum 20 characters.
           </div>
-          <Editor set={setSecondContent} get={secondContent} />
+          <div>
+            <Parser html={firstContent} />
+          </div>
+          {/* <Editor set={setSecondContent} get={secondContent} /> */}
         </InputBox>
         <InputBox className="tag_box">
           <div className="title">Tags</div>
