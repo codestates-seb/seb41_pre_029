@@ -1,5 +1,6 @@
 package com.ikujo.stackoverflow.domain.article.entity;
 
+import com.ikujo.stackoverflow.domain.comment.entity.Comment;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.global.entity.BaseTime;
 import jakarta.persistence.*;
@@ -24,7 +25,7 @@ public class Article extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -39,17 +40,30 @@ public class Article extends BaseTime {
     @ColumnDefault("0")
     private Long hits;
 
-    @Column(nullable = false)
-    @ColumnDefault("0")
-    private Integer recommendCount;
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private List<ArticleRecommend> articleRecommendList = new ArrayList<>();
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
-    private List<ArticleRecommend> articleRecommendList= new ArrayList<>();
+    private List<Comment> commentList = new ArrayList<>();
 
-    public void addArticleRecommend(ArticleRecommend articleRecommend){
+    public void addArticleRecommend(ArticleRecommend articleRecommend) {
         articleRecommendList.add(articleRecommend);
-        if(articleRecommend.getArticle() != this){
+        if (articleRecommend.getArticle() != this) {
             articleRecommend.setArticle(this);
         }
     }
+
+    public Article(Member member, String title, String content, String tag, Long hits) {
+        this.id = null;
+        this.member = member;
+        this.title = title;
+        this.content = content;
+        this.tag = tag;
+        this.hits = hits;
+    }
+
+    public static Article of(Member member, String title, String content, String tag, Long hits) {
+        return new Article(member, title, content, tag, hits);
+    }
+
 }

@@ -54,6 +54,10 @@ public class Comment extends BaseTime {
         }
     }
 
+    public Boolean isSelection() {
+        return this.selection;
+    }
+
     public Comment(Article article, Member member, String content, Boolean selection,
                    Integer recommendCount, List<CommentRecommend> commentRecommendList) {
         this.article = article;
