@@ -14,6 +14,7 @@ import SignupPage from "./pages/SignupPage";
 import EditQuestionPage from "./pages/EditQuestionPage";
 
 import useStore from "./zustand/store.js";
+import EditAnswerPage from "./pages/EditAnswerPage";
 
 function App() {
   const [searchData, setSearchData] = useState("");
@@ -34,6 +35,7 @@ function App() {
           {/* <Route path="/signoutpage" element={<SignoutPage />} /> */}
           <Route path="/signuppage" element={<SignupPage />} />
           <Route path="/edit/:id" element={<EditQuestionPage />} />
+          <Route path="/editanswer/:questionid/:answerid" element={<EditAnswerPage />} />
         </Routes>
       </Router>
     </div>

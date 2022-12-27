@@ -8,6 +8,7 @@ import com.ikujo.stackoverflow.domain.article.dto.response.ArticleResponse;
 import com.ikujo.stackoverflow.domain.article.entity.Article;
 import com.ikujo.stackoverflow.domain.article.repository.ArticleRepository;
 import com.ikujo.stackoverflow.domain.article.service.impl.ArticleServiceImpl;
+import com.ikujo.stackoverflow.domain.member.entity.Link;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.Profile;
 import com.ikujo.stackoverflow.domain.member.repository.MemberRepository;
@@ -183,7 +184,8 @@ class ArticleServiceTest {
                 "test@gmail.com",
                 "1234",
                 "테스트",
-                new Profile("이미지", "대한민국", "안녕하세요", "테스트입니다~"));
+                new Profile("이미지", "대한민국", "안녕하세요", "테스트입니다~")
+        ,new Link());
     }
 
     private ArticleRequest createArticleRequest() {

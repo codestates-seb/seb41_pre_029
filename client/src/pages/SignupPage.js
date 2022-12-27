@@ -203,24 +203,23 @@ const SignupPage = () => {
       setPwdValid("valid");
     } else if (emailValueCheck && passwordValueCheck) {
       clear();
-      localStorage.setItem("UserID", "임시로그인");
-      // pathNavigate("/");
+      localStorage.setItem("info", "임시로그인");
+      pathNavigate("/");
       // window.location.reload();
-      // axios({
-      //   method: "post",
-      //   url: "요청할 api 주소/members/login",
-      //   data: {
-      //     email,
-      //     password: pwd,
-      // displayName,
-      //   },
-      // })
-      //   .then((res) => {
-      //     console.log(res);
-      //     //토큰저장?
-      //     localStorage.setItem("isLogin", res.data.token);
-      //     localStorage.setItem("UserID", res.data.id);
-      //   })
+      axios({
+        method: "post",
+        url: "http://13.124.69.107/members/signup",
+        data: {
+          email,
+          password: pwd,
+          nickname: displayName,
+        },
+      }).then((res) => {
+        console.log(res);
+        //토큰저장?
+        // localStorage.setItem("isLogin", res.data.token);
+        // localStorage.setItem("UserID", res.data.id);
+      });
       //   .then(navigate("/"))
       //   .catch((error) => {
       //     console.log(error);
@@ -336,11 +335,9 @@ const SignupPage = () => {
                 <Question />
               </div>
             </CheckBox>
-            <FormBtn
-              type={"submmit"}
-              onClick={submitHandler}
-              buttonName={"Sign Up"}
-            ></FormBtn>
+            <p onClick={submitHandler}>
+              <FormBtn type={"submmit"} buttonName={"Sign Up"}></FormBtn>
+            </p>
             <Div>
               <SinUpdiv>
                 By clicking “Sign up”, you agree to our

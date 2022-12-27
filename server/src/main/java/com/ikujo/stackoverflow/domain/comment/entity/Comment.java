@@ -9,6 +9,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,12 +69,8 @@ public class Comment extends BaseTime {
         this.commentRecommendList = commentRecommendList;
     }
 
-    public static Comment of(Article article, Member member, String content, Boolean selection,
+    public static Comment of(Long id, Article article, Member member, String content, Boolean selection,
                              Integer recommendCount, List<CommentRecommend> commentRecommendList) {
-        return new Comment(article, member, content, selection, recommendCount, commentRecommendList);
-    }
-
-    public Member creator() {
-        return new Member(member.getId(), member.getNickname());
+        return new Comment(id, article, member, content, selection, recommendCount, commentRecommendList);
     }
 }
