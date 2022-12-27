@@ -96,14 +96,13 @@ const DeleteProfile = () => {
     if (active) {
       if (window.confirm("정말 삭제하시겠습니까?")) {
         //상태 로그아웃으로 만들기
-        // axios
-        //   .delete(`http://localhost:8080/members/{member-${id}}`)
-        //   .then(() => {
-        //     alert("그동안 이용해주셔서 감사합니다.");
-        //     navigate("/");
-        //   })
-        //   .catch((err) => console.log("error!!"));
-        console.log("???");
+        axios
+          .delete(`http://13.124.69.107/members/${id}`)
+          .then(() => {
+            alert("그동안 이용해주셔서 감사합니다.");
+            navigate("/");
+          })
+          .catch((err) => console.log("error!!"));
       } else {
         return;
       }

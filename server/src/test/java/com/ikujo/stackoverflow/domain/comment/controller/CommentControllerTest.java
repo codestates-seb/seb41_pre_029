@@ -5,9 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.ikujo.stackoverflow.config.LocalDateTimeSerializer;
 import com.ikujo.stackoverflow.domain.article.entity.Article;
 import com.ikujo.stackoverflow.domain.article.repository.ArticleRepository;
-import com.ikujo.stackoverflow.domain.comment.dto.CommentPost;
-import com.ikujo.stackoverflow.domain.comment.entity.Comment;
-import com.ikujo.stackoverflow.domain.comment.service.CommentService;
+import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPost;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.Profile;
 import com.ikujo.stackoverflow.domain.member.repository.MemberRepository;
@@ -17,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -25,9 +22,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.startsWith;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
