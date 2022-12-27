@@ -1,20 +1,53 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 import Nav from "./Nav";
 import Footer from "./Footer";
 import CEditor from './CKEditor';
 import Parser from "./Parser";
 import Button from "./Button";
-
+import axios from "axios";
 
 const EditQuestion = ({originData}) => {
-    const location = {pathname:'/'}
-    const [content, setContent] = useState(originData[0].content);
-    const [title,setTitle] = useState(originData[0].title);
-    const [tags, setTags] = useState(originData[0].tags);
 
-    const addTags = (event) => {
+    const location = {pathname:'/'}
+    const [content, setContent] = useState(originData.content);
+    const [title,setTitle] = useState(originData.title);
+    const [tags, setTags] = useState(originData.tag);
+    const [submitTags, setSubmitTags] = useState("");
+    const[summary, setSummary] = useState(originData.summary || "");
+
+    const [input, setInput] = useState({
+      title : originData.title,
+      tags : originData.tags,
+      content : originData.content,
+      summary
+    });
+
+    useEffect(() => {
+      setInput({
+        title,
+        submitTags,
+        content,
+      });
+    }, [submitTags, content, title]);
+
+  /* 태그 제출 형식으로 변경 */
+   useEffect(() => {
+    setSubmitTags(`#${tags.map((el) => el.replaceAll(" ", "-")).join("#")}`);
+  });
+  // console.log(input);
+
+  const handleChange = (e) => {
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  /* 태그 추가, 삭제 */
+  const addTags = (event) => {
     let inputValue = event.target.value;
     if (inputValue.length !== 0 && !tags.includes(inputValue)) {
       setTags([...tags, inputValue]);
@@ -30,13 +63,29 @@ const EditQuestion = ({originData}) => {
     );
   };
 
-  console.log(content)
+  const params = useParams();
+  const id = Number(params.id);
+  const navigate = useNavigate();
+
+  const handleClickEdit = () => {
+    axios
+    .patch(`http://13.124.69.107/questions/${id}`, 
+    {
+      data: {
+        title : input.title,
+        content : input.content,
+        tag : input.tags
+      }
+    })
+    .then(() => navigate(`/questionpage/${id}`))
+    console.log(input)
+  }
   return (
     <>
     <EditContainer>
       <Nav location={location} />
       <Main>
-      <YellowBoxContainer padding="10px" >
+      <YellowBoxContainer className="main_box" padding="10px" >
         Your edit will be placed in a queue until it is peer reviewed.
         <br />
         <br />
@@ -44,13 +93,16 @@ const EditQuestion = ({originData}) => {
       </YellowBoxContainer>
         <InputBox>
           <div className="title">Title</div>
-          <input className="title_input" value={title}>
+          <input className="input"
+          value={input.title}
+          name="title"
+          onChange={e => setTitle(e.target.value)}>
           </input>
         </InputBox>
           <InputBox>
-          <div className="content">Body</div>
+          <div className="title">Body</div>
           <CEditor onChange={setContent} data={content} /> 
-            <Parser html={content} />
+            {/* <Parser html={content} /> */}
         </InputBox>
             <InputBox className="tag_box">
               <div className="title">Tags</div>
@@ -81,12 +133,14 @@ const EditQuestion = ({originData}) => {
           </TagsInput>
         </InputBox>
         <InputBox>
-          <div className="edit_summary">Edit Summary</div>
-          <input className="edit_summary_input" placeholder="brieflt explain your changes">
+          <div className="title">Edit Summary</div>
+          <input className="input" placeholder="brieflt explain your changes" name="summary" onChange={handleChange}>
           </input>
         </InputBox>
         <SubmitContainer>
-          <Button buttonName={"Save edits"}/>
+          <p onClick={handleClickEdit}>
+            <Button buttonName={"Save edits"}/>
+          </p>
           <div>Cancle</div>
         </SubmitContainer>
     </Main>
@@ -114,6 +168,7 @@ export default EditQuestion;
 const EditContainer = styled.div`
   display: flex;
   flex-direction: row;
+  width: 100%;
 
     margin-left: 320.5px;
     margin-right: 320.5px;
@@ -122,7 +177,7 @@ const YellowBoxContainer = styled.div`
  width: ${(props) => props.width || "Auto"};
   background-color:#fdf7e2;
   padding:${(props) => props.padding || 0};
-  margin: 20px;
+  margin: 20px 0 ;
   margin-right: 10px;
   box-shadow: 0 1px 2px hsla(0,0%,0%,0.05), 0 1px 4px hsla(0, 0%, 0%, 0.05), 0 2px 8px hsla(0, 0%, 0%, 0.05);
   border-left: 1px solid #FDEBAA;
@@ -131,10 +186,12 @@ const YellowBoxContainer = styled.div`
   font-size : 12px;
   line-height: 16px;
   color : #525960;
+   &.main_box{
+   border: 1px solid #FDEBAA;
+ }
 `
 
 const Title = styled.div`
-
   width:270px;
   padding: 10px 15px;
   font-size : 12px;
@@ -144,7 +201,6 @@ const Title = styled.div`
   background-color: #fbf3d5;
   border-top:1px solid #FDEBAA;
   border-bottom:1px solid #FDEBAA;
-
 `
 const Content = styled.ol`
   margin-top:12px;
@@ -158,22 +214,48 @@ const Content = styled.ol`
 
 const Main = styled.div`
   width: 800px;
+  margin:20px;
+
+  > div {
+  > .title {
+     font-size: 17px;
+    font-weight: 600;
+    padding: 0 2px;
+    margin: 15px 0;
+  }
+
+  > .input{
+   padding: 7.8px 9.2px;
+    width: 97.1%;
+    border-radius: 3px;
+    border: 1px solid #e3e6e8;
+
+    &:focus {
+      box-shadow: 1px 1px 1px 2px #cde9fe, -1px -1px 1px 2px #cde9fe;
+      outline: none !important;
+      border-color: #8cb3d0;
+    }
+  }
+}
+
+  
   `
 const InputBox = styled.div`
   & > :focus {
       box-shadow: 1px 1px 1px 2px #cde9fe, -1px -1px 1px 2px #cde9fe;
-      outline: none;
+            outline: none !important;
     }
+  
 `
 const TagsInput = styled.div`
   display: flex;
   align-items: flex-start;
   flex-wrap: wrap;
   min-height: 48px;
-  width: 480px;
   padding: 0 8px;
   border: 1px solid rgb(214, 216, 218);
   border-radius: 6px;
+
 
 
   > ul {
@@ -243,12 +325,12 @@ const TagsInput = styled.div`
 const SubmitContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-top: 20px;
+  margin-top: 40px;
   > * {
     margin-right: 30px;
     font-size: 13px;
   }
-  > :first-child {
+  > :first-child >  {
     :hover {
       background-color: #0063bf;
     }

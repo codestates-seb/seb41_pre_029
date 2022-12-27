@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 const Nav = ({ location }) => {
   const [active, setActive] = useState(location.pathname);
@@ -9,11 +9,14 @@ const Nav = ({ location }) => {
   const handleClick = (link) => {
     setActive(link);
   };
-  
+
+  const params = useParams();
+  const id = params.id;
+
   const menu = [
     { name: "Questions", link: "/" },
     { name: "Tags", link: "/tags" },
-    { name: "Users", link: "/mypage" },
+    { name: "Users", link: `/mypage/1` },
     { name: "Companies", link: "/companies" },
   ];
 
@@ -30,7 +33,11 @@ const Nav = ({ location }) => {
         <NavLink
           key={index}
           to={el.link}
-          className={`${el.link === active ? "active" : null} ${location.pathname.includes('/questionpage') && index === 0 ? "active" : null}`}
+          className={`${el.link === active ? "active" : null} ${
+            location.pathname.includes("/questionpage") && index === 0
+              ? "active"
+              : null
+          }`}
           onClick={() => handleClick(el.link)}
         >
           <div>

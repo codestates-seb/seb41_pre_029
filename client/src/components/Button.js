@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledButton = styled.button`
@@ -18,10 +18,11 @@ const StyledButton = styled.button`
 `;
 
 const Button = ({ buttonName, link, ...rest }) => {
+  const navigate = useNavigate();
   return (
-    // <Link to={link}>
-    <StyledButton {...rest}>{buttonName}</StyledButton>
-    // {/* </Link> */}
+    <StyledButton {...rest} onClick={() => navigate(link)}>
+      {buttonName}
+    </StyledButton>
   );
 };
 

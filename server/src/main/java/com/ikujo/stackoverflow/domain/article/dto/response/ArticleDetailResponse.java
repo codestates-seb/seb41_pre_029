@@ -4,8 +4,9 @@ import com.ikujo.stackoverflow.domain.article.entity.Article;
 import com.ikujo.stackoverflow.domain.member.entity.dto.MemberIdentityDto;
 import com.ikujo.stackoverflow.global.dto.BaseTimeDto;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static com.ikujo.stackoverflow.domain.article.dto.response.ArticleResponse.tagSplit;
 
 public record ArticleDetailResponse(
         MemberIdentityDto member,
@@ -36,7 +37,7 @@ public record ArticleDetailResponse(
 
     public static ArticleDetailResponse from(Article article) {
         List<String> tags = tagSplit(article.getTag());
-        MemberIdentityDto memberIdentityResponse = MemberIdentityDto.of(article.getMember().getId(), article.getMember().getNickname());
+        MemberIdentityDto memberIdentityResponse = MemberIdentityDto.of(article.getMember().getId(), article.getMember().getProfile().getImage(), article.getMember().getNickname());
         BaseTimeDto baseTimeDto = BaseTimeDto.of(article.getCreatedAt(), article.getLastModifiedAt());
 
         return new ArticleDetailResponse(
@@ -49,17 +50,6 @@ public record ArticleDetailResponse(
                 article.getHits(),
                 baseTimeDto
         );
-    }
-
-    public static List<String> tagSplit(String tag) {
-        List<String> tags = new ArrayList<>();
-        tag = tag.replace("#", " #");
-        String[] tagSplit = tag.split(" ");
-        for (int i = 1; i < tagSplit.length; i++) {
-            tags.add(tagSplit[i]);
-        }
-
-        return tags;
     }
 
 }

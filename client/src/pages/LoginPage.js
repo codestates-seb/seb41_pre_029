@@ -93,7 +93,7 @@ const BtnStyle = styled.button`
 `;
 const FormBtn = styled(Button)`
   height: 38px;
-  width: auto;
+  width: 100%;
   padding: 8px 13px;
   margin: 10px 1px;
 `;
@@ -150,24 +150,27 @@ const Loginpage = () => {
       setPwdValid("valid");
     } else {
       clear();
-      axios({
-        method: "post",
-        url: "요청할 api 주소/members/login",
-        data: {
-          email,
-          password: pwd,
-        },
-      })
-        .then((res) => {
-          console.log(res);
-          //토큰저장?
-          localStorage.setItem("isLogin", res.data.token);
-          localStorage.setItem("UserID", res.data.id);
-        })
-        .then(navigate("/"))
-        .catch((error) => {
-          console.log(error);
-        });
+      localStorage.setItem("UserID", "임시로그인");
+      navigate("/");
+      window.location.reload();
+      // axios({
+      //   method: "post",
+      //   url: "요청할 api 주소/members/login",
+      //   data: {
+      //     email,
+      //     password: pwd,
+      //   },
+      // })
+      //   .then((res) => {
+      //     console.log(res);
+      //     //토큰저장?
+      //     localStorage.setItem("isLogin", res.data.token);
+      //     localStorage.setItem("UserID", res.data.id);
+      //   })
+      //   .then(navigate("/"))
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
     }
   };
   return (
@@ -225,7 +228,9 @@ const Loginpage = () => {
               onChange={(e) => setPwd(e.target.value)}
             />
             <span>{isvalid}</span>
-            <FormBtn onClick={submitHandler} buttonName={"Log in"}></FormBtn>
+            <p onClick={submitHandler}>
+              <FormBtn buttonName={"Log in"}></FormBtn>
+            </p>
           </Form>
         </Div>
         <Div>

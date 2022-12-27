@@ -1,8 +1,10 @@
 // about 내용, 아이콘 날짜 정보 받아와야 함
 import styled from "styled-components";
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import axios from "axios";
 
+import Theme from "../components/Theme";
 import EditProfile from "../components/EditProfile";
 import DeleteProfile from "../components/DeleteProfile";
 import Nav from "../components/Nav";
@@ -138,7 +140,24 @@ const MyPage = () => {
   const [activeDel, setActiveDel] = useState(false);
   const [page, setPage] = useState("theme");
 
-  const location = useLocation();
+  const [userInfo, setUserInfo] = useState({});
+  console.log("render!");
+
+  const params = useParams();
+  const id = params.id;
+  // console.log(id);
+
+  const pathLocation = { pathname: `/mypage/${id}` };
+
+  useEffect(() => {
+    axios
+      .get(`http://13.124.69.107/members/${id}`)
+      .then((res) => setUserInfo(res.data.data));
+  }, []);
+
+  // console.log(userInfo);
+
+  // const { email, nickname, profile } = userInfo;
 
   const handleClickEdit = () => {
     if (!activeEdit) {
@@ -169,12 +188,12 @@ const MyPage = () => {
   return (
     <>
       <PageWrapper>
-        <Nav location={location} />
+        <Nav location={pathLocation} />
         <ContentsWrapper>
           <div className="content-userBar">
-            <img src="https://lh3.googleusercontent.com/a/AATXAJzbbtvOgySkjfLmq_p28xd-Cr4PnWtRXCDJpVx4=k-s256"></img>
+            <img src={userInfo?.profile?.image}></img>
             <div className="content-userBar--flexItems">
-              <div className="username">{"userName"}</div>
+              <div className="username">{userInfo?.nickname}</div>
               <ul className="icons">
                 <li className="icons-wrapper">
                   <svg
@@ -291,13 +310,14 @@ const MyPage = () => {
                 <div className="content-about--title">About</div>
                 <div className="content-about--body">
                   <p>
-                    자꾸 눈이 감긴다.Your about me section is currently blank.
-                    Would you like to add one? Edit profile
+                    {userInfo?.profile?.aboutMe}
+                    {/* 자꾸 눈이 감긴다.Your about me section is currently blank.
+                    Would you like to add one? Edit profile */}
                   </p>
                 </div>
               </div>
               <div className="content-interface">
-                {page === "theme" && <div>theme</div>}
+                {page === "theme" && <Theme />}
                 {page === "edit" && <EditProfile />}
                 {page === "delete" && <DeleteProfile />}
               </div>

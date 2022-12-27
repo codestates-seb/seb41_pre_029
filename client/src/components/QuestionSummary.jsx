@@ -2,13 +2,15 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 import displayedAt from "../util/displayedAt";
+import axios from "axios";
 
 const QuestionSummary = ({ props }) => {
+
   const navigate = useNavigate();
   const navigateDetailPage = (id) => {
     navigate(`/questionpage/${id}`)
   }
-  
+
   return (
     <QuestionSummaryContainer id="question_sumamry_{props.id}">
       <SummaryStats>
@@ -20,9 +22,9 @@ const QuestionSummary = ({ props }) => {
         <div className="summary_item">
           {props.selection ? 
           <span className="selected">
-            ✔ {props.recommendCount}
+            ✔ {props.commentCount}
           <span className="summary_item_unit">
-              {props.recommendCount === 1? " answer" : " answers"}
+              {props.commentCount === 1? " answer" : " answers"}
             </span>
           </span>
           : 
@@ -167,9 +169,11 @@ const SummaryMeta = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+   
 
     & .summary_meta_tag {
       background: #e1ecf4;
+       cursor: pointer;
 
       margin-right: 4px;
       padding: 3px 6px;
