@@ -31,10 +31,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.matches;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -64,11 +64,38 @@ class MemberControllerTest {
 
     @Test
     public void getMemberProfileTest() throws Exception {
-        //given
-
-        //when
-
-        //then
+//        //given
+//        Long id = 1L;
+//
+//        MemberResponse response = MemberResponse.of(
+//                1L,
+//                "test@gmail.com",
+//                "test",
+//                new Profile(
+//                        "https://www.gravatar.com/avatar/571f9b56b9fe58dca664a393b6d2793c?s=192&d=identicon&r=PG",
+//                        "서울",
+//                        "프로필 제목",
+//                        "프로필 소개"
+//                ),
+//                LocalDateTime.now(),
+//                LocalDateTime.now()
+//        );
+//
+//        given(memberService.findMember(Mockito.anyLong())).willReturn(new Member());
+//        given(MemberResponse.from(Mockito.any(Member.class))).willReturn()
+//
+//        //when
+//        ResultActions actions = mockMvc.perform(
+//                get("/members/{id}", id)
+//                        .accept(MediaType.APPLICATION_JSON)
+//        );
+//
+//        //then
+//        actions.andExpect(status().isOk())
+//                .andExpect(jsonPath("$.data.id").value(response.id()))
+//                .andExpect(jsonPath("$.data.email").value(response.email()))
+//                .andExpect(jsonPath("$.data.nickname").value(response.nickname()))
+//                .andReturn();
     }
 
 
