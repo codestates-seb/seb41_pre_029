@@ -1,13 +1,14 @@
 package com.ikujo.stackoverflow.domain.member.service;
 
 import com.ikujo.stackoverflow.domain.member.entity.Member;
-import com.ikujo.stackoverflow.domain.member.entity.Profile;
 import com.ikujo.stackoverflow.domain.member.entity.dto.MemberDto;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberLoginPost;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberProfilePatch;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberSignupPost;
 import com.ikujo.stackoverflow.domain.member.entity.dto.response.MemberResponse;
 import com.ikujo.stackoverflow.domain.member.repository.MemberRepository;
+import com.ikujo.stackoverflow.global.exception.BusinessLogicException;
+import com.ikujo.stackoverflow.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -49,7 +50,7 @@ public class MemberService {
                 .ifPresent(findMember::setNickname);
 
         // 프로필 정보는 null 허용
-        Optional.of(memberProfilePatch.image())
+        Optional.ofNullable(memberProfilePatch.image())
                 .ifPresent(image -> findMember.getProfile().setImage(image));
 
         Optional.ofNullable(memberProfilePatch.location())
@@ -61,6 +62,15 @@ public class MemberService {
         Optional.ofNullable(memberProfilePatch.aboutMe())
                 .ifPresent(aboutMe -> findMember.getProfile().setAboutMe(aboutMe));
 
+        Optional.ofNullable(memberProfilePatch.website())
+                .ifPresent(website -> findMember.getLink().setWebsite(website));
+
+        Optional.ofNullable(memberProfilePatch.twitter())
+                .ifPresent(twitter -> findMember.getLink().setTwitter(twitter));
+
+        Optional.ofNullable(memberProfilePatch.github())
+                .ifPresent(github -> findMember.getLink().setGithub(github));
+
         return memberRepository.save(findMember);
     }
 
@@ -70,7 +80,7 @@ public class MemberService {
     public void loginMember(MemberLoginPost memberLoginPost) {
         Optional<Member> findMember = memberRepository.findByEmail(memberLoginPost.email());
         if (!findMember.isPresent()) {
-            throw new RuntimeException("존재하지 않는 이메일입니다.");
+            throw new BusinessLogicException(ExceptionCode.EMAIL_NOT_FOUND);
         }
 
         // 비밀번호 검증 로직
@@ -99,7 +109,7 @@ public class MemberService {
     private void verifyExistsEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent())
-            throw new RuntimeException("같은 이메일이 존재합니다.");
+            throw new BusinessLogicException(ExceptionCode.EMAIL_EXISTS);
     }
 
     /**
@@ -108,7 +118,7 @@ public class MemberService {
     @Transactional(readOnly = true)
     public Member findVerifiedMember(Long id) {
         Member findMember = memberRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("잘못된 회원 정보입니다."));
+                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         return findMember;
     }
