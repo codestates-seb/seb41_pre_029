@@ -139,6 +139,7 @@ const Loginpage = () => {
     setPwdValid("");
   };
   //폼 제출시 서버통신
+
   const submitHandler = (e) => {
     e.preventDefault();
     if (!emailValueCheck || email.trim() === "") {
@@ -150,7 +151,8 @@ const Loginpage = () => {
       setPwdValid("valid");
     } else {
       clear();
-      localStorage.setItem("UserID", "임시로그인");
+      const data = { id: 1, token: "jwt" };
+      localStorage.setItem("info", JSON.stringify(data));
       navigate("/");
       window.location.reload();
       // axios({

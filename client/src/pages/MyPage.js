@@ -9,6 +9,8 @@ import EditProfile from "../components/EditProfile";
 import DeleteProfile from "../components/DeleteProfile";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import displayedAt from "../util/displayedAt";
+import parser from "../components/Parser";
 
 const PageWrapper = styled.div`
   display: flex;
@@ -145,8 +147,6 @@ const MyPage = () => {
 
   const params = useParams();
   const id = params.id;
-  // console.log(id);
-
   const pathLocation = { pathname: `/mypage/${id}` };
 
   useEffect(() => {
@@ -154,10 +154,6 @@ const MyPage = () => {
       .get(`http://13.124.69.107/members/${id}`)
       .then((res) => setUserInfo(res.data.data));
   }, []);
-
-  // console.log(userInfo);
-
-  // const { email, nickname, profile } = userInfo;
 
   const handleClickEdit = () => {
     if (!activeEdit) {
@@ -175,7 +171,6 @@ const MyPage = () => {
       setPage("delete");
     }
   };
-
   const handleClickTheme = () => {
     if (!activeTheme) {
       setActiveTheme(true);
@@ -206,7 +201,9 @@ const MyPage = () => {
                   >
                     <path d="M9 4.5a1.5 1.5 0 0 0 1.28-2.27L9 0 7.72 2.23c-.14.22-.22.48-.22.77 0 .83.68 1.5 1.5 1.5Zm3.45 7.5-.8-.81-.81.8c-.98.98-2.69.98-3.67 0l-.8-.8-.82.8c-.49.49-1.14.76-1.83.76-.55 0-1.3-.17-1.72-.46V15c0 1.1.9 2 2 2h10a2 2 0 0 0 2-2v-2.7c-.42.28-1.17.45-1.72.45-.69 0-1.34-.27-1.83-.76Zm1.3-5H10V5H8v2H4.25C3 7 2 8 2 9.25v.9c0 .81.91 1.47 1.72 1.47.39 0 .77-.14 1.03-.42l1.61-1.6 1.6 1.6a1.5 1.5 0 0 0 2.08 0l1.6-1.6 1.6 1.6c.28.28.64.43 1.03.43.81 0 1.73-.67 1.73-1.48v-.9C16 8.01 15 7 13.75 7Z" />
                   </svg>
-                  <span>Member for {9} months</span>
+                  <span>
+                    Member for {displayedAt(userInfo?.createdAt)} months
+                  </span>
                 </li>
                 <li className="icons-wrapper">
                   <svg
@@ -234,6 +231,21 @@ const MyPage = () => {
                   </svg>
                   <span>Visited {7} days ago</span>
                 </li>
+                {userInfo?.profile?.location ? (
+                  <li className="icons-wrapper">
+                    <svg
+                      aria-hidden="true"
+                      className="mrn2 svg-icon iconLocation"
+                      width="15"
+                      height="15"
+                      viewBox="0 0 17 18"
+                      fill="#6a737c"
+                    >
+                      <path d="M2 6.38C2 9.91 8.1 17.7 8.1 17.7c.22.29.58.29.8 0 0 0 6.1-7.8 6.1-11.32A6.44 6.44 0 0 0 8.5 0 6.44 6.44 0 0 0 2 6.38Zm9.25.12a2.75 2.75 0 1 1-5.5 0 2.75 2.75 0 0 1 5.5 0Z"></path>
+                    </svg>
+                    <span>{userInfo?.profile.location}</span>
+                  </li>
+                ) : null}
               </ul>
             </div>
           </div>
