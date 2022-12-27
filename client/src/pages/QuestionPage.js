@@ -188,9 +188,7 @@ const AnswerSection = styled.article`
 `;
 
 const QuestionPage = () => {
-
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   const params = useParams();
   const questionId = Number(params.id);
@@ -203,29 +201,36 @@ const QuestionPage = () => {
 
   // 질문 클릭시 해당 질문 id 가져와서 해당하는 질문만 필터해서 가져오도록 하기
 
-  useEffect( () => {
-    axios
-    .get(`http://13.124.69.107/questions/${questionId}`)
-    .then((res) => setQuestion(res.data.data))
-  }, [])
-  
-    useEffect(() => {
-      axios
-      .get(`http://13.124.69.107/questions/${questionId}/comments`)
-      .then((res) => setAnswers(res.data.data))
-    }, [])
-
-
   useEffect(() => {
     axios
       .get(`http://13.124.69.107/questions/${questionId}`)
-      .then((res) => console.log(res.data.data));
+      .then((res) => setQuestion(res.data.data));
   }, []);
+
+  useEffect(() => {
+    axios
+      .get(`http://13.124.69.107/questions/${questionId}/comments`)
+      .then((res) => setAnswers(res.data.data));
+  }, []);
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://13.124.69.107/questions/${questionId}`)
+  //     .then((res) => console.log(res.data.data));
+  // }, []);
   const navigateEditpage = (id) => {
     navigate(`/edit/${id}`);
   };
 
-  console.log(question)
+  const handleDelete = (questionId) => {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      axios
+        .delete(`http://13.124.69.107/questions/${questionId}`)
+        .then((res) => navigate("/"));
+    }
+  };
+
+  console.log(question);
   return (
     <>
       <QuestionPageWrapper>
@@ -276,6 +281,12 @@ const QuestionPage = () => {
                         Edit
                       </span>
                       <span className="button">Follow</span>
+                      <span
+                        className="button"
+                        onClick={() => handleDelete(questionId)}
+                      >
+                        Delete
+                      </span>
                     </div>
                     <div className="post--footer-profile">
                       <div className="imgwrapper">
