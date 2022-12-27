@@ -1,33 +1,37 @@
 import styled from "styled-components";
 import { useState,useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 import Nav from "./Nav";
 import Footer from "./Footer";
 import CEditor from './CKEditor';
 import Parser from "./Parser";
 import Button from "./Button";
+import axios from "axios";
 
 const EditQuestion = ({originData}) => {
+
     const location = {pathname:'/'}
     const [content, setContent] = useState(originData.content);
     const [title,setTitle] = useState(originData.title);
-    const [tags, setTags] = useState(originData.tags);
+    const [tags, setTags] = useState(originData.tag);
     const [submitTags, setSubmitTags] = useState("");
     const[summary, setSummary] = useState(originData.summary || "");
 
     const [input, setInput] = useState({
-      title,
-      tags,
-      content,
+      title : originData.title,
+      tags : originData.tags,
+      content : originData.content,
       summary
     });
 
     useEffect(() => {
       setInput({
+        title,
         submitTags,
         content,
       });
-    }, [submitTags, content]);
+    }, [submitTags, content, title]);
 
   /* 태그 제출 형식으로 변경 */
    useEffect(() => {
@@ -59,6 +63,23 @@ const EditQuestion = ({originData}) => {
     );
   };
 
+  const params = useParams();
+  const id = Number(params.id);
+  const navigate = useNavigate();
+
+  const handleClickEdit = () => {
+    axios
+    .patch(`http://13.124.69.107/questions/${id}`, 
+    {
+      data: {
+        title : input.title,
+        content : input.content,
+        tag : input.tags
+      }
+    })
+    .then(() => navigate(`/questionpage/${id}`))
+    console.log(input)
+  }
   return (
     <>
     <EditContainer>
@@ -75,7 +96,7 @@ const EditQuestion = ({originData}) => {
           <input className="input"
           value={input.title}
           name="title"
-          onChange={handleChange}>
+          onChange={e => setTitle(e.target.value)}>
           </input>
         </InputBox>
           <InputBox>
@@ -117,7 +138,9 @@ const EditQuestion = ({originData}) => {
           </input>
         </InputBox>
         <SubmitContainer>
-          <Button buttonName={"Save edits"}/>
+          <p onClick={handleClickEdit}>
+            <Button buttonName={"Save edits"}/>
+          </p>
           <div>Cancle</div>
         </SubmitContainer>
     </Main>
