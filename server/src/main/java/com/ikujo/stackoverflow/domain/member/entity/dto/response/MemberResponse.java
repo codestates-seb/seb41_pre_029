@@ -21,7 +21,18 @@ public record MemberResponse(
 
 ) {
 
-    public static MemberResponse of(Member member) {
+    public static MemberResponse of(Long id,
+                                    String email,
+                                    String nickname,
+                                    Profile profile,
+                                    LocalDateTime createdAt,
+                                    LocalDateTime lastModifiedAt) {
+
+        return new MemberResponse(id, email, nickname, profile, createdAt, lastModifiedAt);
+    }
+
+
+    public static MemberResponse from(Member member) {
 
         Long id = member.getId();
         String email = member.getEmail();
@@ -32,5 +43,4 @@ public record MemberResponse(
 
         return new MemberResponse(id, email, nickname, profile, createdAt, lastModifiedAt);
     }
-
 }

@@ -4,7 +4,7 @@ import com.ikujo.stackoverflow.global.entity.BaseTime;
 import jakarta.persistence.*;
 import lombok.*;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Getter
 @Entity
 @AllArgsConstructor // 테스트를 위한 용도

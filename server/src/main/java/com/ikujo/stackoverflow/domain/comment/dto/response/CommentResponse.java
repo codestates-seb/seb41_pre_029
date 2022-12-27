@@ -23,7 +23,10 @@ public record CommentResponse(Long id,
 
     public static CommentResponse from(Comment comment) {
 
-        MemberIdentityDto memberIdentityResponse = MemberIdentityDto.of(comment.getMember().getId(), comment.getMember().getNickname());
+        MemberIdentityDto memberIdentityResponse = MemberIdentityDto.of(comment.getMember().getId(),
+                comment.getMember().getProfile().getImage(),
+                comment.getMember().getNickname()
+        );
 
         return new CommentResponse(
                 comment.getId(),
