@@ -96,7 +96,7 @@ useEffect(()=>{
             ))
         : questions
             .slice(offset, offset + limit)
-            .map((question,idx) => (
+            .map((question) => (
               <QuestionSummary key={question.id} props={question} />
             ))}
       <PageContainer>

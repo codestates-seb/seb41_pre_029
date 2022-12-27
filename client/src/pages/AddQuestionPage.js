@@ -13,6 +13,7 @@ const AddQuestionPage = () => {
   const [tags, setTags] = useState([]);
   const [content, setContent] = useState("");
   const [submitTags, setSubmitTags] = useState("");
+  const navigate = useNavigate();
 
   const [input, setInput] = useState({
     title: "",
@@ -59,12 +60,10 @@ const AddQuestionPage = () => {
           content: input.content,
           tag: input.submitTags,
         },
-      }).then((res) => console.log(res));
-
-      // navigate("/");
+      }).then((res) => navigate("/"));
     }
   };
-  // console.log(input);
+
   const handleChange = (e) => {
     setInput({
       ...input,

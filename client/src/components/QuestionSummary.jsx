@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 import displayedAt from "../util/displayedAt";
-import axios from "axios";
+import  parser from "./Parser"
 
 const QuestionSummary = ({ props }) => {
 
@@ -12,7 +12,7 @@ const QuestionSummary = ({ props }) => {
   }
 
   return (
-    <QuestionSummaryContainer id="question_sumamry_{props.id}">
+    <QuestionSummaryContainer>
       <SummaryStats>
         <div className="summary_item">
           <span className="summary_item_number">{props.hits || 0}</span>
@@ -48,8 +48,8 @@ const QuestionSummary = ({ props }) => {
         </SummaryTitleContents>
         <SummaryMeta>
           <div className="summary_meta_tags">
-            {props.tags.map((tag)=>(
-                <div className="summary_meta_tag">{tag}</div>
+            {props.tags.map((tag,idx)=>(
+                <div key={idx} className="summary_meta_tag">{tag}</div>
             ))}
           </div>
           <div className="summary_meta_user">
@@ -93,7 +93,6 @@ const SummaryStats = styled.div`
     height: 19px;
     margin-bottom: 5px;
     font-size: 13px;
-    /* background-color: pink; */
 
     > span {
       height: 17px;
@@ -185,6 +184,10 @@ const SummaryMeta = styled.div`
 
       font-size: 12px;
       color: #39739d;
+
+      &:hover{
+        background-color: #85caff
+      }
     }
   }
 
