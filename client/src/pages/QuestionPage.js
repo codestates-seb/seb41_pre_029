@@ -19,10 +19,12 @@ import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
 
 const QuestionPageWrapper = styled.div`
   display: flex;
+
   margin: 0 320.5px 0 320.5px;
 `;
 const PageWrapper = styled.div`
   padding: 0 24px 0 24px;
+
   > .bodyWrapper {
     display: flex;
     > .sidebar {
@@ -187,6 +189,8 @@ const AnswerSection = styled.article`
 `;
 const Editor = styled.div`
   width: 720px;
+
+  bottom: 100px;
   margin-bottom: 100px;
   > h2 {
     padding: 20px;
@@ -215,9 +219,7 @@ const AnswerBtn = styled(Button)`
   margin-top: 50px;
 `;
 const QuestionPage = () => {
-
   const navigate = useNavigate();
-
 
   const params = useParams();
   const questionId = Number(params.id);
@@ -225,13 +227,12 @@ const QuestionPage = () => {
   const location = useLocation();
   const Id = localStorage.getItem("info");
   const memberId = JSON.parse(Id);
-  console.log(memberId.id);
+
   // const tihsQuestion = data.filter((el) => el.id === questionId);
   const [question, setQuestion] = useState();
   const [answers, setAnswers] = useState([]);
   const [comment, setComment] = useState("");
   // 질문 클릭시 해당 질문 id 가져와서 해당하는 질문만 필터해서 가져오도록 하기
-
 
   const submmitComment = () => {
     if (comment.trim() === "") {
@@ -260,15 +261,15 @@ const QuestionPage = () => {
 
   useEffect(() => {
     axios
-    .get(`http://13.124.69.107/questions/${questionId}`)
-    .then((res) => setQuestion(res.data.data))
-  }, [])
-  
-    useEffect(() => {
-      axios
+      .get(`http://13.124.69.107/questions/${questionId}`)
+      .then((res) => setQuestion(res.data.data));
+  }, []);
+
+  useEffect(() => {
+    axios
       .get(`http://13.124.69.107/questions/${questionId}/comments`)
-      .then((res) => setAnswers(res.data.data))
-    }, [])
+      .then((res) => setAnswers(res.data.data));
+  }, []);
 
   const navigateEditpage = (id) => {
     navigate(`/edit/${id}`);
@@ -281,7 +282,6 @@ const QuestionPage = () => {
         .then((res) => navigate("/"));
     }
   };
-
 
   return (
     <>
@@ -367,6 +367,23 @@ const QuestionPage = () => {
                   <AnswerDetail key={idx} answers={el} />
                 ))}
               </AnswerSection>
+              <Editor>
+                <h2>Your Answer</h2>
+                <CEditor onChange={setComment} data={comment} />
+                <p onClick={submmitComment}>
+                  <AnswerBtn buttonName={"Post Your Answe"} />
+                </p>
+                <Tag>
+                  Not the answer you're looking for? Browse other questions
+                  tagged
+                  {question?.tags.map((tag, idx) => (
+                    <div key={idx} className="summary_meta_tag">
+                      {tag}
+                    </div>
+                  ))}
+                  or ask your own question.
+                </Tag>
+              </Editor>
             </BodyArticle>
             <div className="sidebar">
               <YellowBox />
@@ -376,22 +393,6 @@ const QuestionPage = () => {
               <GreyBox title="Collectives"></GreyBox>
             </div>
           </div>
-          <Editor>
-            <h2>Your Answer</h2>
-            <CEditor onChange={setComment} data={comment} />
-            <p onClick={submmitComment}>
-              <AnswerBtn buttonName={"Post Your Answe"} />
-            </p>
-            <Tag>
-              Not the answer you're looking for? Browse other questions tagged
-              {question?.tags.map((tag, idx) => (
-                <div key={idx} className="summary_meta_tag">
-                  {tag}
-                </div>
-              ))}
-              or ask your own question.
-            </Tag>
-          </Editor>
         </PageWrapper>
       </QuestionPageWrapper>
       <Footer />
