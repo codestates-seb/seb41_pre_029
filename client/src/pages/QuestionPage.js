@@ -191,6 +191,7 @@ const QuestionPage = () => {
 
   const navigate = useNavigate()
 
+
   const params = useParams();
   const questionId = Number(params.id);
 
@@ -201,6 +202,7 @@ const QuestionPage = () => {
   const [answers, setAnswers] = useState([]);
 
   // 질문 클릭시 해당 질문 id 가져와서 해당하는 질문만 필터해서 가져오도록 하기
+
   useEffect( () => {
     axios
     .get(`http://13.124.69.107/questions/${questionId}`)
@@ -213,6 +215,12 @@ const QuestionPage = () => {
       .then((res) => setAnswers(res.data.data))
     }, [])
 
+
+  useEffect(() => {
+    axios
+      .get(`http://13.124.69.107/questions/${questionId}`)
+      .then((res) => console.log(res.data.data));
+  }, []);
   const navigateEditpage = (id) => {
     navigate(`/edit/${id}`);
   };
