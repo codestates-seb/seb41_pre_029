@@ -30,6 +30,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
@@ -71,30 +72,28 @@ class MemberControllerTest {
     }
 
 
-    @DisplayName("회원 가입 테스트")
+    @DisplayName("회원가입 테스트")
     @Test
     public void signupTest() throws Exception {
         //given
         MemberSignupPost memberSignupPost = new MemberSignupPost("test@gmail.com", "test", "test");
         String content = gson.toJson(memberSignupPost);
 
-        Member member = MemberDto.of(memberSignupPost).toEntity();
-        MemberResponse response = MemberResponse.from(member);
-//        MemberResponse response = MemberResponse.of(
-//                1L,
-//                "test@gmail.com",
-//                "test",
-//                new Profile(
-//                        "https://www.gravatar.com/avatar/571f9b56b9fe58dca664a393b6d2793c?s=192&d=identicon&r=PG",
-//                        null,
-//                        null,
-//                        null
-//                ),
-//                LocalDateTime.now(),
-//                LocalDateTime.now()
-//        );
+        MemberResponse response = MemberResponse.of(
+                1L,
+                "test@gmail.com",
+                "test",
+                new Profile(
+                        "https://www.gravatar.com/avatar/571f9b56b9fe58dca664a393b6d2793c?s=192&d=identicon&r=PG",
+                        null,
+                        null,
+                        null
+                ),
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
 
-        given(memberService.createMember(Mockito.any(Member.class))).willReturn(member);
+        given(memberService.createMember(any(MemberSignupPost.class))).willReturn(response);
 
         //when
         ResultActions actions =
@@ -110,33 +109,32 @@ class MemberControllerTest {
                 .andExpect(jsonPath("$.data.id").value(response.id()))
                 .andExpect(jsonPath("$.data.email").value(response.email()))
                 .andExpect(jsonPath("$.data.nickname").value(response.nickname()))
-                .andReturn();
-//                .andDo(document("signup",
-//                        preprocessRequest(prettyPrint()),
-//                        preprocessResponse(prettyPrint()),
-//                        requestFields(
-//                                List.of(
-//                                        fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
-//                                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
-//                                        fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임")
-//                                )
-//                        ),
-//                        responseFields(
-//                                List.of(
-//                                        fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터"),
-//                                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("회원 식별자"),
-//                                        fieldWithPath("data.email").type(JsonFieldType.STRING).description("이메일"),
-//                                        fieldWithPath("data.nickname").type(JsonFieldType.STRING).description("닉네임"),
-//                                        fieldWithPath("data.profile").type(JsonFieldType.OBJECT).description("회원 프로필"),
-//                                        fieldWithPath("data.profile.image").type(JsonFieldType.STRING).description("프로필 이미지"),
-//                                        fieldWithPath("data.profile.location").type(JsonFieldType.NULL).description("프로필 지역"),
-//                                        fieldWithPath("data.profile.title").type(JsonFieldType.NULL).description("프로필 제목"),
-//                                        fieldWithPath("data.profile.aboutMe").type(JsonFieldType.NULL).description("프로필 소개"),
-//                                        fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("회원 가입 날짜"),
-//                                        fieldWithPath("data.lastModifiedAt").type(JsonFieldType.STRING).description("마지막 수정 날짜")
-//                                )
-//                        )
-//                ));
+                .andDo(document("signup",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                List.of(
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
+                                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
+                                        fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임")
+                                )
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터"),
+                                        fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                                        fieldWithPath("data.email").type(JsonFieldType.STRING).description("이메일"),
+                                        fieldWithPath("data.nickname").type(JsonFieldType.STRING).description("닉네임"),
+                                        fieldWithPath("data.profile").type(JsonFieldType.OBJECT).description("회원 프로필"),
+                                        fieldWithPath("data.profile.image").type(JsonFieldType.STRING).description("프로필 이미지"),
+                                        fieldWithPath("data.profile.location").type(JsonFieldType.NULL).description("프로필 지역"),
+                                        fieldWithPath("data.profile.title").type(JsonFieldType.NULL).description("프로필 제목"),
+                                        fieldWithPath("data.profile.aboutMe").type(JsonFieldType.NULL).description("프로필 소개"),
+                                        fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("회원 가입 날짜"),
+                                        fieldWithPath("data.lastModifiedAt").type(JsonFieldType.STRING).description("마지막 수정 날짜")
+                                )
+                        )
+                ));
     }
 
 }

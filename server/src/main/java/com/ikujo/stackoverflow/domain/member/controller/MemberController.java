@@ -55,8 +55,7 @@ public class MemberController {
 
     @PostMapping("/signup")
     public ResponseEntity signup(@Valid @RequestBody MemberSignupPost memberSignupPost) {
-        Member member = memberService.createMember(MemberDto.of(memberSignupPost).toEntity());
-        MemberResponse response = MemberResponse.from(member);
+        MemberResponse response = memberService.createMember(memberSignupPost);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
     }

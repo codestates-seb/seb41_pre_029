@@ -2,8 +2,11 @@ package com.ikujo.stackoverflow.domain.member.service;
 
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.Profile;
+import com.ikujo.stackoverflow.domain.member.entity.dto.MemberDto;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberLoginPost;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberProfilePatch;
+import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberSignupPost;
+import com.ikujo.stackoverflow.domain.member.entity.dto.response.MemberResponse;
 import com.ikujo.stackoverflow.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,13 +26,17 @@ public class MemberService {
     /**
      * 회원 가입
      */
-    public Member createMember(Member member) {
-        verifyExistsEmail(member.getEmail());
+    public MemberResponse createMember(MemberSignupPost memberSignupPost) {
+        verifyExistsEmail(memberSignupPost.email());
+
+        Member member = MemberDto.of(memberSignupPost).toEntity();
         Member savedMember = memberRepository.save(member);
 
         // 이메일 인증 로직 필요
 
-        return savedMember;
+        MemberResponse response = MemberResponse.from(savedMember);
+
+        return response;
     }
 
     /**

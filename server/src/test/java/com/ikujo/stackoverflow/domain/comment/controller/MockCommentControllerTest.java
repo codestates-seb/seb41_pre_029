@@ -249,7 +249,7 @@ public class MockCommentControllerTest {
                 "블라블라블라",
                 0,
                 false,
-                MemberIdentityDto.of(1L, "일쿠조"),
+                MemberIdentityDto.of(1L, "일쿠조", "일쿠조"),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -261,7 +261,7 @@ public class MockCommentControllerTest {
                 "블라",
                 0,
                 false,
-                MemberIdentityDto.of(1L, "일쿠조"),
+                MemberIdentityDto.of(1L, "일쿠조", "일쿠조"),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
