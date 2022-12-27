@@ -23,7 +23,7 @@ public record ArticleResponse(
 
     public static ArticleResponse from(Article article) {
         List<String> tags = tagSplit(article.getTag());
-        MemberIdentityDto memberIdentityResponse = MemberIdentityDto.of(article.getMember().getId(), article.getMember().getNickname());
+        MemberIdentityDto memberIdentityResponse = MemberIdentityDto.of(article.getMember().getId(), article.getMember().getProfile().getImage(), article.getMember().getNickname());
         BaseTimeDto baseTimeDto = BaseTimeDto.of(article.getCreatedAt(), article.getLastModifiedAt());
         Boolean selection = article.getCommentList().stream()
                 .anyMatch(Comment::isSelection);
@@ -38,7 +38,7 @@ public record ArticleResponse(
                 baseTimeDto,
                 selection,
                 article.getCommentList().size()
-                );
+        );
     }
 
     public static List<String> tagSplit(String tag) {
