@@ -2,14 +2,13 @@ import axios from "axios";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
 
+import Footer from "../components/Footer";
+import parser from "../components/Parser";
 import Nav from "../components/Nav";
-import data, { answerData } from "../dummydata";
 import AnswerDetail from "../components/AnswerDetail";
 import Button from "../components/Button";
 import displayedAt from "../util/displayedAt";
-import useStore from "../zustand/store";
 import YellowBox from "../components/YellowBox";
 import GreyBox from "../components/GreyBox";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
@@ -230,7 +229,6 @@ const QuestionPage = () => {
     }
   };
 
-  console.log(question);
   return (
     <>
       <QuestionPageWrapper>
@@ -261,7 +259,7 @@ const QuestionPage = () => {
                   <RecommandB fill="#babfc4" />
                 </div>
                 <div className="post-layout">
-                  <div className="post--body">{question?.content}</div>
+                  <div className="post--body">{parser(question?.content)}</div>
                   <div className="post--tags">
                     <div className="summary_meta_tags">
                       {question?.tags.map((tag, idx) => (

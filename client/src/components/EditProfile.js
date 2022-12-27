@@ -1,8 +1,4 @@
 import styled from "styled-components";
-// import Editor from "./Editor";
-// import ReactMarkdown from "react-markdown";
-// import remarkGfm from "remark-gfm";
-
 import { useEffect, useState } from "react";
 import { ReactComponent as SvgTwitter } from "../assets/twitter.svg";
 import { ReactComponent as SvgGit } from "../assets/git.svg";
@@ -13,6 +9,171 @@ import StyledButton from "./Button";
 import Input from "./Input";
 import Editor from "./Editors";
 import axios from "axios";
+
+const EditProfile = () => {
+  const navigator = useNavigate();
+  const params = useParams();
+  const id = params.id;
+
+  const [editValue, setEditValue] = useState("");
+  const [info, setInfo] = useState({
+    // createAt: "",
+    // email: "",
+    // lastModifiedAt: "",
+    // nickname: "",
+    // profile: {
+    //   image: "",
+    //   title: "",
+    //   location: "",
+    //   aboutMe: "",
+    // },
+    // link: {
+    //   website: "",
+    //   twitter: "",
+    //   github: "",
+    // },
+  });
+
+  useEffect(() => {
+    axios
+      .get(`http://13.124.69.107/members/${id}`)
+      .then((res) => res.data.data)
+      .then((res) => {
+        setInfo(res);
+        setEditValue(res.profile.aboutMe);
+      });
+  }, []);
+  // console.log(info);
+  const { createAt, email, lastModifiedAt, link, nickname, profile } = info;
+
+  const changeHandler = (e) => {
+    setInfo({
+      ...info,
+      [e.target.name]: e.target.value,
+      link: { ...info.link, [e.target.name]: e.target.value },
+      profile: { ...info.profile, [e.target.name]: e.target.value },
+    });
+  };
+
+  const submitBtn = (e) => {
+    e.preventDefault();
+    const data = {
+      nickname,
+      location: profile.location,
+      title: profile.title,
+      aboutMe: profile.aboutMe,
+      website: link.website,
+      github: link.github,
+      twitter: link.twitter,
+    };
+    console.log(data);
+    axios({
+      url: `http://13.124.69.107/members/${id}`, // 통신할 웹문서
+      method: "patch", // 통신 방식
+      data,
+    }).then((res) => window.location.reload());
+  };
+
+  return (
+    <Wrap>
+      <Title className="mainTitle">Edit your profile</Title>
+      <Title>Public information </Title>
+      <Form>
+        <FormList>
+          <Profile>
+            <div>
+              <Title className="profile">Profile image</Title>
+              <img alt="profile" src={info.profile?.image} />
+            </div>
+          </Profile>
+          <Input
+            type="text"
+            name="nickname"
+            value={nickname || ""}
+            onChange={changeHandler}
+            label={"Display name"}
+          />
+          <Input
+            type="text"
+            name="location"
+            value={profile?.location || ""}
+            onChange={changeHandler}
+            label={"location"}
+          />
+          <Input
+            type="text"
+            name="title"
+            value={profile?.title || ""}
+            onChange={changeHandler}
+            label={"Title"}
+          />
+          <Title className="editor">About me</Title>
+          <Editor set={setEditValue} get={editValue} />
+          {/* <div dangerouslySetInnerHTML={{ __html: editValue }}></div> */}
+        </FormList>
+        <Title>Links</Title>
+        <FormList className="link">
+          <InputDiv className="links">
+            <Label>Website</Label>
+            <Web />
+            <Svg
+              type="text"
+              name="website"
+              value={link?.website || ""}
+              onChange={changeHandler}
+            />
+          </InputDiv>
+          <InputDiv className="links">
+            <Label>Twitter link or username</Label>
+            <SvgTwitter />
+            <Svg
+              type="text"
+              name="twitter"
+              value={link?.twitter || ""}
+              onChange={changeHandler}
+            />
+          </InputDiv>
+          <InputDiv className="links">
+            <Label>GitHub link or username</Label>
+            <SvgGit />
+            <Svg
+              type="text"
+              name="github"
+              value={link?.github || ""}
+              onChange={changeHandler}
+            />
+          </InputDiv>
+        </FormList>
+        <Title>Private information</Title>
+        {/* <FormList>
+          <Input
+            label={"Full name"}
+            type="text"
+            name="fullName"
+            onChange={changeHandler}
+            value={fullName}
+          />
+        </FormList> */}
+        <Btn>
+          <div onClick={submitBtn}>
+            <StyledButton
+              type="submit"
+              buttonName={"Save profile"}
+            ></StyledButton>
+          </div>
+          <StyledButton
+            onClick={() => navigator("/")}
+            buttonName={"Cancle"}
+            background={"#E1ECF4"}
+            color={"#39739D"}
+          ></StyledButton>
+        </Btn>
+      </Form>
+    </Wrap>
+  );
+};
+
+export default EditProfile;
 
 const Wrap = styled.div`
   display: flex;
@@ -107,194 +268,3 @@ const Label = styled.label`
   font-family: inherit;
   font-weight: 600;
 `;
-
-const EditProfile = () => {
-  const navigator = useNavigate();
-  const [editValue, setEditValue] = useState("");
-
-  const [info, setInfo] = useState({
-    nickname: "",
-    location: "",
-    title: "",
-    website: "",
-    twitter: "",
-    gitHub: "",
-    fullName: "",
-  });
-
-  /**
-   * 회원 정보 수정 기능 로직
-   * 1. 로그인 상태인지 확인(미구현)
-   * 2. 기존 상태 불러오기(o)
-   *  (1) 문제 1 : 이미지 수정 기능?-fe url 바꾸기
-   *  (2) 문제 2 : 서버정보에 웹사이트, 트위터 링크, 깃허브 링크, 풀네임 없음 -be(전달)
-   * 3. 정보 수정 후 버튼 클릭 시
-   *  (1) input 데이터를 서버에 전송(500..)
-   *  (2) 리렌더링
-   *  (3) submit 후 클리어?
-   */
-
-  //서버에서 받은 정보
-  const [value, setValue] = useState({});
-
-  const params = useParams();
-  const id = params.id;
-  // console.log(id);
-
-  useEffect(() => {
-    axios
-      .get(`http://13.124.69.107/members/${id}`)
-      .then((res) => res.data.data)
-      .then((res) => {
-        setInfo({
-          nickname: res.nickname,
-          location: res.profile.location,
-          title: res.profile.title,
-        });
-        setEditValue(res.profile.title);
-        setValue(res);
-      });
-  }, []);
-
-  // console.log(value);
-  const { nickname, location, title, website, twitter, gitHub, fullName } =
-    info;
-
-  const changeHandler = (e) => {
-    setInfo({
-      ...info,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const clear = () => {
-    setInfo({
-      nickname: "",
-      location: "",
-      title: "",
-      aboutMe: "",
-      website: "",
-      twitter: "",
-      gitHub: "",
-      fullName: "",
-      edit: "",
-    });
-    setEditValue("");
-  };
-
-  // console.log(editValue);
-  const submitBtn = (e) => {
-    // console.log("submit!!!");ㄴ
-    e.preventDefault();
-    const data = {
-      nickname,
-      location,
-      title,
-    };
-    axios({
-      url: `http://13.124.69.107/members/${id}`, // 통신할 웹문서
-      method: "patch", // 통신 방식
-      data: data,
-    }).then((res) => res);
-  };
-  return (
-    <Wrap>
-      <Title className="mainTitle">Edit your profile</Title>
-      <Title>Public information </Title>
-      <Form>
-        <FormList>
-          <Profile>
-            <div>
-              <Title className="profile">Profile image</Title>
-              <img alt="profile" src={value?.profile?.image} />
-              <input type="file" />
-            </div>
-          </Profile>
-          <Input
-            type="text"
-            name="nickname"
-            value={nickname}
-            onChange={changeHandler}
-            label={"Display name"}
-          />
-          <Input
-            type="text"
-            name="location"
-            value={location}
-            onChange={changeHandler}
-            label={"location"}
-          />
-          <Input
-            type="text"
-            name="title"
-            value={title}
-            onChange={changeHandler}
-            label={"Title"}
-          />
-          <Title className="editor">About me</Title>
-          <Editor set={setEditValue} get={editValue} />
-          {/* <div dangerouslySetInnerHTML={{ __html: editValue }}></div> */}
-        </FormList>
-        <Title>Links</Title>
-        <FormList className="link">
-          <InputDiv className="links">
-            <Label>Website</Label>
-            <Web />
-            <Svg
-              type="text"
-              name="website"
-              value={website}
-              onChange={changeHandler}
-            />
-          </InputDiv>
-          <InputDiv className="links">
-            <Label>Twitter link or username</Label>
-            <SvgTwitter />
-            <Svg
-              type="text"
-              name="twitter"
-              value={twitter}
-              onChange={changeHandler}
-            />
-          </InputDiv>
-          <InputDiv className="links">
-            <Label>GitHub link or username</Label>
-            <SvgGit />
-            <Svg
-              type="text"
-              name="gitHub"
-              value={gitHub}
-              onChange={changeHandler}
-            />
-          </InputDiv>
-        </FormList>
-        <Title>Private information</Title>
-        <FormList>
-          <Input
-            label={"Full name"}
-            type="text"
-            name="fullName"
-            onChange={changeHandler}
-            value={fullName}
-          />
-        </FormList>
-        <Btn>
-          <div onClick={submitBtn}>
-            <StyledButton
-              type="submit"
-              buttonName={"Save profile"}
-            ></StyledButton>
-          </div>
-          <StyledButton
-            onClick={() => navigator("/")}
-            buttonName={"Cancle"}
-            background={"#E1ECF4"}
-            color={"#39739D"}
-          ></StyledButton>
-        </Btn>
-      </Form>
-    </Wrap>
-  );
-};
-
-export default EditProfile;
