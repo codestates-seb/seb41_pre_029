@@ -2,9 +2,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 import displayedAt from "../util/displayedAt";
-import axios from "axios";
 import  parser from "./Parser"
-
 
 const QuestionSummary = ({ props }) => {
 
@@ -46,7 +44,7 @@ const QuestionSummary = ({ props }) => {
       <div className="summary_title_meta_wrapper">
         <SummaryTitleContents>
           <div className="summary_title" onClick={() => navigateDetailPage(props.id)}>{props.title}</div>
-          <div className="summary_contents">{parser(props.content)}</div>
+          <div className="summary_contents">{props.content}</div>
         </SummaryTitleContents>
         <SummaryMeta>
           <div className="summary_meta_tags">
@@ -95,7 +93,6 @@ const SummaryStats = styled.div`
     height: 19px;
     margin-bottom: 5px;
     font-size: 13px;
-    /* background-color: pink; */
 
     > span {
       height: 17px;
@@ -189,7 +186,7 @@ const SummaryMeta = styled.div`
       color: #39739d;
 
       &:hover{
-        background-color: #2c5877;
+        background-color: #85caff
       }
     }
   }
