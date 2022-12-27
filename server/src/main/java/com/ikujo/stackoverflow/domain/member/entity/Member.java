@@ -28,18 +28,24 @@ public class Member extends BaseTime {
     @Embedded
     private Profile profile;
 
+    @Setter
+    @Embedded
+    private Link link;
+
     /**
      * MemberDto 사용을 위한 생성자 및 of 메서드
      */
-    public Member(String email, String password, String nickname, Profile profile) {
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-        this.profile = profile;
-    }
+//    public Member(Long id, String email, String password, String nickname, Profile profile, Link link) {
+//        this.id = id;
+//        this.email = email;
+//        this.password = password;
+//        this.nickname = nickname;
+//        this.profile = profile;
+//        this.link = link;
+//    }
 
-    public static Member of(String email, String password, String nickname, Profile profile) {
-        return new Member(email, password, nickname, profile);
+    public static Member of(Long id, String email, String password, String nickname, Profile profile, Link link) {
+        return new Member(id, email, password, nickname, profile, link);
     }
 
     public Member(Long id, String nickname) {
