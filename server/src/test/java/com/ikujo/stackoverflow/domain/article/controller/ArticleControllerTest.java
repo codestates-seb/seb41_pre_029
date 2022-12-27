@@ -189,7 +189,7 @@ class ArticleControllerTest {
 
     private ArticleDetailResponse createArticleDetailResponse() {
         return ArticleDetailResponse.of(
-                MemberIdentityDto.of(1L, "일쿠조"),
+                MemberIdentityDto.of(1L, "이미지", "일쿠조"),
                 1L,
                 "첫 제목",
                 "첫 내용",

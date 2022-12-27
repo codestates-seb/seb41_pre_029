@@ -23,7 +23,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
-//import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -31,19 +31,19 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-//import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.*;
-//import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-//import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CommentController.class)
 @MockBean(JpaMetamodelMappingContext.class)
-//@AutoConfigureRestDocs
+@AutoConfigureRestDocs
 public class MockCommentControllerTest {
 
     @Autowired
@@ -68,41 +68,52 @@ public class MockCommentControllerTest {
     void postComment() throws Exception {
 
         //given
+        Member member = createMember();
         Article article = createArticle();
-        CommentDto commentDto = createCommentDto();
+        CommentPost commentPost = new CommentPost("블라블라블라", member.getId());
+        String contents = gson.toJson(commentPost);
         CommentResponse commentResponse = createCommentResponse1();
-        given(commentService.createComment(Mockito.anyLong(), Mockito.any(CommentPost.class)))
-                .willReturn(commentDto.toEntity());
-        given(CommentResponse.from(Mockito.any(Comment.class))).willReturn(commentResponse);
 
-        String content = gson.toJson(commentDto);
+        given(commentService.createComment(Mockito.anyLong(), Mockito.any(CommentPost.class))).willReturn(commentResponse);
 
         //when
         ResultActions actions =
-                mockMvc.perform(post("/questions/{article-id}/comments", article.getId())
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(content));
+                mockMvc.perform(
+                        post("/questions/{article-id}/comments", article.getId())
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(contents)
+                );
 
         //then
-        actions.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.data.content").value(commentDto.content()));
-//                .andDo(document("post-Comment",
-//                        preprocessRequest(prettyPrint()),
-//                        preprocessResponse(prettyPrint()),
-//                        requestFields(
-//                                List.of(
-//                                        fieldWithPath("content").type(JsonFieldType.STRING).description("본문")
-//                                )
-//                        ),
-//                        responseFields(
-//                                List.of(
-//                                        fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터"),
-//                                        fieldWithPath("data.commentId").type(JsonFieldType.NUMBER).description("답글 아이디"),
-//                                        fieldWithPath("data.recommendCount").type(JsonFieldType.NUMBER).description("추천 수"),
-//                                        fieldWithPath("data.selection").type(JsonFieldType.BOOLEAN).description("채택 여부")
-//                                )
-//                        )));
+        actions
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.data.content").value(commentPost.content()))
+                .andDo(document("post-comment",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                List.of(
+                                        fieldWithPath("content").type(JsonFieldType.STRING).description("본문"),
+                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자")
+                                )
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터"),
+                                        fieldWithPath("data.commentId").type(JsonFieldType.NUMBER).description("답글 식별자"),
+                                        fieldWithPath("data.content").type(JsonFieldType.STRING).description("본문"),
+                                        fieldWithPath("data.recommendCount").type(JsonFieldType.NUMBER).description("추천 수"),
+                                        fieldWithPath("data.selection").type(JsonFieldType.BOOLEAN).description("채택 여부"),
+                                        fieldWithPath("data.memberIdentityDto").type(JsonFieldType.OBJECT).description("회원 정보"),
+                                        fieldWithPath("data.memberIdentityDto.memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                                        fieldWithPath("data.memberIdentityDto.image").type(JsonFieldType.STRING).description("이미지"),
+                                        fieldWithPath("data.memberIdentityDto.nickname").type(JsonFieldType.STRING).description("회원 이름"),
+                                        fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("회원 가입 날짜"),
+                                        fieldWithPath("data.lastModifiedAt").type(JsonFieldType.STRING).description("마지막 수정 날짜")
+                                )
+                        )
+                ));
     }
 
     @DisplayName("[API][PATCH] 게시글 수정")
@@ -111,8 +122,9 @@ public class MockCommentControllerTest {
 
         //given
         CommentDto commentDto = updateCommentDto();
+        CommentResponse commentResponse = createCommentResponse2();
         given(commentService.updateComment(anyLong(), anyLong(), any(CommentPatch.class)))
-                .willReturn(commentDto.toEntity());
+                .willReturn(commentResponse);
 
         String content = gson.toJson(commentDto);
 
@@ -138,7 +150,7 @@ public class MockCommentControllerTest {
         Comment comment = createComment();
 
         given(commentService.findComment(anyLong()))
-                .willReturn(comment);
+                .willReturn(createCommentResponse1());
 
         String content = gson.toJson(comment);
 
@@ -222,8 +234,7 @@ public class MockCommentControllerTest {
     }
 
     private Comment createComment() {
-        return new Comment(1L, createArticle(), createMember(), "블라블라", false, 0,
-                null);
+        return new Comment(1L, createArticle(), createMember(), "블라블라블라", false, 0, null);
     }
 
     private CommentDto createCommentDto() {
@@ -249,7 +260,7 @@ public class MockCommentControllerTest {
                 "블라블라블라",
                 0,
                 false,
-                MemberIdentityDto.of(1L, "일쿠조"),
+                MemberIdentityDto.of(1L, "이미지","greatshine"),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -258,10 +269,10 @@ public class MockCommentControllerTest {
     private CommentResponse createCommentResponse2() {
         return CommentResponse.of(
                 2L,
-                "블라",
+                "블라3",
                 0,
                 false,
-                MemberIdentityDto.of(1L, "일쿠조"),
+                MemberIdentityDto.of(1L, "이미지","greatshine"),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );

@@ -28,8 +28,7 @@ public class CommentController {
     public ResponseEntity postComment(@PathVariable("article-id") @Positive Long articleId,
                                       @RequestBody CommentPost commentPost) {
 
-        Comment comment = commentService.createComment(articleId, commentPost);
-        CommentResponse commentResponse = CommentResponse.from(comment);
+        CommentResponse commentResponse = commentService.createComment(articleId, commentPost);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(commentResponse), HttpStatus.CREATED);
@@ -40,8 +39,7 @@ public class CommentController {
                                        @PathVariable("comment-id") @Positive Long commentId,
                                        @RequestBody CommentPatch commentPatch) {
 
-        Comment comment = commentService.updateComment(articleId, commentId, commentPatch);
-        CommentResponse commentResponse = CommentResponse.from(comment);
+        CommentResponse commentResponse = commentService.updateComment(articleId, commentId, commentPatch);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(commentResponse), HttpStatus.OK);
@@ -52,8 +50,7 @@ public class CommentController {
     public ResponseEntity getComment(@PathVariable("article-id") @Positive Long articleId,
                                      @PathVariable("comment-id") @Positive Long commentId) {
 
-        Comment comment = commentService.findComment(commentId);
-        CommentResponse commentResponse = CommentResponse.from(comment);
+        CommentResponse commentResponse = commentService.findComment(commentId);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(commentResponse), HttpStatus.OK);

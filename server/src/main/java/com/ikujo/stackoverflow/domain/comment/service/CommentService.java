@@ -24,19 +24,20 @@ public class CommentService {
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
 
-    public Comment createComment(Long articleId, CommentPost commentPost) {
+    public CommentResponse createComment(Long articleId, CommentPost commentPost) {
 
         Article article = findVerifiedArticle(articleId);
         Member member = findVerifiedMember(commentPost.memberId());
 
         CommentDto commentDto = CommentDto.of(commentPost, article, member);
         Comment comment = commentDto.toEntity();
+        commentRepository.save(comment);
 
-        return commentRepository.save(comment);
+        return CommentResponse.from(comment);
 
     }
 
-    public Comment updateComment(Long articleId, Long commentId, CommentPatch commentPatch) {
+    public CommentResponse updateComment(Long articleId, Long commentId, CommentPatch commentPatch) {
 
         Article article = findVerifiedArticle(articleId);
         Comment comment = findVerifiedComment(commentId);
@@ -44,14 +45,17 @@ public class CommentService {
 
         CommentDto commentDto = CommentDto.of(comment, commentPatch, article, member);
         Comment newComment = commentDto.toEntity();
+        commentRepository.save(newComment);
 
-        return commentRepository.save(newComment);
+        return CommentResponse.from(newComment);
 
     }
 
-    public Comment findComment(Long commentId) {
+    public CommentResponse findComment(Long commentId) {
 
-        return findVerifiedComment(commentId);
+        Comment comment = findVerifiedComment(commentId);
+
+        return CommentResponse.from(comment);
     }
 
     public List<CommentResponse> findComments(Long articleId) {
