@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
-
+import CEditor from "../components/CKEditor";
 import Nav from "../components/Nav";
 import data, { answerData } from "../dummydata";
 import AnswerDetail from "../components/AnswerDetail";
@@ -104,15 +104,12 @@ const QuestionSection = styled.section`
 
         > .summary_meta_tag {
           background: #e1ecf4;
-
           margin-right: 4px;
           padding: 3px 6px;
-
           border-width: 1px;
           border-style: solid;
           border-radius: 3px;
           border-color: #e1ecf4;
-
           font-size: 12px;
           color: #39739d;
         }
@@ -186,46 +183,85 @@ const AnswerSection = styled.article`
     margin-top: 32px;
   }
 `;
-
+const Editor = styled.div`
+  width: 720px;
+  margin-bottom: 100px;
+  > h2 {
+    padding: 20px;
+    font-size: 1.5rem;
+  }
+`;
+const Tag = styled.div`
+  font-size: 17px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 20px 0px;
+  .summary_meta_tag {
+    background: #e1ecf4;
+    margin-right: 4px;
+    padding: 3px 6px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 3px;
+    border-color: #e1ecf4;
+    font-size: 15px;
+    color: #39739d;
+  }
+`;
+const AnswerBtn = styled(Button)`
+  margin-top: 50px;
+`;
 const QuestionPage = () => {
-
-  const navigate = useNavigate()
-
+  const navigateEditpage = useNavigate();
 
   const params = useParams();
   const questionId = Number(params.id);
 
   const location = useLocation();
-
+  const Id = localStorage.getItem("info");
+  const memberId = JSON.parse(Id);
+  console.log(memberId.id);
   // const tihsQuestion = data.filter((el) => el.id === questionId);
   const [question, setQuestion] = useState();
   const [answers, setAnswers] = useState([]);
-
+  const [comment, setComment] = useState("");
   // 질문 클릭시 해당 질문 id 가져와서 해당하는 질문만 필터해서 가져오도록 하기
 
-  useEffect( () => {
-    axios
-    .get(`http://13.124.69.107/questions/${questionId}`)
-    .then((res) => setQuestion(res.data.data))
-  }, [])
-  
-    useEffect(() => {
+  const submmitComment = () => {
+    if (comment.trim() === "") {
+      return;
+    } else {
       axios
-      .get(`http://13.124.69.107/questions/${questionId}/comments`)
-      .then((res) => setAnswers(res.data.data))
-    }, [])
-
-
+        .post(`http://13.124.69.107/questions/${questionId}/comments`, {
+          content: comment,
+          memberId: memberId.id,
+        })
+        .then((res) => window.location.reload());
+      setComment("");
+    }
+  };
   useEffect(() => {
     axios
       .get(`http://13.124.69.107/questions/${questionId}`)
-      .then((res) => console.log(res.data.data));
+      .then((res) => setQuestion(res.data.data));
   }, []);
-  const navigateEditpage = (id) => {
-    navigate(`/edit/${id}`);
-  };
 
-  console.log(question)
+  useEffect(() => {
+    axios
+      .get(`http://13.124.69.107/questions/${questionId}/comments`)
+      .then((res) => setAnswers(res.data.data));
+  }, []);
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`http://13.124.69.107/questions/${questionId}`)
+  //     .then((res) => console.log(res.data.data));
+  // }, []);
+  // const navigateEditpage = (id) => {
+  //   navigate(`/edit/${id}`);
+  // };
+
   return (
     <>
       <QuestionPageWrapper>
@@ -313,6 +349,22 @@ const QuestionPage = () => {
               <GreyBox title="Collectives"></GreyBox>
             </div>
           </div>
+          <Editor>
+            <h2>Your Answer</h2>
+            <CEditor onChange={setComment} data={comment} />
+            <p onClick={submmitComment}>
+              <AnswerBtn buttonName={"Post Your Answe"} />
+            </p>
+            <Tag>
+              Not the answer you're looking for? Browse other questions tagged
+              {question?.tags.map((tag, idx) => (
+                <div key={idx} className="summary_meta_tag">
+                  {tag}
+                </div>
+              ))}
+              or ask your own question.
+            </Tag>
+          </Editor>
         </PageWrapper>
       </QuestionPageWrapper>
       <Footer />
