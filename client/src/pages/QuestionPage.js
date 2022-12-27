@@ -272,7 +272,8 @@ const QuestionPage = () => {
     navigate(`/edit/${id}`);
   };
 
-  const handleDelete = (questionId) => {
+  const handleDelete = () => {
+    console.log("클릭!");
     if (window.confirm("정말 삭제하시겠습니까?")) {
       axios
         .delete(`http://13.124.69.107/questions/${questionId}`)
@@ -330,7 +331,7 @@ const QuestionPage = () => {
                         Edit
                       </span>
                       <span className="button">Follow</span>
-                      <span className="button" onClick={() => handleDelete}>
+                      <span className="button" onClick={handleDelete}>
                         Delete
                       </span>
                     </div>

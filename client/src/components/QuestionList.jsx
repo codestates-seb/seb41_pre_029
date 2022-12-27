@@ -60,7 +60,7 @@ const QuestionList = ({ data }) => {
 useEffect(()=>{
  axios.get('http://13.124.69.107/questions').then((res) => {
   setQuestions(res?.data.data)
-  console.log(res)})
+  })
   },[])
 
 
