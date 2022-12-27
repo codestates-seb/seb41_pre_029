@@ -1,7 +1,6 @@
-package com.ikujo.stackoverflow.domain.comment.dto;
+package com.ikujo.stackoverflow.domain.comment.dto.response;
 
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
-import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.dto.MemberIdentityDto;
 
 import java.time.LocalDateTime;

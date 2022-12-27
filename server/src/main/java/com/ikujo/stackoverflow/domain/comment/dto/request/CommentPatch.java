@@ -1,4 +1,4 @@
-package com.ikujo.stackoverflow.domain.comment.dto;
+package com.ikujo.stackoverflow.domain.comment.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 

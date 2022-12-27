@@ -5,25 +5,25 @@ import com.google.gson.GsonBuilder;
 import com.ikujo.stackoverflow.config.LocalDateTimeSerializer;
 import com.ikujo.stackoverflow.domain.article.entity.Article;
 import com.ikujo.stackoverflow.domain.comment.dto.CommentDto;
-import com.ikujo.stackoverflow.domain.comment.dto.CommentPatch;
-import com.ikujo.stackoverflow.domain.comment.dto.CommentPost;
-import com.ikujo.stackoverflow.domain.comment.dto.CommentResponse;
+import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPatch;
+import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPost;
+import com.ikujo.stackoverflow.domain.comment.dto.response.CommentResponse;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
 import com.ikujo.stackoverflow.domain.comment.service.CommentService;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.Profile;
 import com.ikujo.stackoverflow.domain.member.entity.dto.MemberIdentityDto;
-import com.ikujo.stackoverflow.global.dto.BaseTimeDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.payload.JsonFieldType;
+//import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -31,19 +31,19 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+//import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+//import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+//import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CommentController.class)
 @MockBean(JpaMetamodelMappingContext.class)
-@AutoConfigureRestDocs
+//@AutoConfigureRestDocs
 public class MockCommentControllerTest {
 
     @Autowired
@@ -70,8 +70,10 @@ public class MockCommentControllerTest {
         //given
         Article article = createArticle();
         CommentDto commentDto = createCommentDto();
-        given(commentService.createComment(anyLong(), any(CommentPost.class)))
+        CommentResponse commentResponse = createCommentResponse1();
+        given(commentService.createComment(Mockito.anyLong(), Mockito.any(CommentPost.class)))
                 .willReturn(commentDto.toEntity());
+        given(CommentResponse.from(Mockito.any(Comment.class))).willReturn(commentResponse);
 
         String content = gson.toJson(commentDto);
 
