@@ -29,7 +29,7 @@ public class MemberController {
     @GetMapping("/{id}")
     public ResponseEntity getMemberProfile(@PathVariable("id") Long id) {
         Member findMember = memberService.findMember(id);
-        MemberResponse response = MemberResponse.of(findMember);
+        MemberResponse response = MemberResponse.from(findMember);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
@@ -40,7 +40,7 @@ public class MemberController {
 
         Member updateMember = memberService.updateMember(id, profilePatchDto);
 
-        MemberResponse response = MemberResponse.of(updateMember);
+        MemberResponse response = MemberResponse.from(updateMember);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
@@ -55,8 +55,7 @@ public class MemberController {
 
     @PostMapping("/signup")
     public ResponseEntity signup(@Valid @RequestBody MemberSignupPost memberSignupPost) {
-        Member member = memberService.createMember(MemberDto.of(memberSignupPost).toEntity());
-        MemberResponse response = MemberResponse.of(member);
+        MemberResponse response = memberService.createMember(memberSignupPost);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
     }
