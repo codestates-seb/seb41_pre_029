@@ -156,7 +156,7 @@ const EditProfile = () => {
       });
   }, []);
 
-  console.log(value);
+  // console.log(value);
   const { nickname, location, title, website, twitter, gitHub, fullName } =
     info;
 
@@ -184,7 +184,7 @@ const EditProfile = () => {
 
   // console.log(editValue);
   const submitBtn = (e) => {
-    console.log("submit!!!");
+    // console.log("submit!!!");ㄴ
     e.preventDefault();
     const data = {
       nickname,

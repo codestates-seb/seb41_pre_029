@@ -185,6 +185,10 @@ const SummaryMeta = styled.div`
 
       font-size: 12px;
       color: #39739d;
+
+      &:hover{
+        background-color: #2c5877;
+      }
     }
   }
 
