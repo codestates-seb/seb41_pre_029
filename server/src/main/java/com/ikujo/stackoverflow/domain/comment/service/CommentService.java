@@ -5,11 +5,16 @@ import com.ikujo.stackoverflow.domain.article.repository.ArticleRepository;
 import com.ikujo.stackoverflow.domain.comment.dto.CommentDto;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPatch;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPost;
+import com.ikujo.stackoverflow.domain.comment.dto.request.CommentRecommendPost;
+import com.ikujo.stackoverflow.domain.comment.dto.response.CommentRecommendResponse;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentResponse;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
+import com.ikujo.stackoverflow.domain.comment.repository.CommentRecommendRepository;
 import com.ikujo.stackoverflow.domain.comment.repository.CommentRepository;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.repository.MemberRepository;
+import com.ikujo.stackoverflow.global.exception.BusinessLogicException;
+import com.ikujo.stackoverflow.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +28,8 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
+
+    private final CommentRecommendRepository commentRecommendRepository;
 
     public CommentResponse createComment(Long articleId, CommentPost commentPost) {
 
@@ -76,11 +83,19 @@ public class CommentService {
 
     }
 
+    public CommentRecommendResponse createLikes(Long articleId, Long commentId,
+                                                CommentRecommendPost commentRecommendPost) {
+
+
+
+        return null;
+    }
+
     public Article findVerifiedArticle(Long articleId) {
 
         Optional<Article> optionalArticle = articleRepository.findById(articleId);
         Article findArticle = optionalArticle
-                .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_FOUND));
 
         return findArticle;
 
@@ -90,7 +105,7 @@ public class CommentService {
 
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         Member findMember = optionalMember
-                .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다."));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         return findMember;
 
@@ -100,7 +115,7 @@ public class CommentService {
 
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         Comment findComment = optionalComment
-                .orElseThrow(() -> new RuntimeException("답글이 존재하지 않습니다."));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
 
         return findComment;
 

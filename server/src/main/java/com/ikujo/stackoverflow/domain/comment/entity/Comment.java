@@ -40,10 +40,6 @@ public class Comment extends BaseTime {
     @ColumnDefault("false")
     private Boolean selection;
 
-    @Column(nullable = false)
-    @ColumnDefault("0")
-    private Integer recommendCount;
-
     @OneToMany(mappedBy = "comment", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<CommentRecommend> commentRecommendList = new ArrayList<>();
 
@@ -59,17 +55,16 @@ public class Comment extends BaseTime {
     }
 
     public Comment(Article article, Member member, String content, Boolean selection,
-                   Integer recommendCount, List<CommentRecommend> commentRecommendList) {
+                   List<CommentRecommend> commentRecommendList) {
         this.article = article;
         this.member = member;
         this.content = content;
         this.selection = selection;
-        this.recommendCount = recommendCount;
         this.commentRecommendList = commentRecommendList;
     }
 
     public static Comment of(Article article, Member member, String content, Boolean selection,
-                             Integer recommendCount, List<CommentRecommend> commentRecommendList) {
-        return new Comment(article, member, content, selection, recommendCount, commentRecommendList);
+                             List<CommentRecommend> commentRecommendList) {
+        return new Comment(article, member, content, selection, commentRecommendList);
     }
 }

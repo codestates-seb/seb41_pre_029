@@ -26,6 +26,6 @@ public class CommentRecommend {
     private Comment comment;
     
     @Column(nullable = false)
-    private Boolean flag;
+    private Integer flag;
 
 }

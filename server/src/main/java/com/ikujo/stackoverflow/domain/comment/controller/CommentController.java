@@ -2,16 +2,19 @@ package com.ikujo.stackoverflow.domain.comment.controller;
 
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPatch;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPost;
+import com.ikujo.stackoverflow.domain.comment.dto.request.CommentRecommendPost;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentMultiResponseDto;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentResponse;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
 import com.ikujo.stackoverflow.domain.comment.service.CommentService;
 
 import com.ikujo.stackoverflow.global.dto.SingleResponseDto;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,13 +23,14 @@ import java.util.List;
 @RequestMapping("/questions/{article-id}/comments")
 @CrossOrigin
 @RequiredArgsConstructor
+@Validated
 public class CommentController {
 
     private final CommentService commentService;
 
     @PostMapping
     public ResponseEntity postComment(@PathVariable("article-id") @Positive Long articleId,
-                                      @RequestBody CommentPost commentPost) {
+                                      @Valid @RequestBody CommentPost commentPost) {
 
         CommentResponse commentResponse = commentService.createComment(articleId, commentPost);
 
@@ -37,7 +41,7 @@ public class CommentController {
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@PathVariable("article-id") @Positive Long articleId,
                                        @PathVariable("comment-id") @Positive Long commentId,
-                                       @RequestBody CommentPatch commentPatch) {
+                                       @Valid @RequestBody CommentPatch commentPatch) {
 
         CommentResponse commentResponse = commentService.updateComment(articleId, commentId, commentPatch);
 
@@ -78,5 +82,20 @@ public class CommentController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PostMapping("/{comment-id}/likes")
+    public ResponseEntity postLikes(@PathVariable("article-id") @Positive Long articleId,
+                                    @PathVariable("comment-id") @Positive Long commentId,
+                                    @Valid @RequestBody CommentRecommendPost commentRecommendPost) {
+        return null;
+    }
+
+    @PostMapping("/{comment-id}/unlikes")
+    public ResponseEntity postUnlikes() {
+        return null;
+    }
+
+
+
 
 }
