@@ -22,7 +22,7 @@ public class Member extends BaseTime {
     private String email;
 
     // 로그인 인증을 위한 패스워드
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 100)
     private String password;
 
     @Column(nullable = false, length = 20)
