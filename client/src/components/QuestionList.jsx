@@ -1,9 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import useStore from "../zustand/store.js";
 import axios from "axios";
-
-import dummydata from "../dummydata";
 
 import QuestionSummary from "./QuestionSummary";
 import Pagination from "./Pagination";
@@ -58,22 +55,19 @@ const PageContainer = styled.div`
 `;
 
 const QuestionList = ({ data }) => {
-  const { getInitialQuestions } = useStore((state) => state);
-  const [questions, setQuestions] = useState(dummydata);
+  const [questions, setQuestions] = useState([]);
 
-  console.log(data);
-
-  const id =1;
+  // console.log(questions);
 
 useEffect(()=>{
- axios.get('http://13.124.69.107/members/1').then((res) => console.log(res.data.data));
+ axios.get('http://13.124.69.107/questions').then((res) => setQuestions(res?.data.data));
   },[])
 
   const filtered = questions.filter(
     (el) => el.content.includes(data) || el.title.includes(data)
   );
 
-  console.log(filtered + "1");
+  // console.log(filtered + "1");
   const [isActive, setIsActive] = useState("15");
 
   //페이지 당 게시물 수
@@ -102,7 +96,7 @@ useEffect(()=>{
             ))
         : questions
             .slice(offset, offset + limit)
-            .map((question) => (
+            .map((question,idx) => (
               <QuestionSummary key={question.id} props={question} />
             ))}
       <PageContainer>

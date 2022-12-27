@@ -5,6 +5,7 @@ import displayedAt from "../util/displayedAt";
 import axios from "axios";
 
 const QuestionSummary = ({ props }) => {
+  console.log(props);
 
   const navigate = useNavigate();
   const navigateDetailPage = (id) => {
@@ -22,9 +23,9 @@ const QuestionSummary = ({ props }) => {
         <div className="summary_item">
           {props.selection ? 
           <span className="selected">
-            ✔ {props.recommendCount}
+            ✔ {props.commentCount}
           <span className="summary_item_unit">
-              {props.recommendCount === 1? " answer" : " answers"}
+              {props.commentCount === 1? " answer" : " answers"}
             </span>
           </span>
           : 
