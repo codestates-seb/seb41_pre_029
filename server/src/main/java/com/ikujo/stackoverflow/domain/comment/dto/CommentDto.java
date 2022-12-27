@@ -24,13 +24,15 @@ public record CommentDto(Long id,
                 null, null, LocalDateTime.now(), LocalDateTime.now());
     }
 
-    public static CommentDto of(Comment comment, CommentPatch commentPatch, Article article, Member member) {
-        return new CommentDto(comment.getId(), article, member, commentPatch.content(), comment.getSelection(),
-                comment.getRecommendCount(), comment.getCommentRecommendList(), comment.getCreatedAt(), LocalDateTime.now());
+    public static CommentDto of(Comment comment, CommentPatch commentPatch) {
+        return new CommentDto(comment.getId(), comment.getArticle(), comment.getMember(), commentPatch.content(),
+               comment.getSelection() ,comment.getRecommendCount(), comment.getCommentRecommendList(),
+                comment.getCreatedAt(), LocalDateTime.now());
     }
 
     public Comment toEntity() {
         return Comment.of(
+                id,
                 article,
                 member,
                 content,
@@ -38,6 +40,7 @@ public record CommentDto(Long id,
                 recommendCount,
                 commentRecommendList
         );
-
     }
+
+
 }

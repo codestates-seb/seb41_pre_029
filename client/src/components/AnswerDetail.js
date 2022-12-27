@@ -6,6 +6,7 @@ import displayedAt from "../util/displayedAt";
 import useScrollTop from "../util/useScrollTop";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AnswerSection = styled.section`
   display: flex;
@@ -29,6 +30,7 @@ const AnswerSection = styled.section`
       font-size: 21px;
       padding: 4px 0 4px 0;
     }
+    
   }
   > .post-layout {
     > .post--body {
@@ -80,6 +82,11 @@ const AnswerSection = styled.section`
             color: #000;
           }
         }
+        > .hoverE {
+          :hover {
+            cursor: pointer;
+      }
+    }
       }
       > .post--footer-profile {
         flex: 1 1 auto;
@@ -121,10 +128,8 @@ const AnswerSection = styled.section`
 `;
 
 const AnswerDetail = (answer) => {
-  useScrollTop();
-  const questionId = useParams().id;
 
-  answer = answer.answers;
+  useScrollTop();
   // console.log(answer.memberIdentityDto.nickname);
 
   const handleDelete = () => {
@@ -137,7 +142,15 @@ const AnswerDetail = (answer) => {
     }
   };
 
-  // .then((res) => console.log(res));
+  const params = useParams();
+  const questionId = Number(params.id);
+  answer = answer.answers
+  const navigate = useNavigate();
+
+  const navigateEditpage = (id) => {
+    navigate(`/editanswer/${questionId}/${id}`);
+  };
+
   return (
     <AnswerSection>
       <div className="recommand">
@@ -145,12 +158,13 @@ const AnswerDetail = (answer) => {
         <span>{answer.recommendCount}</span>
         <RecommandB fill="#babfc4" />
       </div>
+
       <div className="post-layout">
         <div className="post--body">{answer.content}</div>
         <div className="post--footer">
           <div className="post--footer-button">
             <span className="button">Share</span>
-            <span className="button">Edit</span>
+            <span className='button hoverE' onClick={() => navigateEditpage(answer.id)}>Edit</span>
             <span className="button">Follow</span>
             <span className="button" onClick={() => handleDelete(questionId)}>
               Delete

@@ -9,35 +9,20 @@ import Parser from "./Parser";
 import Button from "./Button";
 import axios from "axios";
 
-const EditQuestion = ({originData}) => {
+const EditAnswer = ({originData, questionId, answerId}) => {
 
     const location = {pathname:'/'}
     const [content, setContent] = useState(originData.content);
-    const [title,setTitle] = useState(originData.title);
-    const [tags, setTags] = useState(originData.tag);
-    const [submitTags, setSubmitTags] = useState("");
-    const[summary, setSummary] = useState(originData.summary || "");
 
     const [input, setInput] = useState({
-      title : originData.title,
-      tags : originData.tags,
       content : originData.content,
-      summary
     });
 
     useEffect(() => {
       setInput({
-        title,
-        submitTags,
-        content,
+        content
       });
-    }, [submitTags, content, title]);
-
-  /* 태그 제출 형식으로 변경 */
-   useEffect(() => {
-    setSubmitTags(`##${tags.map((el) => el.replaceAll(" ", "-")).join("##")}`);
-  });
-  // console.log(input);
+    }, [content]);
 
   const handleChange = (e) => {
     setInput({
@@ -46,39 +31,18 @@ const EditQuestion = ({originData}) => {
     });
   };
 
-  /* 태그 추가, 삭제 */
-  const addTags = (event) => {
-    let inputValue = event.target.value;
-    if (inputValue.length !== 0 && !tags.includes(inputValue)) {
-      setTags([...tags, inputValue]);
-      event.target.value = "";
-    }
-    };
-
-  const removeTags = (indexToRemove) => {
-    setTags(
-      tags.filter((__, idx) => {
-        return idx !== indexToRemove;
-      })
-    );
-  };
-
-  const handleChangeTitle = (e) => {
-    setTitle(e.target.value)
-  }
-
-  const params = useParams();
-  const id = Number(params.id);
   const navigate = useNavigate();
+
+  const cancleEdit = () => {
+    navigate(`/questionpage/${questionId}`)
+  }
 
   const handleClickEdit = () => {
     axios
-    .patch(`http://13.124.69.107/questions/${id}`, {
-      "title" : input.title,
+    .patch(`http://13.124.69.107/questions/${questionId}/comments/${answerId}`, {
       "content" : input.content,
-      "tag" : input.submitTags
     })
-    .then(() => navigate(`/questionpage/${id}`))
+    .then(() => navigate(`/questionpage/${questionId}`))
   }
   return (
     <>
@@ -92,45 +56,9 @@ const EditQuestion = ({originData}) => {
       We welcome edits that make the post easier to understand and more valuable for readers. Because community members review edits, please try to make the post substantially better than how you found it, for example, by fixing grammar or adding additional resources and hyperlinks.
       </YellowBoxContainer>
         <InputBox>
-          <div className="title">Title</div>
-          <input className="input"
-          value={title}
-          name="title"
-          onChange={e => handleChangeTitle(e)}>
-          </input>
-        </InputBox>
-          <InputBox>
-          <div className="title">Body</div>
+          <div className="title">Answer</div>
           <CEditor onChange={setContent} data={content} /> 
             {/* <Parser html={content} /> */}
-        </InputBox>
-            <InputBox className="tag_box">
-              <div className="title">Tags</div>
-          <TagsInput>
-            <ul id="tags">
-              {tags.map((tag, index) => (
-                <li key={index} className="tag">
-                  <span className="tag_title">{tag}</span>
-                  <span
-                    className="tag_close_icon"
-                    onClick={() => removeTags(index)}
-                  >
-                    &times;
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <input
-              className="tag_input"
-              type="text"
-              onKeyUp={(e) => {
-                if (e.key === "Enter") {
-                  addTags(e);
-                }
-              }}
-              placeholder="Press enter to add tags"
-            />
-          </TagsInput>
         </InputBox>
         <InputBox>
           <div className="title">Edit Summary</div>
@@ -141,7 +69,7 @@ const EditQuestion = ({originData}) => {
           <p onClick={handleClickEdit}>
             <Button buttonName={"Save edits"}/>
           </p>
-          <div>Cancle</div>
+          <div onClick={cancleEdit}>Cancle</div>
         </SubmitContainer>
     </Main>
       <RightBar>
@@ -163,7 +91,7 @@ const EditQuestion = ({originData}) => {
       </>
     ) 
   }
-export default EditQuestion;
+export default EditAnswer;
 
 const EditContainer = styled.div`
   display: flex;
