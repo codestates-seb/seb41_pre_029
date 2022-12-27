@@ -114,6 +114,7 @@ const AnswerSection = styled.section `
 
 const AnswerDetail = (answer) => {
   answer = answer.answers
+  console.log(answer.memberIdentityDto.nickname)
   return (
     <AnswerSection>
       <div className='recommand'>
@@ -136,7 +137,7 @@ const AnswerDetail = (answer) => {
             <div className='profile-wrapper'>
               <div className='profile-time'>asked {displayedAt(answer.createdAt)}</div>
                 <div className='profile-user'>
-                  <div className='userName'>{answer.member.nickName}</div>
+                  <div className='userName'>{answer.memberIdentityDto.nickname}</div>
                   <div className='user-follower'>
                     <span className='follower'>1,120</span>
                   </div>
