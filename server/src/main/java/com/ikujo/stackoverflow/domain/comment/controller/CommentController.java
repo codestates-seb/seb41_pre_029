@@ -48,7 +48,7 @@ public class CommentController {
 
     }
 
-    @GetMapping("/{comment-id}")
+    @GetMapping("/{comment-id}") // 답글 수정을 위한 단일 조회
     public ResponseEntity getComment(@PathVariable("comment-id") @Positive Long commentId) {
 
         CommentResponse commentResponse = commentService.findComment(commentId);
