@@ -10,6 +10,7 @@ import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPost;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentResponse;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
 import com.ikujo.stackoverflow.domain.comment.service.CommentService;
+import com.ikujo.stackoverflow.domain.member.entity.Link;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.Profile;
 import com.ikujo.stackoverflow.domain.member.entity.dto.MemberIdentityDto;
@@ -110,22 +111,21 @@ public class MockCommentControllerTest {
     void patchComment() throws Exception {
 
         //given
-        CommentDto commentDto = updateCommentDto();
-        given(commentService.updateComment(anyLong(), anyLong(), any(CommentPatch.class)))
-                .willReturn(commentDto.toEntity());
+        Comment comment = createComment();
+        willDoNothing().given(commentService).updateComment(Mockito.anyLong(), Mockito.any(CommentPatch.class));
 
-        String content = gson.toJson(commentDto);
 
         //when
         ResultActions actions =
-                mockMvc.perform(patch("/questions/{article-id}/comments/{comment-id}", 1L, 1L)
+                mockMvc.perform(patch("/questions/{article-id}/comments/{comment-id}", 1L, comment.getId())
                         .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(content));
+                        .contentType(MediaType.APPLICATION_JSON));
+
 
         //then
-        actions.andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.content").value(commentDto.content()));
+        actions.andExpect(status().isResetContent());
+        then(commentService).should().updateComment(comment.getId(), new CommentPatch("업데이트 가즈아"));
+
 
     }
 
@@ -213,7 +213,7 @@ public class MockCommentControllerTest {
 
     private Member createMember() {
         return new Member(1L, "j01039519778@gmail.com", "111222333444", "greatshine",
-                new Profile("이미지","동해", "자바 스프링 개발자", "언제나 화이팅"));
+                new Profile("이미지","동해", "자바 스프링 개발자", "언제나 화이팅"),new Link());
     }
 
     private Article createArticle() {
@@ -229,15 +229,6 @@ public class MockCommentControllerTest {
     private CommentDto createCommentDto() {
         return CommentDto.of(
                 new CommentPost("블라블라블라", createMember().getId()),
-                createArticle(),
-                createMember()
-        );
-    }
-
-    private CommentDto updateCommentDto() {
-        return CommentDto.of(
-                createComment(),
-                new CommentPatch("블라3"),
                 createArticle(),
                 createMember()
         );

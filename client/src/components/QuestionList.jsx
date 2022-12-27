@@ -57,17 +57,17 @@ const PageContainer = styled.div`
 const QuestionList = ({ data }) => {
   const [questions, setQuestions] = useState([]);
 
-  // console.log(questions);
-
 useEffect(()=>{
- axios.get('http://13.124.69.107/questions').then((res) => setQuestions(res?.data.data));
+ axios.get('http://13.124.69.107/questions').then((res) => {
+  setQuestions(res?.data.data)
+  })
   },[])
+
 
   const filtered = questions.filter(
     (el) => el.content.includes(data) || el.title.includes(data)
   );
 
-  // console.log(filtered + "1");
   const [isActive, setIsActive] = useState("15");
 
   //페이지 당 게시물 수

@@ -51,6 +51,7 @@ const AddQuestionPage = () => {
   };
 
   const handleSubmit = () => {
+    if (input.title.trim().length < 1) return;
     if (window.confirm("Are you sure you want to submit this Question?")) {
       axios({
         url: `http://13.124.69.107/questions`, // 통신할 웹문서

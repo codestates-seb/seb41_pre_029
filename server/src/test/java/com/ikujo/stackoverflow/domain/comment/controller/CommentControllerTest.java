@@ -6,6 +6,7 @@ import com.ikujo.stackoverflow.config.LocalDateTimeSerializer;
 import com.ikujo.stackoverflow.domain.article.entity.Article;
 import com.ikujo.stackoverflow.domain.article.repository.ArticleRepository;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPost;
+import com.ikujo.stackoverflow.domain.member.entity.Link;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.Profile;
 import com.ikujo.stackoverflow.domain.member.repository.MemberRepository;
@@ -58,7 +59,8 @@ class CommentControllerTest {
         String content = gson.toJson(commentPost);
 
         Member member = new Member(1L, "j01039519778@gmail.com", "111222333444", "greatshine",
-                new Profile("이미지","동해", "자바 스프링 개발자", "언제나 화이팅"));
+                new Profile("이미지","동해", "자바 스프링 개발자", "언제나 화이팅"),
+                new Link());
         Article article = new Article(1L, member, "자바","이거 어떻게 하나요", "Java", 1L, null, null);
 
         memberRepository.save(member);

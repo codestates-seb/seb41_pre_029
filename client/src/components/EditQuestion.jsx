@@ -71,6 +71,10 @@ const EditQuestion = ({originData}) => {
   const id = Number(params.id);
   const navigate = useNavigate();
 
+  const cancleEdit = () => {
+    navigate(`/questionpage/${id}`)
+  }
+
   const handleClickEdit = () => {
     axios
     .patch(`http://13.124.69.107/questions/${id}`, {
@@ -141,7 +145,7 @@ const EditQuestion = ({originData}) => {
           <p onClick={handleClickEdit}>
             <Button buttonName={"Save edits"}/>
           </p>
-          <div>Cancle</div>
+          <div onClick={cancleEdit}>Cancle</div>
         </SubmitContainer>
     </Main>
       <RightBar>
