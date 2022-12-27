@@ -1,5 +1,6 @@
 package com.ikujo.stackoverflow.domain.member.entity.dto;
 
+import com.ikujo.stackoverflow.domain.member.entity.Link;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.Profile;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberLoginPost;
@@ -14,6 +15,7 @@ public record MemberDto(
         String password,
         String nickname,
         Profile profile,
+        Link link,
         LocalDateTime createdAt,
         LocalDateTime lastModifiedAt
 ) {
@@ -26,12 +28,19 @@ public record MemberDto(
                 null,
                 null,
                 null,
+                null,
                 null);
     }
 
     public static MemberDto of(MemberSignupPost memberSignupPost) {
 
-        Profile profile = new Profile("https://www.gravatar.com/avatar/571f9b56b9fe58dca664a393b6d2793c?s=192&d=identicon&r=PG", null, null, null);
+        Profile profile = new Profile(
+                "https://www.gravatar.com/avatar/571f9b56b9fe58dca664a393b6d2793c?s=192&d=identicon&r=PG",
+                "",
+                "",
+                "");
+
+        Link link = new Link("", "", "");
 
         return new MemberDto(
                 null,
@@ -39,6 +48,7 @@ public record MemberDto(
                 memberSignupPost.password(),
                 memberSignupPost.nickname(),
                 profile,
+                link,
                 LocalDateTime.now(),
                 LocalDateTime.now()
                 );
@@ -62,10 +72,12 @@ public record MemberDto(
 
     public Member toEntity() {
         return Member.of(
+                id,
                 email,
                 password,
                 nickname,
-                profile
+                profile,
+                link
         );
     }
 }

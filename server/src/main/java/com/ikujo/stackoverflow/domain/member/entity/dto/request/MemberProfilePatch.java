@@ -13,6 +13,12 @@ public record MemberProfilePatch(
 
         String title,
 
-        String aboutMe
+        String aboutMe,
+
+        String website,
+
+        String twitter,
+
+        String github
 
 ) {}
