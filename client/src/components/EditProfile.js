@@ -1,12 +1,14 @@
 import styled from "styled-components";
 // import Editor from "./Editor";
 import Input from "./Input";
+import remarkGfm from "remark-gfm";
 import StyledButton from "./Button";
 import { useState } from "react";
 import { ReactComponent as SvgTwitter } from "../assets/twitter.svg";
 import { ReactComponent as SvgGit } from "../assets/git.svg";
 import { ReactComponent as Web } from "../assets/web.svg";
 import { useNavigate } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 import Editor from "./Editors";
 const Wrap = styled.div`
   display: flex;
@@ -145,7 +147,6 @@ const EditProfile = () => {
       twitter,
       gitHub,
       fullName,
-
     };
     console.log(data);
     clear();
@@ -189,6 +190,7 @@ const EditProfile = () => {
           />
           <Title className="editor">About me</Title>
           <Editor set={setEditValue} get={editValue} />
+          <div dangerouslySetInnerHTML={{ __html: editValue }}></div>
         </FormList>
         <Title>Links</Title>
         <FormList className="link">

@@ -30,7 +30,7 @@ const Nav = ({ location }) => {
         <NavLink
           key={index}
           to={el.link}
-          className={`${el.link === active ? "active" : null} ${location.pathname === '/questionpage' && index === 0 ? "active" : null}`}
+          className={`${el.link === active ? "active" : null} ${location.pathname.includes('/questionpage') && index === 0 ? "active" : null}`}
           onClick={() => handleClick(el.link)}
         >
           <div>

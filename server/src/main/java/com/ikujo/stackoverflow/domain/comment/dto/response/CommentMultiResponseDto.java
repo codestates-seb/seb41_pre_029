@@ -1,4 +1,4 @@
-package com.ikujo.stackoverflow.domain.comment.dto;
+package com.ikujo.stackoverflow.domain.comment.dto.response;
 
 import lombok.Getter;
 
@@ -16,5 +16,3 @@ public class CommentMultiResponseDto<T> {
         this.size = size;
     }
 }
-
-

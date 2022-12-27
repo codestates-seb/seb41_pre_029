@@ -41,6 +41,7 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'com.google.code.gson:gson'
 }
 
 tasks.named('test') {

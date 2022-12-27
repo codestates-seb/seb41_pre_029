@@ -3,9 +3,9 @@ package com.ikujo.stackoverflow.domain.article.service.impl;
 import com.ikujo.stackoverflow.domain.article.dto.ArticleDto;
 import com.ikujo.stackoverflow.domain.article.dto.request.ArticleRequest;
 import com.ikujo.stackoverflow.domain.article.dto.response.ArticleDetailResponse;
+import com.ikujo.stackoverflow.domain.article.dto.response.ArticlePatchResponse;
 import com.ikujo.stackoverflow.domain.article.dto.response.ArticleResponse;
 import com.ikujo.stackoverflow.domain.article.entity.Article;
-import com.ikujo.stackoverflow.domain.article.repository.ArticleDummyRepository;
 import com.ikujo.stackoverflow.domain.article.repository.ArticleRepository;
 import com.ikujo.stackoverflow.domain.article.service.ArticleService;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
@@ -24,8 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
-//    private final ArticleRepository articleRepository;
-        private final ArticleDummyRepository articleRepository;
+    private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
 
     @Transactional(readOnly = true)
@@ -35,17 +34,18 @@ public class ArticleServiceImpl implements ArticleService {
                 .map(ArticleResponse::from);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public ArticleDetailResponse findArticle(Long articleId) {
-        return articleRepository.findById(articleId)
-                .map(ArticleDetailResponse::from)
+        Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 게시글 입니다. articleId : " + articleId));
+        article.visitCount();
+
+        return ArticleDetailResponse.from(article);
     }
 
     @Override
     public ArticleDto saveArticle(ArticleRequest articleRequest, Long memberId) {
-        Member member = memberRepository.getReferenceById(memberId);
+        Member member = memberRepository.findById(memberId).get();
         Article article = articleRepository.save(articleRequest.toDto(member).toEntity());
 
         return ArticleDto.from(article);
@@ -57,6 +57,22 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.deleteById(articleId);
 
         log.info("삭제한 게시글 번호 : {}", articleId);
+    }
+
+    @Override
+    public void patchArticle(Long articleId, ArticleRequest articleRequest) {
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 게시글 입니다. articleId : " + articleId));
+
+        articleRepository.save(articleRequest.toDto(article).toEntity());
+        log.info("patchArticle() 정상 작동.");
+    }
+
+    @Override
+    public ArticlePatchResponse patchFindArticle(Long articleId) {
+        return articleRepository.findById(articleId)
+                .map(ArticlePatchResponse::from)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 게시글 입니다. articleId : " + articleId));
     }
 
     private void verifyExistArticle(Long articleId) {

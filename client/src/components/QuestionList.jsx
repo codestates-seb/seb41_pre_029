@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import useStore from "../zustand/store.js";
+import axios from "axios";
 
 import dummydata from "../dummydata";
 
@@ -59,15 +60,18 @@ const PageContainer = styled.div`
 const QuestionList = ({ data }) => {
   const { getInitialQuestions } = useStore((state) => state);
   const [questions, setQuestions] = useState(dummydata);
+
   console.log(data);
-  //  useEffect(() => {
-  // getInitialQuestions('/questions').then((data)=>setQuestions(data.data))
-  //  },[])
-  // console.log(questions);
+
+  const id =1;
+
+useEffect(()=>{
+ axios.get('http://13.124.69.107/members/1').then((res) => console.log(res.data.data));
+  },[])
+
   const filtered = questions.filter(
     (el) => el.content.includes(data) || el.title.includes(data)
   );
-  console.log(filtered);
 
   console.log(filtered + "1");
   const [isActive, setIsActive] = useState("15");

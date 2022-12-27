@@ -1,9 +1,16 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 import displayedAt from "../util/displayedAt";
+import axios from "axios";
 
 const QuestionSummary = ({ props }) => {
-  
+
+  const navigate = useNavigate();
+  const navigateDetailPage = (id) => {
+    navigate(`/questionpage/${id}`)
+  }
+
   return (
     <QuestionSummaryContainer id="question_sumamry_{props.id}">
       <SummaryStats>
@@ -36,7 +43,7 @@ const QuestionSummary = ({ props }) => {
       </SummaryStats>
       <div className="summary_title_meta_wrapper">
         <SummaryTitleContents>
-          <div className="summary_title">{props.title}</div>
+          <div className="summary_title" onClick={() => navigateDetailPage(props.id)}>{props.title}</div>
           <div className="summary_contents">{props.content}</div>
         </SummaryTitleContents>
         <SummaryMeta>
@@ -131,7 +138,10 @@ const SummaryTitleContents = styled.div`
     color: #0074cc;
     margin-bottom:5px;
     padding-bottom:5px;
-
+    :hover {
+      color: #0a95ff;
+      cursor: pointer;
+    }
   }
 
   & .summary_contents {
