@@ -189,12 +189,6 @@ const AnswerSection = styled.article`
 
 const QuestionPage = () => {
 
-  // useEffect( () => {
-  //   axios
-  //   .get(`http://13.124.69.107/questions/1`)
-  //   .then((res) => console.log(res.data))
-  // }, [])
-
   const navigate = useNavigate()
 
   const params = useParams();
@@ -202,15 +196,20 @@ const QuestionPage = () => {
 
   const location = useLocation();
 
-  const tihsQuestion = data.filter((el) => el.id === questionId);
-  const [question, setQuestion] = useState(tihsQuestion[0]);
-  const [answers, setAnswers] = useState(answerData.data);
+  // const tihsQuestion = data.filter((el) => el.id === questionId);
+  const [question, setQuestion] = useState();
+  const [answers, setAnswers] = useState([]);
 
   // 질문 클릭시 해당 질문 id 가져와서 해당하는 질문만 필터해서 가져오도록 하기
-    const { getInitialQuestions } = useStore(state => state);
-
+  useEffect( () => {
+    axios
+    .get(`http://13.124.69.107/questions/${questionId}`)
+    .then((res) => setQuestion(res.data.data))
+  }, [])
+  
     useEffect(() => {
-      axios.get(`http://13.124.69.107/questions/${questionId}/comments`)
+      axios
+      .get(`http://13.124.69.107/questions/${questionId}/comments`)
       .then((res) => setAnswers(res.data.data))
     }, [])
 
@@ -218,6 +217,7 @@ const QuestionPage = () => {
     navigate(`/edit/${id}`);
   };
 
+  console.log(question)
   return (
     <>
       <QuestionPageWrapper>
@@ -225,7 +225,7 @@ const QuestionPage = () => {
         <PageWrapper>
           <TitleBar>
             <div className="head">
-              <h1>{question.title}</h1>
+              <h1>{question?.title}</h1>
               <Button
                 buttonName="Ask Question"
                 link="/addquestionpage"
@@ -234,9 +234,9 @@ const QuestionPage = () => {
             </div>
             <div className="infoWrapper">
               <div className="createdAt">
-                asked {displayedAt(question.baseTime.createdAt)}
+                asked {displayedAt(question?.baseTime.createdAt)}
               </div>
-              <div className="viewed">viewed {question.views}</div>
+              <div className="viewed">viewed {question?.views}</div>
             </div>
           </TitleBar>
           <div className="bodyWrapper">
@@ -244,14 +244,14 @@ const QuestionPage = () => {
               <QuestionSection>
                 <div className="recommand">
                   <RecommandT fill="#babfc4" />
-                  <span>{question.recommendCount}</span>
+                  <span>{question?.recommendCount}</span>
                   <RecommandB fill="#babfc4" />
                 </div>
                 <div className="post-layout">
-                  <div className="post--body">{question.content}</div>
+                  <div className="post--body">{question?.content}</div>
                   <div className="post--tags">
                     <div className="summary_meta_tags">
-                      {question.tags.map((tag, idx) => (
+                      {question?.tags.map((tag, idx) => (
                         <div key={idx} className="summary_meta_tag">
                           {tag}
                         </div>
@@ -263,7 +263,7 @@ const QuestionPage = () => {
                       <span className="button">Share</span>
                       <span
                         className="button"
-                        onClick={() => navigateEditpage(question.id)}
+                        onClick={() => navigateEditpage(question?.id)}
                       >
                         Edit
                       </span>
@@ -275,11 +275,11 @@ const QuestionPage = () => {
                       </div>
                       <div className="profile-wrapper">
                         <div className="profile-time">
-                          asked {displayedAt(question.baseTime.createdAt)}
+                          asked {displayedAt(question?.baseTime.createdAt)}
                         </div>
                         <div className="profile-user">
                           <div className="userName">
-                            {question.member.nickname}
+                            {question?.member.nickname}
                           </div>
                           <div className="user-follower">
                             <span className="follower">1,120</span>
@@ -291,8 +291,8 @@ const QuestionPage = () => {
                 </div>
               </QuestionSection>
               <AnswerSection>
-                <h2 className="answerAmount">{answers.length} Answers</h2>
-                {answers.map((el, idx) => (
+                <h2 className="answerAmount">{answers?.length} Answers</h2>
+                {answers?.map((el, idx) => (
                   <AnswerDetail key={idx} answers={el} />
                 ))}
               </AnswerSection>
