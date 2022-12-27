@@ -64,7 +64,7 @@ public class Comment extends BaseTime {
     }
 
     public static Comment of(Long id, Article article, Member member, String content, Boolean selection,
-                             Integer recommendCount, List<CommentRecommend> commentRecommendList) {
-        return new Comment(id, article, member, content, selection, recommendCount, commentRecommendList);
+                             List<CommentRecommend> commentRecommendList) {
+        return new Comment(id, article, member, content, selection, commentRecommendList);
     }
 }

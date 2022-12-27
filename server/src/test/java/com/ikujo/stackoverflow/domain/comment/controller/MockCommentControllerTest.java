@@ -234,7 +234,7 @@ public class MockCommentControllerTest {
     }
 
     private Comment createComment() {
-        return new Comment(1L, createArticle(), createMember(), "블라블라블라", false, 0, null);
+        return new Comment(1L, createArticle(), createMember(), "블라블라블라", false,  null);
     }
 
     private CommentDto createCommentDto() {
@@ -249,7 +249,7 @@ public class MockCommentControllerTest {
         return CommentResponse.of(
                 1L,
                 "블라블라블라",
-                0,
+                0L,
                 false,
                 MemberIdentityDto.of(1L, "이미지","greatshine"),
                 LocalDateTime.now(),
@@ -261,7 +261,7 @@ public class MockCommentControllerTest {
         return CommentResponse.of(
                 2L,
                 "블라3",
-                0,
+                0L,
                 false,
                 MemberIdentityDto.of(1L, "이미지","greatshine"),
                 LocalDateTime.now(),

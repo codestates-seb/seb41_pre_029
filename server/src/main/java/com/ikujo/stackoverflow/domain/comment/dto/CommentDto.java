@@ -25,7 +25,7 @@ public record CommentDto(Long id,
 
     public static CommentDto of(Comment comment, CommentPatch commentPatch) {
         return new CommentDto(comment.getId(), comment.getArticle(), comment.getMember(), commentPatch.content(),
-               comment.getSelection() ,comment.getRecommendCount(), comment.getCommentRecommendList(),
+               comment.getSelection() , comment.getCommentRecommendList(),
                 comment.getCreatedAt(), LocalDateTime.now());
     }
 
