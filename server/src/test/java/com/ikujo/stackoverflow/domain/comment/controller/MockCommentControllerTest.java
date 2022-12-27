@@ -89,31 +89,32 @@ public class MockCommentControllerTest {
         actions
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.data.content").value(commentPost.content()))
-                .andDo(document("post-comment",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
-                        requestFields(
-                                List.of(
-                                        fieldWithPath("content").type(JsonFieldType.STRING).description("본문"),
-                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자")
-                                )
-                        ),
-                        responseFields(
-                                List.of(
-                                        fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터"),
-                                        fieldWithPath("data.commentId").type(JsonFieldType.NUMBER).description("답글 식별자"),
-                                        fieldWithPath("data.content").type(JsonFieldType.STRING).description("본문"),
-                                        fieldWithPath("data.recommendCount").type(JsonFieldType.NUMBER).description("추천 수"),
-                                        fieldWithPath("data.selection").type(JsonFieldType.BOOLEAN).description("채택 여부"),
-                                        fieldWithPath("data.memberIdentityDto").type(JsonFieldType.OBJECT).description("회원 정보"),
-                                        fieldWithPath("data.memberIdentityDto.memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
-                                        fieldWithPath("data.memberIdentityDto.image").type(JsonFieldType.STRING).description("이미지"),
-                                        fieldWithPath("data.memberIdentityDto.nickname").type(JsonFieldType.STRING).description("회원 이름"),
-                                        fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("회원 가입 날짜"),
-                                        fieldWithPath("data.lastModifiedAt").type(JsonFieldType.STRING).description("마지막 수정 날짜")
-                                )
-                        )
-                ));
+                .andReturn();
+//                .andDo(document("post-comment",
+//                        preprocessRequest(prettyPrint()),
+//                        preprocessResponse(prettyPrint()),
+//                        requestFields(
+//                                List.of(
+//                                        fieldWithPath("content").type(JsonFieldType.STRING).description("본문"),
+//                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자")
+//                                )
+//                        ),
+//                        responseFields(
+//                                List.of(
+//                                        fieldWithPath("data").type(JsonFieldType.OBJECT).description("결과 데이터"),
+//                                        fieldWithPath("data.commentId").type(JsonFieldType.NUMBER).description("답글 식별자"),
+//                                        fieldWithPath("data.content").type(JsonFieldType.STRING).description("본문"),
+//                                        fieldWithPath("data.recommendCount").type(JsonFieldType.NUMBER).description("추천 수"),
+//                                        fieldWithPath("data.selection").type(JsonFieldType.BOOLEAN).description("채택 여부"),
+//                                        fieldWithPath("data.memberIdentityDto").type(JsonFieldType.OBJECT).description("회원 정보"),
+//                                        fieldWithPath("data.memberIdentityDto.memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+//                                        fieldWithPath("data.memberIdentityDto.image").type(JsonFieldType.STRING).description("이미지"),
+//                                        fieldWithPath("data.memberIdentityDto.nickname").type(JsonFieldType.STRING).description("회원 이름"),
+//                                        fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("회원 가입 날짜"),
+//                                        fieldWithPath("data.lastModifiedAt").type(JsonFieldType.STRING).description("마지막 수정 날짜")
+//                                )
+//                        )
+//                ));
     }
 
     @DisplayName("[API][PATCH] 게시글 수정")
