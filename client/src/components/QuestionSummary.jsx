@@ -5,7 +5,6 @@ import displayedAt from "../util/displayedAt";
 import axios from "axios";
 
 const QuestionSummary = ({ props }) => {
-  console.log(props);
 
   const navigate = useNavigate();
   const navigateDetailPage = (id) => {
@@ -170,9 +169,11 @@ const SummaryMeta = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+   
 
     & .summary_meta_tag {
       background: #e1ecf4;
+       cursor: pointer;
 
       margin-right: 4px;
       padding: 3px 6px;
