@@ -37,7 +37,7 @@ public record ArticleDetailResponse(
 
     public static ArticleDetailResponse from(Article article) {
         List<String> tags = tagSplit(article.getTag());
-        MemberIdentityDto memberIdentityResponse = MemberIdentityDto.of(article.getMember().getId(), article.getMember().getNickname());
+        MemberIdentityDto memberIdentityResponse = MemberIdentityDto.of(article.getMember().getId(), article.getMember().getProfile().getImage(), article.getMember().getNickname());
         BaseTimeDto baseTimeDto = BaseTimeDto.of(article.getCreatedAt(), article.getLastModifiedAt());
 
         return new ArticleDetailResponse(
