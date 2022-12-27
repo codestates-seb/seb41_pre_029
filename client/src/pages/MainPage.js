@@ -57,7 +57,6 @@ const SideBar = styled.div`
 
 const MainPage = ({ data }) => {
   const location = useLocation();
-  const navigate = useNavigate();
 
   return (
     <>

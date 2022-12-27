@@ -259,7 +259,7 @@ const QuestionPage = () => {
                   <RecommandB fill="#babfc4" />
                 </div>
                 <div className="post-layout">
-                  <div className="post--body">{parser(question?.content)}</div>
+                  <div className="post--body">{question?.content}</div>
                   <div className="post--tags">
                     <div className="summary_meta_tags">
                       {question?.tags.map((tag, idx) => (
