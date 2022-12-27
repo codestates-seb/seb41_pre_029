@@ -202,21 +202,16 @@ const QuestionPage = () => {
 
   useEffect(() => {
     axios
-      .get(`http://13.124.69.107/questions/${questionId}`)
-      .then((res) => setQuestion(res.data.data));
-  }, []);
-
-  useEffect(() => {
-    axios
+    .get(`http://13.124.69.107/questions/${questionId}`)
+    .then((res) => setQuestion(res.data.data))
+  }, [])
+  
+    useEffect(() => {
+      axios
       .get(`http://13.124.69.107/questions/${questionId}/comments`)
-      .then((res) => setAnswers(res.data.data));
-  }, []);
+      .then((res) => setAnswers(res.data.data))
+    }, [])
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`http://13.124.69.107/questions/${questionId}`)
-  //     .then((res) => console.log(res.data.data));
-  // }, []);
   const navigateEditpage = (id) => {
     navigate(`/edit/${id}`);
   };
