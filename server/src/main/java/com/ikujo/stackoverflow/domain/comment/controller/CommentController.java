@@ -1,6 +1,9 @@
 package com.ikujo.stackoverflow.domain.comment.controller;
 
-import com.ikujo.stackoverflow.domain.comment.dto.*;
+import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPatch;
+import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPost;
+import com.ikujo.stackoverflow.domain.comment.dto.response.CommentMultiResponseDto;
+import com.ikujo.stackoverflow.domain.comment.dto.response.CommentResponse;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
 import com.ikujo.stackoverflow.domain.comment.service.CommentService;
 
