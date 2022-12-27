@@ -215,12 +215,6 @@ const QuestionPage = () => {
       .then((res) => setAnswers(res.data.data))
     }, [])
 
-
-  useEffect(() => {
-    axios
-      .get(`http://13.124.69.107/questions/${questionId}`)
-      .then((res) => console.log(res.data.data));
-  }, []);
   const navigateEditpage = (id) => {
     navigate(`/edit/${id}`);
   };
