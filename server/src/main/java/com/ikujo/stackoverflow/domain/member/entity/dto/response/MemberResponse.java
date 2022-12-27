@@ -1,5 +1,6 @@
 package com.ikujo.stackoverflow.domain.member.entity.dto.response;
 
+import com.ikujo.stackoverflow.domain.member.entity.Link;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.Profile;
 
@@ -15,6 +16,8 @@ public record MemberResponse(
 
         Profile profile,
 
+        Link link,
+
         LocalDateTime createdAt,
 
         LocalDateTime lastModifiedAt
@@ -25,10 +28,11 @@ public record MemberResponse(
                                     String email,
                                     String nickname,
                                     Profile profile,
+                                    Link link,
                                     LocalDateTime createdAt,
                                     LocalDateTime lastModifiedAt) {
 
-        return new MemberResponse(id, email, nickname, profile, createdAt, lastModifiedAt);
+        return new MemberResponse(id, email, nickname, profile, link, createdAt, lastModifiedAt);
     }
 
 
@@ -38,9 +42,10 @@ public record MemberResponse(
         String email = member.getEmail();
         String nickname = member.getNickname();
         Profile profile = member.getProfile();
+        Link link = member.getLink();
         LocalDateTime createdAt = member.getCreatedAt();
         LocalDateTime lastModifiedAt = member.getLastModifiedAt();
 
-        return new MemberResponse(id, email, nickname, profile, createdAt, lastModifiedAt);
+        return new MemberResponse(id, email, nickname, profile, link, createdAt, lastModifiedAt);
     }
 }
