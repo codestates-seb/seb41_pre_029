@@ -225,7 +225,7 @@ const QuestionPage = () => {
   const location = useLocation();
   const Id = localStorage.getItem("info");
   const memberId = JSON.parse(Id);
-  console.log(memberId.id);
+  
   // const tihsQuestion = data.filter((el) => el.id === questionId);
   const [question, setQuestion] = useState();
   const [answers, setAnswers] = useState([]);

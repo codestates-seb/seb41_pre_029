@@ -3,6 +3,7 @@ import styled from "styled-components";
 import displayedAt from "../util/displayedAt";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AnswerSection = styled.section `
   display: flex;
@@ -26,6 +27,7 @@ const AnswerSection = styled.section `
       font-size: 21px;
       padding: 4px 0 4px 0;
     }
+    
   }
   > .post-layout {
     > .post--body {
@@ -72,6 +74,11 @@ const AnswerSection = styled.section `
           font-size: 13px;
           font-weight: 400;
         }
+        > .hoverE {
+          :hover {
+            cursor: pointer;
+      }
+    }
       }
       > .post--footer-profile {
         flex: 1 1 auto;
@@ -113,8 +120,16 @@ const AnswerSection = styled.section `
 `
 
 const AnswerDetail = (answer) => {
+  const params = useParams();
+  const questionId = Number(params.id);
   answer = answer.answers
-  console.log(answer.memberIdentityDto.nickname)
+  console.log(answer)
+  const navigate = useNavigate();
+
+  const navigateEditpage = (id) => {
+    navigate(`/editanswer/${questionId}/${id}`);
+  };
+
   return (
     <AnswerSection>
       <div className='recommand'>
@@ -127,7 +142,7 @@ const AnswerDetail = (answer) => {
         <div className='post--footer'>
           <div className='post--footer-button'>
               <span className='button'>Share</span>
-              <span className='button'>Edit</span>
+              <span className='button hoverE' onClick={() => navigateEditpage(answer.id)}>Edit</span>
               <span className='button'>Follow</span>
           </div>
           <div className='post--footer-profile'>

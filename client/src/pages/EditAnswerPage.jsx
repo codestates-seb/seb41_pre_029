@@ -2,21 +2,22 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState,useEffect } from "react";
 import useStore from "../zustand/store.js";
 
-import EditQuestion from "../components/EditQuestion";
+import EditAnswer from "../components/EditAnswer.jsx";
 import axios from "axios";
 
-const EditQuestionPage = () =>{
+const EditAnswerPage = () =>{
     const [originData, setOriginData] = useState();
     const params = useParams();
-    const id = Number(params.id);
+    const questionId = params.questionid;
+    const answerId = params.answerid;
 
     const navigate = useNavigate();
 
-    // const {questionData} =  useStore((state) => state)
+    
 
     useEffect(()=>{
         axios
-        .get(`http://13.124.69.107/questions/${id}/edit`)
+        .get(`http://13.124.69.107/questions/${questionId}/comments/${answerId}`)
         .then((res) => setOriginData(res.data.data))
 
         // if(questionData.length>= 1) {
@@ -30,9 +31,9 @@ const EditQuestionPage = () =>{
     }, [])// },[id,questionData]);
 
     return <div>
-      {originData && <EditQuestion originData={originData}/>}
+      {originData && <EditAnswer originData={originData} questionId={questionId} answerId={answerId}/>}
 
     </div>
 }
 
-export default EditQuestionPage;
+export default EditAnswerPage;
