@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 import displayedAt from "../util/displayedAt";
 import axios from "axios";
+import  parser from "./Parser"
+
 
 const QuestionSummary = ({ props }) => {
 
@@ -12,7 +14,7 @@ const QuestionSummary = ({ props }) => {
   }
 
   return (
-    <QuestionSummaryContainer id="question_sumamry_{props.id}">
+    <QuestionSummaryContainer>
       <SummaryStats>
         <div className="summary_item">
           <span className="summary_item_number">{props.hits || 0}</span>
@@ -44,12 +46,12 @@ const QuestionSummary = ({ props }) => {
       <div className="summary_title_meta_wrapper">
         <SummaryTitleContents>
           <div className="summary_title" onClick={() => navigateDetailPage(props.id)}>{props.title}</div>
-          <div className="summary_contents">{props.content}</div>
+          <div className="summary_contents">{parser(props.content)}</div>
         </SummaryTitleContents>
         <SummaryMeta>
           <div className="summary_meta_tags">
-            {props.tags.map((tag)=>(
-                <div className="summary_meta_tag">{tag}</div>
+            {props.tags.map((tag,idx)=>(
+                <div key={idx} className="summary_meta_tag">{tag}</div>
             ))}
           </div>
           <div className="summary_meta_user">
