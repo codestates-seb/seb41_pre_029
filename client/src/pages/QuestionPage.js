@@ -5,6 +5,7 @@ import { useLocation, useParams, useNavigate } from "react-router-dom";
 
 import Footer from "../components/Footer";
 import CEditor from "../components/CKEditor";
+import useScrollTop from "../util/useScrollTop";
 
 import parser from "../components/Parser";
 
@@ -215,23 +216,19 @@ const AnswerBtn = styled(Button)`
   margin-top: 50px;
 `;
 const QuestionPage = () => {
-
+  useScrollTop();
   const navigate = useNavigate();
-
 
   const params = useParams();
   const questionId = Number(params.id);
-
   const location = useLocation();
   const Id = localStorage.getItem("info");
   const memberId = JSON.parse(Id);
-  
   // const tihsQuestion = data.filter((el) => el.id === questionId);
   const [question, setQuestion] = useState();
   const [answers, setAnswers] = useState([]);
   const [comment, setComment] = useState("");
   // 질문 클릭시 해당 질문 id 가져와서 해당하는 질문만 필터해서 가져오도록 하기
-
 
   const submmitComment = () => {
     if (comment.trim() === "") {
@@ -260,28 +257,28 @@ const QuestionPage = () => {
 
   useEffect(() => {
     axios
-    .get(`http://13.124.69.107/questions/${questionId}`)
-    .then((res) => setQuestion(res.data.data))
-  }, [])
-  
-    useEffect(() => {
-      axios
+      .get(`http://13.124.69.107/questions/${questionId}`)
+      .then((res) => setQuestion(res.data.data));
+  }, []);
+
+  useEffect(() => {
+    axios
       .get(`http://13.124.69.107/questions/${questionId}/comments`)
-      .then((res) => setAnswers(res.data.data))
-    }, [])
+      .then((res) => setAnswers(res.data.data));
+  }, []);
 
   const navigateEditpage = (id) => {
     navigate(`/edit/${id}`);
   };
 
-  const handleDelete = (questionId) => {
+  const handleDelete = () => {
+    console.log("클릭!");
     if (window.confirm("정말 삭제하시겠습니까?")) {
       axios
         .delete(`http://13.124.69.107/questions/${questionId}`)
         .then((res) => navigate("/"));
     }
   };
-
 
   return (
     <>
@@ -333,10 +330,7 @@ const QuestionPage = () => {
                         Edit
                       </span>
                       <span className="button">Follow</span>
-                      <span
-                        className="button"
-                        onClick={() => handleDelete(questionId)}
-                      >
+                      <span className="button" onClick={handleDelete}>
                         Delete
                       </span>
                     </div>
@@ -364,7 +358,11 @@ const QuestionPage = () => {
               <AnswerSection>
                 <h2 className="answerAmount">{answers?.length} Answers</h2>
                 {answers?.map((el, idx) => (
-                  <AnswerDetail key={idx} answers={el} />
+                  <AnswerDetail
+                    key={idx}
+                    answers={el}
+                    questionId={questionId}
+                  />
                 ))}
               </AnswerSection>
             </BodyArticle>
