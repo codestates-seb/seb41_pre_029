@@ -45,7 +45,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public ArticleDto saveArticle(ArticleRequest articleRequest, Long memberId) {
-        Member member = memberRepository.findById(memberId).get();
+        Member member = memberRepository.findById(memberId).
+                orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저 입니다. articleId : " + memberId));
         Article article = articleRepository.save(articleRequest.toDto(member).toEntity());
 
         return ArticleDto.from(article);
