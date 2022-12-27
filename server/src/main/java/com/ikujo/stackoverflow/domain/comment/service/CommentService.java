@@ -46,17 +46,12 @@ public class CommentService {
 
     }
 
-    public CommentResponse updateComment(Long articleId, Long commentId, CommentPatch commentPatch) {
+    public void updateComment(Long commentId, CommentPatch commentPatch) {
 
-        Article article = findVerifiedArticle(articleId);
         Comment comment = findVerifiedComment(commentId);
-        Member member = findVerifiedMember(comment.getMember().getId());
+        CommentDto commentDto = CommentDto.of(comment, commentPatch);
 
-        CommentDto commentDto = CommentDto.of(comment, commentPatch, article, member);
-        Comment newComment = commentDto.toEntity();
-        commentRepository.save(newComment);
-
-        return CommentResponse.from(newComment);
+        commentRepository.save(commentDto.toEntity());
 
     }
 

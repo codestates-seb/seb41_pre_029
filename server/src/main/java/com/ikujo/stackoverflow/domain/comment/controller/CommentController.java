@@ -43,10 +43,9 @@ public class CommentController {
                                        @PathVariable("comment-id") @Positive Long commentId,
                                        @Valid @RequestBody CommentPatch commentPatch) {
 
-        CommentResponse commentResponse = commentService.updateComment(articleId, commentId, commentPatch);
+        commentService.updateComment(commentId, commentPatch);
 
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(commentResponse), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.RESET_CONTENT);
 
     }
 

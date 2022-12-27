@@ -3,23 +3,17 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import Parser from "../components/Parser";
-
 import Footer from "../components/Footer";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
 import CEditor from "../components/CKEditor";
 
-import useStore from "../zustand/store";
-
 const AddQuestionPage = () => {
-  const navigate = useNavigate();
   const [modal, setModal] = useState(false);
   const [tags, setTags] = useState([]);
   const [content, setContent] = useState("");
   const [submitTags, setSubmitTags] = useState("");
-
-  // const { createQuestion, questionData } = useStore((state) => state);
+  const navigate = useNavigate();
 
   const [input, setInput] = useState({
     title: "",
@@ -48,10 +42,6 @@ const AddQuestionPage = () => {
     }
   };
 
-  // '#123#456#태그-태그#'
-
-  //공백은 하이픈
-
   const removeTags = (indexToRemove) => {
     setTags(
       tags.filter((__, idx) => {
@@ -61,54 +51,19 @@ const AddQuestionPage = () => {
   };
 
   const handleSubmit = () => {
-    // const newQuestion = {
-    //   member: {
-    //     nickname: "2929",
-    //     memberId: 29,
-    //   },
-    //   id: 111,
-    //   title: input.title,
-    //   content: input.firstContent + input.secondContent,
-    //   tags: input.submitTags,
-    //   recommendCount: 0,
-    //   hits: 0,
-    //   baseTime: {
-    //     createAt: new Date(),
-    //     lastModifiedAt: new Date(),
-    //   },
-    // };
-
-    // createQuestion(newQuestion);
-    // console.log(questionData);
     if (window.confirm("Are you sure you want to submit this Question?")) {
-      //임시
-      axios
-        .post(
-          "http://13.124.69.107/questions",
-          { withCredentials: true },
-          {
-            data: {
-              member: {
-                nickname: "2929",
-                memberId: 29,
-              },
-              title: input.title,
-              content: input.firstContent + input.secondContent,
-              tags: input.submitTags,
-              recommendCount: 0,
-              hits: 0,
-              baseTime: {
-                createAt: new Date(),
-                lastModifiedAt: new Date(),
-              },
-            },
-          }
-        )
-        .then((res) => console.log(res.data));
-      navigate("/");
+      axios({
+        url: `http://13.124.69.107/questions`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        data: {
+          title: input.title,
+          content: input.content,
+          tag: input.submitTags,
+        },
+      }).then((res) => navigate("/"));
     }
   };
-  console.log(input);
+
   const handleChange = (e) => {
     setInput({
       ...input,
@@ -117,7 +72,6 @@ const AddQuestionPage = () => {
   };
 
   const handleClear = () => {
-    console.log("Clear!!");
     setInput({
       title: "",
       question: "",
@@ -126,7 +80,6 @@ const AddQuestionPage = () => {
     });
     setTags([]);
     setContent("");
-
     setModal(false);
   };
 
@@ -227,11 +180,9 @@ const AddQuestionPage = () => {
           {/* <Button className="next_button" buttonName={"Next"} /> */}
         </InputBox>
         <SubmitContainer>
-          <Button
-            buttonName={"Review your question"}
-            width=""
-            onClick={handleSubmit}
-          />
+          <p onClick={handleSubmit}>
+            <Button buttonName={"Review your question"} width="" />
+          </p>
           <div onClick={setModal}>Discard draft</div>
         </SubmitContainer>
       </QuestionForm>
@@ -434,11 +385,7 @@ const SubmitContainer = styled.div`
     margin-right: 30px;
     font-size: 13px;
   }
-  > :first-child {
-    :hover {
-      background-color: #0063bf;
-    }
-  }
+
   > div {
     color: #c22e32;
     cursor: pointer;
@@ -446,6 +393,12 @@ const SubmitContainer = styled.div`
     &:hover {
       color: #ab262a;
       background-color: #fdf2f2;
+      border-radius: 3px;
+    }
+  }
+  > p > * {
+    :hover {
+      background-color: #0063bf;
     }
   }
 `;

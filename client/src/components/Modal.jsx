@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Button from './Button';
 
 const Modal = (props) =>{
-  console.log(props)
+  // console.log(props)
 
   return (
     // 모달 창 외부 클릭 시 닫힘
@@ -16,7 +16,9 @@ const Modal = (props) =>{
       </div>
       <div className="content">{props.content}</div>
       <div className='submit_frame'>
-        <Button className="btn" buttonName={props.buttonName} onClick={props.handleClear}>{props.buttonName}</Button>
+        <p onClick={props.handleClear}>
+        <Button className="btn" buttonName={props.buttonName} >{props.buttonName}</Button>
+        </p>
         <div className="cancle_text"  onClick={()=>props.setModal(false)}>Cancle</div>
       </div>
       </ModalWrapper>
@@ -93,9 +95,9 @@ const ModalWrapper = styled.div`
   > .submit_frame {
     display: flex;
     flex-direction: row;
-    > .btn{
+    > p >  .btn{
       background-color: #d0393e;
-       line-height: 15px;
+       line-height: 10px;
        box-shadow: rgba(255, 255, 255, 0.4) 0px 1px 0px 0px inset;
       padding:10px;
         margin: 4px;
@@ -116,6 +118,7 @@ const ModalWrapper = styled.div`
        &:hover{
         color:#525960;
         background-color: #f8f9f9;
+    
         box-shadow: rgba(255, 255, 255, 0.4) 0px 1px 0px 0px inset;
    
        }
