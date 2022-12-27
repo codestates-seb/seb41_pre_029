@@ -34,9 +34,7 @@ public class MemberService {
 
         // 이메일 인증 로직 필요
 
-        MemberResponse response = MemberResponse.from(savedMember);
-
-        return response;
+        return MemberResponse.from(savedMember);
     }
 
     /**
