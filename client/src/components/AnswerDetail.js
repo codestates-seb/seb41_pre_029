@@ -1,10 +1,13 @@
 import styled from "styled-components";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 import displayedAt from "../util/displayedAt";
+import useScrollTop from "../util/useScrollTop";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
 
-const AnswerSection = styled.section `
+const AnswerSection = styled.section`
   display: flex;
   padding: 16px 0 16px 0;
   border-bottom: 1px solid hsl(210deg 8% 90%);
@@ -17,7 +20,7 @@ const AnswerSection = styled.section `
     align-items: center;
     > svg {
       :hover {
-        fill: #8A8A8A;
+        fill: #8a8a8a;
         cursor: pointer;
       }
     }
@@ -44,15 +47,15 @@ const AnswerSection = styled.section `
 
         > .summary_meta_tag {
           background: #e1ecf4;
-      
+
           margin-right: 4px;
           padding: 3px 6px;
-      
+
           border-width: 1px;
           border-style: solid;
           border-radius: 3px;
           border-color: #e1ecf4;
-      
+
           font-size: 12px;
           color: #39739d;
         }
@@ -71,6 +74,11 @@ const AnswerSection = styled.section `
           color: #838c95;
           font-size: 13px;
           font-weight: 400;
+          cursor: pointer;
+
+          &:hover {
+            color: #000;
+          }
         }
       }
       > .post--footer-profile {
@@ -110,44 +118,66 @@ const AnswerSection = styled.section `
       }
     }
   }
-`
+`;
 
 const AnswerDetail = (answer) => {
-  answer = answer.answers
-  console.log(answer.memberIdentityDto.nickname)
+  useScrollTop();
+  const questionId = useParams().id;
+
+  answer = answer.answers;
+  // console.log(answer.memberIdentityDto.nickname);
+
+  const handleDelete = () => {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      axios
+        .delete(
+          `http://13.124.69.107/questions/${questionId}/comments/${answer.id}`
+        )
+        .then((res) => window.location.reload());
+    }
+  };
+
+  // .then((res) => console.log(res));
   return (
     <AnswerSection>
-      <div className='recommand'>
-        <RecommandT fill='#babfc4' />
+      <div className="recommand">
+        <RecommandT fill="#babfc4" />
         <span>{answer.recommendCount}</span>
-        <RecommandB fill='#babfc4' />
+        <RecommandB fill="#babfc4" />
       </div>
-      <div className='post-layout'>
-        <div className='post--body'>{answer.content}</div>
-        <div className='post--footer'>
-          <div className='post--footer-button'>
-              <span className='button'>Share</span>
-              <span className='button'>Edit</span>
-              <span className='button'>Follow</span>
+      <div className="post-layout">
+        <div className="post--body">{answer.content}</div>
+        <div className="post--footer">
+          <div className="post--footer-button">
+            <span className="button">Share</span>
+            <span className="button">Edit</span>
+            <span className="button">Follow</span>
+            <span className="button" onClick={() => handleDelete(questionId)}>
+              Delete
+            </span>
           </div>
-          <div className='post--footer-profile'>
-            <div className='imgwrapper'>
-              <img src='https://www.gravatar.com/avatar/580884d16248daa81e53e8a669f60361?s=64&d=identicon&r=PG&f=1'></img>
+          <div className="post--footer-profile">
+            <div className="imgwrapper">
+              <img src="https://www.gravatar.com/avatar/580884d16248daa81e53e8a669f60361?s=64&d=identicon&r=PG&f=1"></img>
             </div>
-            <div className='profile-wrapper'>
-              <div className='profile-time'>asked {displayedAt(answer.createdAt)}</div>
-                <div className='profile-user'>
-                  <div className='userName'>{answer.memberIdentityDto.nickname}</div>
-                  <div className='user-follower'>
-                    <span className='follower'>1,120</span>
-                  </div>
+            <div className="profile-wrapper">
+              <div className="profile-time">
+                asked {displayedAt(answer.createdAt)}
+              </div>
+              <div className="profile-user">
+                <div className="userName">
+                  {answer.memberIdentityDto.nickname}
                 </div>
+                <div className="user-follower">
+                  <span className="follower">1,120</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </AnswerSection>
-  )
-}
+  );
+};
 
 export default AnswerDetail;
