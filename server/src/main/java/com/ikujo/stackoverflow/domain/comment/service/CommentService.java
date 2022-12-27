@@ -3,12 +3,14 @@ package com.ikujo.stackoverflow.domain.comment.service;
 import com.ikujo.stackoverflow.domain.article.entity.Article;
 import com.ikujo.stackoverflow.domain.article.repository.ArticleRepository;
 import com.ikujo.stackoverflow.domain.comment.dto.CommentDto;
+import com.ikujo.stackoverflow.domain.comment.dto.CommentRecommendDto;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPatch;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPost;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentRecommendPost;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentRecommendResponse;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentResponse;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
+import com.ikujo.stackoverflow.domain.comment.entity.CommentRecommend;
 import com.ikujo.stackoverflow.domain.comment.repository.CommentRecommendRepository;
 import com.ikujo.stackoverflow.domain.comment.repository.CommentRepository;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
@@ -86,7 +88,11 @@ public class CommentService {
     public CommentRecommendResponse createLikes(Long articleId, Long commentId,
                                                 CommentRecommendPost commentRecommendPost) {
 
-
+        Comment comment = findVerifiedComment(commentId);
+        Member member = findVerifiedMember(commentRecommendPost.memberId());
+        CommentRecommendDto commentRecommendDto = CommentRecommendDto.of(member, comment, commentRecommendPost);
+        CommentRecommend commentRecommend = commentRecommendDto.toEntity();
+        commentRecommendRepository.save(commentRecommend);
 
         return null;
     }

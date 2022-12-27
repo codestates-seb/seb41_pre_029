@@ -28,4 +28,14 @@ public class CommentRecommend {
     @Column(nullable = false)
     private Integer flag;
 
+    public CommentRecommend(Member member, Comment comment, Integer flag) {
+        this.member = member;
+        this.comment = comment;
+        this.flag = flag;
+    }
+
+    public static CommentRecommend of(Member member, Comment comment, Integer flag) {
+        return new CommentRecommend(member, comment, flag);
+    }
+
 }
