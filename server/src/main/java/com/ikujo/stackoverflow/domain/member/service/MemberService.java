@@ -2,7 +2,6 @@ package com.ikujo.stackoverflow.domain.member.service;
 
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.dto.MemberDto;
-import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberLoginPost;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberProfilePatch;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberSignupPost;
 import com.ikujo.stackoverflow.domain.member.entity.dto.response.MemberResponse;
@@ -90,14 +89,14 @@ public class MemberService {
     /**
      * 회원 로그인 (리팩토링 필요!!)
      */
-    public void loginMember(MemberLoginPost memberLoginPost) {
-        Optional<Member> findMember = memberRepository.findByEmail(memberLoginPost.email());
-        if (!findMember.isPresent()) {
-            throw new BusinessLogicException(ExceptionCode.EMAIL_NOT_FOUND);
-        }
-
-        // 비밀번호 검증 로직
-    }
+//    public void loginMember(MemberLoginPost memberLoginPost) {
+//        Optional<Member> findMember = memberRepository.findByEmail(memberLoginPost.email());
+//        if (!findMember.isPresent()) {
+//            throw new BusinessLogicException(ExceptionCode.EMAIL_NOT_FOUND);
+//        }
+//
+//        // 비밀번호 검증 로직
+//    }
 
     /**
      * 회원 삭제

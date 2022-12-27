@@ -1,8 +1,6 @@
 package com.ikujo.stackoverflow.domain.member.controller;
 
 import com.ikujo.stackoverflow.domain.member.entity.Member;
-import com.ikujo.stackoverflow.domain.member.entity.dto.MemberDto;
-import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberLoginPost;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberProfilePatch;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberSignupPost;
 import com.ikujo.stackoverflow.domain.member.entity.dto.response.MemberResponse;
@@ -60,11 +58,11 @@ public class MemberController {
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity login(@Valid @RequestBody MemberLoginPost memberLoginPost) {
-        memberService.loginMember(memberLoginPost);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity login(@Valid @RequestBody MemberLoginPost memberLoginPost) {
+//        memberService.loginMember(memberLoginPost);
+//
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
 }

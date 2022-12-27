@@ -3,7 +3,6 @@ package com.ikujo.stackoverflow.domain.member.entity.dto;
 import com.ikujo.stackoverflow.domain.member.entity.Link;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.entity.Profile;
-import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberLoginPost;
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberSignupPost;
 
 import java.time.LocalDateTime;
@@ -20,17 +19,17 @@ public record MemberDto(
         LocalDateTime lastModifiedAt
 ) {
 
-    public static MemberDto of(MemberLoginPost memberLoginPost) {
-        return new MemberDto(
-                null,
-                memberLoginPost.email(),
-                memberLoginPost.password(),
-                null,
-                null,
-                null,
-                null,
-                null);
-    }
+//    public static MemberDto of(MemberLoginPost memberLoginPost) {
+//        return new MemberDto(
+//                null,
+//                memberLoginPost.email(),
+//                memberLoginPost.password(),
+//                null,
+//                null,
+//                null,
+//                null,
+//                null);
+//    }
 
     public static MemberDto of(MemberSignupPost memberSignupPost) {
 
