@@ -39,8 +39,7 @@ public class CommentController {
     }
 
     @PatchMapping("/{comment-id}")
-    public ResponseEntity patchComment(@PathVariable("article-id") @Positive Long articleId,
-                                       @PathVariable("comment-id") @Positive Long commentId,
+    public ResponseEntity patchComment(@PathVariable("comment-id") @Positive Long commentId,
                                        @Valid @RequestBody CommentPatch commentPatch) {
 
         commentService.updateComment(commentId, commentPatch);
@@ -50,8 +49,7 @@ public class CommentController {
     }
 
     @GetMapping("/{comment-id}")
-    public ResponseEntity getComment(@PathVariable("article-id") @Positive Long articleId,
-                                     @PathVariable("comment-id") @Positive Long commentId) {
+    public ResponseEntity getComment(@PathVariable("comment-id") @Positive Long commentId) {
 
         CommentResponse commentResponse = commentService.findComment(commentId);
 
