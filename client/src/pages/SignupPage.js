@@ -203,7 +203,7 @@ const SignupPage = () => {
       setPwdValid("valid");
     } else if (emailValueCheck && passwordValueCheck) {
       clear();
-      localStorage.setItem("UserID", "임시로그인");
+      localStorage.setItem("info", "임시로그인");
       pathNavigate("/");
       // window.location.reload();
       axios({

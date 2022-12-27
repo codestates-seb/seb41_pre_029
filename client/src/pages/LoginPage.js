@@ -152,7 +152,7 @@ const Loginpage = () => {
     } else {
       clear();
       const data = { id: 1, token: "jwt" };
-      localStorage.setItem("info", JSON.stringify(data));
+
       navigate("/");
       window.location.reload();
       // axios({
