@@ -228,7 +228,9 @@ const Loginpage = () => {
               onChange={(e) => setPwd(e.target.value)}
             />
             <span>{isvalid}</span>
-            <FormBtn onClick={submitHandler} buttonName={"Log in"}></FormBtn>
+            <p onClick={submitHandler}>
+              <FormBtn buttonName={"Log in"}></FormBtn>
+            </p>
           </Form>
         </Div>
         <Div>

@@ -187,12 +187,10 @@ const EditProfile = () => {
     console.log("submit!!!");
     e.preventDefault();
     const data = {
-      ...value,
       nickname,
       location,
       title,
     };
-    console.log(data);
     axios({
       url: `http://13.124.69.107/members/${id}`, // 통신할 웹문서
       method: "patch", // 통신 방식
