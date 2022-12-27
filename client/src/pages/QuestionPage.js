@@ -2,14 +2,13 @@ import axios from "axios";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
 
+import Footer from "../components/Footer";
+import parser from "../components/Parser";
 import Nav from "../components/Nav";
-import data, { answerData } from "../dummydata";
 import AnswerDetail from "../components/AnswerDetail";
 import Button from "../components/Button";
 import displayedAt from "../util/displayedAt";
-import useStore from "../zustand/store";
 import YellowBox from "../components/YellowBox";
 import GreyBox from "../components/GreyBox";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
@@ -188,9 +187,7 @@ const AnswerSection = styled.article`
 `;
 
 const QuestionPage = () => {
-
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   const params = useParams();
   const questionId = Number(params.id);
@@ -203,7 +200,7 @@ const QuestionPage = () => {
 
   // 질문 클릭시 해당 질문 id 가져와서 해당하는 질문만 필터해서 가져오도록 하기
 
-  useEffect( () => {
+  useEffect(() => {
     axios
     .get(`http://13.124.69.107/questions/${questionId}`)
     .then((res) => setQuestion(res.data.data))
@@ -219,7 +216,14 @@ const QuestionPage = () => {
     navigate(`/edit/${id}`);
   };
 
-  console.log(question)
+  const handleDelete = (questionId) => {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      axios
+        .delete(`http://13.124.69.107/questions/${questionId}`)
+        .then((res) => navigate("/"));
+    }
+  };
+
   return (
     <>
       <QuestionPageWrapper>
@@ -270,6 +274,12 @@ const QuestionPage = () => {
                         Edit
                       </span>
                       <span className="button">Follow</span>
+                      <span
+                        className="button"
+                        onClick={() => handleDelete(questionId)}
+                      >
+                        Delete
+                      </span>
                     </div>
                     <div className="post--footer-profile">
                       <div className="imgwrapper">
