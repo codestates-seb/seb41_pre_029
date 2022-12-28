@@ -2,6 +2,8 @@ package com.ikujo.stackoverflow.config;
 
 import com.ikujo.stackoverflow.global.auth.JwtAuthenticationFilter;
 import com.ikujo.stackoverflow.global.auth.JwtTokenizer;
+import com.ikujo.stackoverflow.global.auth.handler.MemberAuthenticationFailureHandler;
+import com.ikujo.stackoverflow.global.auth.handler.MemberAuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -86,6 +88,10 @@ public class SecurityConfiguration {
 
             // 로그인 request URL
             jwtAuthenticationFilter.setFilterProcessesUrl("/members/login");
+
+            // 인증 성공 또는 실패 핸들러
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
+            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
             // Spring Security Filter Chain 추가
             builder.addFilter(jwtAuthenticationFilter);
