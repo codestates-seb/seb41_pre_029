@@ -2,14 +2,13 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 import displayedAt from "../util/displayedAt";
-import  parser from "./Parser"
 
-const QuestionSummary = ({ props}) => {
-
+const QuestionSummary = ({props}) => {
   const navigate = useNavigate();
   const navigateDetailPage = (id) => {
     navigate(`/questionpage/${id}`)
   }
+  
   const viewTags = 
    props.tags.map((el) => el.replaceAll("#","").replaceAll("-"," ")).filter((el) =>(el!==""))
 

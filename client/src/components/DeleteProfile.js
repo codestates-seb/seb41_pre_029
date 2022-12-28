@@ -83,23 +83,28 @@ const DeleteProfile = () => {
   const navigate = useNavigate();
 
   const [active, setActive] = useState(false);
-  console.log("params:" + params);
-  console.log(active);
 
   const handleActive = () => {
     setActive(!active);
   };
 
+  const data = JSON.parse(localStorage.getItem("info"));
+  const memberId = data.id;
+  const token = data.token;
+  // console.log(memberId);
+
   //회원 탈퇴 기능
-  const handleDeleteProfile = (id) => {
-    console.log("clicked!");
+  const handleDeleteProfile = () => {
     if (active) {
       if (window.confirm("정말 삭제하시겠습니까?")) {
         //상태 로그아웃으로 만들기
         axios
-          .delete(`http://13.124.69.107/members/${id}`)
+          .delete(`http://13.124.69.107/members/${memberId}`)
           .then(() => {
+            localStorage.removeItem("info");
             alert("그동안 이용해주셔서 감사합니다.");
+          })
+          .then(() => {
             navigate("/");
           })
           .catch((err) => console.log("error!!"));
