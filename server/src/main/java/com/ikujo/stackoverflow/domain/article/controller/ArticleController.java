@@ -13,6 +13,7 @@ import com.ikujo.stackoverflow.global.dto.SingleResponseDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/questions")
@@ -40,8 +42,11 @@ public class ArticleController {
     }
 
     @GetMapping("{article-id}")
-    public ResponseEntity getQuestion(@Positive @PathVariable("article-id") Long articleId) {
-        ArticleDetailResponse articleDetailDto = articleService.findArticle(articleId);
+    public ResponseEntity getQuestion(@RequestHeader(name = "Authorization") String token,
+                                      @Positive @PathVariable("article-id") Long articleId) {
+        Long memberId = jwtTokenizer.tokenToMemberId(token);
+        log.info("GET: getQuestion 요청이 들어왔습니다. 현재 로그인 memberId : {} 입니다.", memberId);
+        ArticleDetailResponse articleDetailDto = articleService.findArticle(articleId, memberId);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(articleDetailDto),
@@ -49,12 +54,11 @@ public class ArticleController {
     }
 
     @PostMapping()
-    public ResponseEntity postArticle(@RequestHeader(name = "Authorization") String token, // Long memberId,
+    public ResponseEntity postArticle(@RequestHeader(name = "Authorization") String token,
                                       @RequestBody @Valid ArticleRequest articlePost) {
-        // FIXME : 회원 아이디를 어떻게 받을지 결정되면 이 부분만 수정하면 된다.
-        Long id = jwtTokenizer.tokenToMemberId(token); // Long memberId = 1L;
+        Long memberId = jwtTokenizer.tokenToMemberId(token);
 
-        ArticleDto articleDto = articleService.saveArticle(articlePost, id);
+        ArticleDto articleDto = articleService.saveArticle(articlePost, memberId);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(articleDto),
@@ -86,18 +90,18 @@ public class ArticleController {
     }
 
     @PostMapping("{article-id}/likes")
-    public ResponseEntity articlePickedLike(@Positive @PathVariable("article-id") Long articleId) {
-        // FIXME : 회원 아이디를 어떻게 받을지 결정되면 이 부분만 수정하면 된다.
-        Long memberId = 1L;
+    public ResponseEntity articlePickedLike(@RequestHeader(name = "Authorization") String token,
+                                            @Positive @PathVariable("article-id") Long articleId) {
+        Long memberId = jwtTokenizer.tokenToMemberId(token);
         articleRecommendService.pickedLike(articleId, memberId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("{article-id}/unlikes")
-    public ResponseEntity articlePickedUnlike(@Positive @PathVariable("article-id") Long articleId) {
-        // FIXME : 회원 아이디를 어떻게 받을지 결정되면 이 부분만 수정하면 된다.
-        Long memberId = 1L;
+    public ResponseEntity articlePickedUnlike(@RequestHeader(name = "Authorization") String token,
+                                              @Positive @PathVariable("article-id") Long articleId) {
+        Long memberId = jwtTokenizer.tokenToMemberId(token);
         articleRecommendService.pickedUnlike(articleId, memberId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

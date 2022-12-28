@@ -18,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Slf4j
 @RequiredArgsConstructor
 @Transactional
@@ -35,10 +37,14 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleDetailResponse findArticle(Long articleId) {
+    public ArticleDetailResponse findArticle(Long articleId, Long memberId) {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 게시글 입니다. articleId : " + articleId));
         article.visitCount();
+
+        if(Objects.nonNull(memberId)) {
+            return ArticleDetailResponse.from(article, memberId);
+        }
 
         return ArticleDetailResponse.from(article);
     }
