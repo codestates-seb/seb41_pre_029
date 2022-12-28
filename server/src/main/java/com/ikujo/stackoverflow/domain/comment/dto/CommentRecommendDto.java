@@ -10,8 +10,8 @@ public record CommentRecommendDto(Long id,
                                   Comment comment,
                                   Integer flag) {
 
-    public static CommentRecommendDto of(Member member, Comment comment, CommentRecommendPost commentRecommendPost) {
-        return new CommentRecommendDto(null, member, comment, commentRecommendPost.flag());
+    public static CommentRecommendDto of(Long id, Member member, Comment comment, Integer flag) {
+        return new CommentRecommendDto(id, member, comment, flag);
     }
 
     public CommentRecommend toEntity() {
@@ -20,6 +20,11 @@ public record CommentRecommendDto(Long id,
                 comment,
                 flag
         );
+    }
+
+    public static CommentRecommendDto from(CommentRecommend commentRecommend) {
+        return new CommentRecommendDto(commentRecommend.getId(), commentRecommend.getMember(),
+                commentRecommend.getComment(), commentRecommend.getFlag());
     }
 
 }

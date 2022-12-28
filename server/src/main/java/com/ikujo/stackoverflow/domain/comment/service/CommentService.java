@@ -3,18 +3,14 @@ package com.ikujo.stackoverflow.domain.comment.service;
 import com.ikujo.stackoverflow.domain.article.entity.Article;
 import com.ikujo.stackoverflow.domain.article.repository.ArticleRepository;
 import com.ikujo.stackoverflow.domain.comment.dto.CommentDto;
-import com.ikujo.stackoverflow.domain.comment.dto.CommentRecommendDto;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPatch;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPost;
-import com.ikujo.stackoverflow.domain.comment.dto.request.CommentRecommendPost;
-import com.ikujo.stackoverflow.domain.comment.dto.response.CommentRecommendResponse;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentResponse;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
-import com.ikujo.stackoverflow.domain.comment.entity.CommentRecommend;
-import com.ikujo.stackoverflow.domain.comment.repository.CommentRecommendRepository;
 import com.ikujo.stackoverflow.domain.comment.repository.CommentRepository;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.repository.MemberRepository;
+import com.ikujo.stackoverflow.global.auth.jwt.JwtTokenizer;
 import com.ikujo.stackoverflow.global.exception.BusinessLogicException;
 import com.ikujo.stackoverflow.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +27,13 @@ public class CommentService {
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
 
-    private final CommentRecommendRepository commentRecommendRepository;
+    private final JwtTokenizer jwtTokenizer;
 
-    public CommentResponse createComment(Long articleId, CommentPost commentPost) {
+    public CommentResponse createComment(Long articleId, String token, CommentPost commentPost) {
 
         Article article = findVerifiedArticle(articleId);
-        Member member = findVerifiedMember(commentPost.memberId());
+        Long memberId = jwtTokenizer.tokenToMemberId(token);
+        Member member = findVerifiedMember(memberId);
 
         CommentDto commentDto = CommentDto.of(commentPost, article, member);
         Comment comment = commentDto.toEntity();

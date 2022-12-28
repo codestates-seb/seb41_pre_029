@@ -4,10 +4,12 @@ import com.ikujo.stackoverflow.domain.comment.dto.CommentRecommendDto;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentRecommendPost;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentRecommendResponse;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
+import com.ikujo.stackoverflow.domain.comment.entity.CommentRecommend;
 import com.ikujo.stackoverflow.domain.comment.repository.CommentRecommendRepository;
 import com.ikujo.stackoverflow.domain.comment.repository.CommentRepository;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.repository.MemberRepository;
+import com.ikujo.stackoverflow.global.auth.jwt.JwtTokenizer;
 import com.ikujo.stackoverflow.global.exception.BusinessLogicException;
 import com.ikujo.stackoverflow.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
@@ -25,37 +27,52 @@ public class CommentRecommendService {
 
     private final CommentRecommendRepository commentRecommendRepository;
 
-    public CommentRecommendResponse Likes(Long commentId, CommentRecommendPost commentRecommendPost) {
+    private final JwtTokenizer jwtTokenizer;
+
+    public CommentRecommendResponse Likes(Long commentId, String token, CommentRecommendPost commentRecommendPost) {
 
         Comment comment = findVerifiedComment(commentId);
-        Member member = findVerifiedMember(comment.getMember().getId());
-        CommentRecommendDto commentRecommendDto = CommentRecommendDto.of(member, comment, commentRecommendPost);
+        Long memberId = jwtTokenizer.tokenToMemberId(token);
+        Member member = findVerifiedMember(memberId);
+        CommentRecommendDto commentRecommendDto =
+                getCommentRecommendDto(commentId, memberId, comment, member);
 
         if(commentRecommendDto.flag() == 0) {
-            commentRecommendRepository.save(commentRecommendDto.toEntity());
+            CommentRecommendResponse commentRecommendResponse = CommentRecommendResponse
+                            .from(commentRecommendRepository.save(CommentRecommend.of(member, comment, 1)));
+
+            return commentRecommendResponse;
         } else if(commentRecommendDto.flag() == 1) {
             commentRecommendRepository.deleteById(commentRecommendDto.id());
+            CommentRecommendResponse commentRecommendResponse = CommentRecommendResponse.from(comment);
+
+            return commentRecommendResponse;
         } else {
             throw new BusinessLogicException(ExceptionCode.FLAG_DUPLICATED);
         }
-        return null;
     }
 
-    public CommentRecommendResponse UnLikes(Long commentId, CommentRecommendPost commentRecommendPost) {
+    public CommentRecommendResponse UnLikes(Long commentId, String token, CommentRecommendPost commentRecommendPost) {
 
         Comment comment = findVerifiedComment(commentId);
-        Member member = findVerifiedMember(comment.getMember().getId());
-        CommentRecommendDto commentRecommendDto = CommentRecommendDto.of(member, comment, commentRecommendPost);
+        Long memberId = jwtTokenizer.tokenToMemberId(token);
+        Member member = findVerifiedMember(memberId);
+        CommentRecommendDto commentRecommendDto =
+                getCommentRecommendDto(commentId, memberId, comment, member);
 
         if(commentRecommendDto.flag() == 0) {
-            commentRecommendRepository.save(commentRecommendDto.toEntity());
+            CommentRecommendResponse commentRecommendResponse = CommentRecommendResponse
+                    .from(commentRecommendRepository.save(CommentRecommend.of(member, comment, -1)));
+
+            return commentRecommendResponse;
         } else if(commentRecommendDto.flag() == -1) {
             commentRecommendRepository.deleteById(commentRecommendDto.id());
+            CommentRecommendResponse commentRecommendResponse = CommentRecommendResponse.from(comment);
+
+            return commentRecommendResponse;
         } else {
             throw new BusinessLogicException(ExceptionCode.FLAG_DUPLICATED);
         }
-
-        return null;
     }
 
     public Member findVerifiedMember(Long memberId) {
@@ -76,6 +93,14 @@ public class CommentRecommendService {
 
         return findComment;
 
+    }
+
+    private CommentRecommendDto getCommentRecommendDto(Long commentId, Long memberId, Comment comment, Member member) {
+        return commentRecommendRepository.findAllByCommentId(commentId).stream()
+                .filter(recommend -> recommend.getMember().getId().equals(memberId))
+                .findFirst()
+                .map(CommentRecommendDto::from)
+                .orElse(CommentRecommendDto.of(null, member, comment, 0));
     }
 
 }
