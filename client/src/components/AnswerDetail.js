@@ -1,12 +1,11 @@
 import styled from "styled-components";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import displayedAt from "../util/displayedAt";
 import useScrollTop from "../util/useScrollTop";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
-import { useNavigate, useParams } from "react-router-dom";
 
 const AnswerSection = styled.section`
   display: flex;
