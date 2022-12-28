@@ -3,23 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^35.4.0",
-    "@ckeditor/ckeditor5-editor-inline": "^35.4.0",
-    "@ckeditor/ckeditor5-react": "^5.0.5",
     "@reduxjs/toolkit": "^1.9.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "@uiw/react-md-editor": "^3.20.0",
+    "@uiw/react-md-editor": "^3.20.1",
     "axios": "^1.2.1",
-    "ckeditor5-custom-build-with-balloon-editor": "^0.1.0",
     "html-react-parser": "^3.0.4",
     "http-proxy-middleware": "^2.0.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-loader-spinner": "^5.3.4",
     "react-markdown": "^8.0.4",
-    "react-quill": "^2.0.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.5.0",
     "react-scripts": "5.0.1",
@@ -53,5 +48,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "homepage": "./"
 }

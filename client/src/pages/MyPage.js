@@ -143,7 +143,6 @@ const MyPage = () => {
   const [page, setPage] = useState("theme");
 
   const [userInfo, setUserInfo] = useState({});
-  console.log("render!");
 
   const params = useParams();
   const id = params.id;

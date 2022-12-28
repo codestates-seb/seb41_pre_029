@@ -1,7 +1,6 @@
 package com.ikujo.stackoverflow.domain.comment.entity;
 
 import com.ikujo.stackoverflow.domain.article.entity.Article;
-import com.ikujo.stackoverflow.domain.comment.entity.CommentRecommend;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.global.entity.BaseTime;
 import jakarta.persistence.*;
@@ -9,7 +8,6 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

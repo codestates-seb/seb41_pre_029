@@ -131,49 +131,46 @@ const Loginpage = () => {
   const emailValueCheck = emailRegex.test(email);
   const passwordValueCheck = passwordRegex.test(pwd);
   //초기화기능
-  const clear = () => {
-    setEmail("");
-    setPwd("");
-    setIsValid("");
-    setPwd("");
-    setPwdValid("");
-  };
+  // const clear = () => {
+  //   setEmail("");
+  //   setPwd("");
+  //   setIsValid("");
+  //   setPwd("");
+  //   setPwdValid("");
+  // };
   //폼 제출시 서버통신
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (!emailValueCheck || email.trim() === "") {
-      setIsValid("The email is not a valid email address.");
-      setEmailValid("valid");
-    } else if (!passwordValueCheck || pwd.trim() === "") {
-      setIsValid(" The password is not a valid .");
-      setEmailValid("");
-      setPwdValid("valid");
-    } else {
-      clear();
-      const data = { id: 1, token: "jwt" };
-
-      navigate("/");
-      window.location.reload();
-      // axios({
-      //   method: "post",
-      //   url: "요청할 api 주소/members/login",
-      //   data: {
-      //     email,
-      //     password: pwd,
-      //   },
-      // })
-      //   .then((res) => {
-      //     console.log(res);
-      //     //토큰저장?
-      //     localStorage.setItem("isLogin", res.data.token);
-      //     localStorage.setItem("UserID", res.data.id);
-      //   })
-      //   .then(navigate("/"))
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
-    }
+    // if (!emailValueCheck || email.trim() === "") {
+    //   setIsValid("The email is not a valid email address.");
+    //   setEmailValid("valid");
+    // } else if (!passwordValueCheck || pwd.trim() === "") {
+    //   setIsValid(" The password is not a valid .");
+    //   setEmailValid("");
+    //   setPwdValid("valid");
+    // } else {
+    axios
+      .post(
+        "http://13.124.69.107/members/login",
+        {
+          usrename: email,
+          password: pwd,
+        }
+        // { withCredentials: true }
+      )
+      .then((res) => {
+        const data = JSON.stringify({
+          id: res.data.usrename,
+          token: res.headers,
+        });
+        localStorage.setItem("info", data);
+        navigate("/");
+        window.location.reload();
+      })
+      .catch((error) => {
+      });
+    // }
   };
   return (
     <Flex>

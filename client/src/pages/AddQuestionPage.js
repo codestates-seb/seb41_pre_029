@@ -30,8 +30,7 @@ const AddQuestionPage = () => {
   }, [submitTags, content]);
 
   useEffect(() => {
-    setSubmitTags(`#${tags.map((el) => el.replaceAll(" ", "-")).join("#")}`);
-    // console.log("제출용 태그 : " + submitTags);
+    setSubmitTags(`##${tags.map((el) => el.replaceAll(" ", "-")).join("##")}`);
   });
 
   const addTags = (event) => {

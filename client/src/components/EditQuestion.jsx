@@ -14,7 +14,8 @@ const EditQuestion = ({originData}) => {
     const location = {pathname:'/'}
     const [content, setContent] = useState(originData.content);
     const [title,setTitle] = useState(originData.title);
-    const [tags, setTags] = useState(originData.tag);
+    const [tags, setTags] = useState(originData.tag.map((el) => el.replaceAll("#", "").replaceAll("-", " "))
+  .filter((el) => el !== ""));
     const [submitTags, setSubmitTags] = useState("");
     const[summary, setSummary] = useState(originData.summary || "");
 
@@ -25,6 +26,10 @@ const EditQuestion = ({originData}) => {
       summary
     });
 
+  const [viewTags,setViewTags] = useState(tags
+  .map((el) => el.replaceAll("#", "").replaceAll("-", " "))
+  .filter((el) => el !== ""));
+
     useEffect(() => {
       setInput({
         title,
@@ -34,10 +39,15 @@ const EditQuestion = ({originData}) => {
     }, [submitTags, content, title]);
 
   /* 태그 제출 형식으로 변경 */
-   useEffect(() => {
+  useEffect(() => {
     setSubmitTags(`##${tags.map((el) => el.replaceAll(" ", "-")).join("##")}`);
   });
-  // console.log(input);
+
+  /* 태그 뷰 형식으로 변경 */ //tags가 바뀔 때마다 변경
+
+
+
+
 
   const handleChange = (e) => {
     setInput({
@@ -45,6 +55,7 @@ const EditQuestion = ({originData}) => {
       [e.target.name]: e.target.value,
     });
   };
+
 
   /* 태그 추가, 삭제 */
   const addTags = (event) => {
@@ -84,6 +95,13 @@ const EditQuestion = ({originData}) => {
     })
     .then(() => navigate(`/questionpage/${id}`))
   }
+
+    useEffect(()=>{
+    setViewTags(tags
+  .map((el) => el.replaceAll("#", "").replaceAll("-", " "))
+  .filter((el) => el !== ""));
+},[tags])
+
   return (
     <>
     <EditContainer>
@@ -112,7 +130,7 @@ const EditQuestion = ({originData}) => {
               <div className="title">Tags</div>
           <TagsInput>
             <ul id="tags">
-              {tags.map((tag, index) => (
+              {viewTags.map((tag, index) => (
                 <li key={index} className="tag">
                   <span className="tag_title">{tag}</span>
                   <span

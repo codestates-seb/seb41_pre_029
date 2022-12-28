@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import MDEditor from "@uiw/react-md-editor";
+import { useState } from "react";
 
 import displayedAt from "../util/displayedAt";
 import useScrollTop from "../util/useScrollTop";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
-import { useNavigate, useParams } from "react-router-dom";
 
 const AnswerSection = styled.section`
   display: flex;
@@ -24,13 +25,15 @@ const AnswerSection = styled.section`
         fill: #8a8a8a;
         cursor: pointer;
       }
+      &.active {
+        fill: #f48225;
+      }
     }
     > span {
       margin: 2px;
       font-size: 21px;
       padding: 4px 0 4px 0;
     }
-    
   }
   > .post-layout {
     > .post--body {
@@ -39,6 +42,8 @@ const AnswerSection = styled.section`
       word-break: keep-all;
       word-wrap: normal;
       line-height: 22.5px;
+      background-color: white;
+      color: #000;
     }
     > .post--tags {
       margin: 24px 0 12px 0;
@@ -85,8 +90,8 @@ const AnswerSection = styled.section`
         > .hoverE {
           :hover {
             cursor: pointer;
-      }
-    }
+          }
+        }
       }
       > .post--footer-profile {
         flex: 1 1 auto;
@@ -128,9 +133,7 @@ const AnswerSection = styled.section`
 `;
 
 const AnswerDetail = (answer) => {
-
   useScrollTop();
-  // console.log(answer.memberIdentityDto.nickname);
 
   const handleDelete = () => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
@@ -144,27 +147,97 @@ const AnswerDetail = (answer) => {
 
   const params = useParams();
   const questionId = Number(params.id);
-  answer = answer.answers
+  answer = answer.answers;
+  const answerId = answer.id;
   const navigate = useNavigate();
-
   const navigateEditpage = (id) => {
     navigate(`/editanswer/${questionId}/${id}`);
+  };
+
+  const [like, setLike] = useState(false);
+  const [disLike, setDisLike] = useState(false);
+  const [selection, setSelection] = useState(answer.selection);
+  // console.log("like:" + like);
+  // console.log("disLike:" + disLike);
+
+  const handleLike = () => {
+    if (!like && disLike) {
+      axios
+        .post(
+          `http://13.124.69.107/questions/${questionId}/comments/${answerId}/unlikes`
+        )
+        .then((res) => setLike(!like));
+    } else {
+      axios
+        .post(
+          `http://13.124.69.107/questions/${questionId}/comments/${answerId}/likes`
+        )
+        .then((res) => setLike(!like));
+    }
+  };
+
+  const handleDisLike = () => {
+    if (like && !disLike) {
+      axios
+        .post(
+          `http://13.124.69.107/questions/${questionId}/comments/${answerId}/likes`
+        )
+        .then((res) => setDisLike(!disLike));
+    } else {
+      axios
+        .post(
+          `http://13.124.69.107/questions/${questionId}/comments/${answerId}/unlikes`
+        )
+        .then((res) => setDisLike(!disLike));
+    }
+  };
+
+  const handleSelection = () => {
+    axios
+      .post(
+        `http://13.124.69.107/questions/${questionId}/comments/${answerId}/selection`
+      )
+      .then((res) => setSelection(!selection));
   };
 
   return (
     <AnswerSection>
       <div className="recommand">
-        <RecommandT fill="#babfc4" />
+        <RecommandT
+          fill="#babfc4"
+          onClick={handleLike}
+          className={like ? "like active" : "like"}
+        />
         <span>{answer.recommendCount}</span>
-        <RecommandB fill="#babfc4" />
+        <RecommandB
+          fill="#babfc4"
+          onClick={handleDisLike}
+          className={disLike ? "dislike active" : "dislike"}
+        />
+        <div
+          onClick={handleSelection}
+          className={selection ? "selected" : "not_selected"}
+        >
+          ❌
+        </div>
       </div>
 
       <div className="post-layout">
-        <div className="post--body">{answer.content}</div>
+        <MDEditor.Markdown
+          className="post--body"
+          source={answer.content}
+          style={{ whiteSpace: "pre-wrap", backgroundColor: "white" }}
+        />
+        {/* <div className="post--body">{answer.content}</div> */}
         <div className="post--footer">
           <div className="post--footer-button">
             <span className="button">Share</span>
-            <span className='button hoverE' onClick={() => navigateEditpage(answer.id)}>Edit</span>
+            <span
+              className="button hoverE"
+              onClick={() => navigateEditpage(answer.id)}
+            >
+              Edit
+            </span>
             <span className="button">Follow</span>
             <span className="button" onClick={() => handleDelete(questionId)}>
               Delete

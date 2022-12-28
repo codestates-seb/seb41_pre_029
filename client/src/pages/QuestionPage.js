@@ -2,28 +2,27 @@ import axios from "axios";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
+import MDEditor from "@uiw/react-md-editor";
+import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
+import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
 
 import Footer from "../components/Footer";
 import CEditor from "../components/CKEditor";
 import useScrollTop from "../util/useScrollTop";
-
-import parser from "../components/Parser";
-
 import Nav from "../components/Nav";
 import AnswerDetail from "../components/AnswerDetail";
 import Button from "../components/Button";
 import displayedAt from "../util/displayedAt";
 import YellowBox from "../components/YellowBox";
 import GreyBox from "../components/GreyBox";
-import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
-import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
 
 const QuestionPageWrapper = styled.div`
   display: flex;
-
   margin: 0 320.5px 0 320.5px;
 `;
+
 const PageWrapper = styled.div`
+  height: auto;
   padding: 0 24px 0 24px;
 
   > .bodyWrapper {
@@ -72,7 +71,9 @@ const TitleBar = styled.div`
     }
   }
 `;
-const BodyArticle = styled.article``;
+const BodyArticle = styled.article`
+  height: auto;
+`;
 const QuestionSection = styled.section`
   display: flex;
   > .recommand {
@@ -84,6 +85,9 @@ const QuestionSection = styled.section`
       :hover {
         fill: #8a8a8a;
         cursor: pointer;
+      }
+      &.active {
+        fill: #f48225;
       }
     }
     > span {
@@ -99,6 +103,8 @@ const QuestionSection = styled.section`
       word-break: keep-all;
       word-wrap: normal;
       line-height: 22.5px;
+      background-color: white;
+      color: black;
     }
     > .post--tags {
       margin: 24px 0 12px 0;
@@ -177,6 +183,7 @@ const QuestionSection = styled.section`
   }
 `;
 const AnswerSection = styled.article`
+  height: auto;
   display: flex;
   flex-direction: column;
   > h2 {
@@ -189,10 +196,8 @@ const AnswerSection = styled.article`
   }
 `;
 const Editor = styled.div`
+  height: auto;
   width: 720px;
-
-  bottom: 100px;
-  margin-bottom: 100px;
   > h2 {
     padding: 20px;
     font-size: 1.5rem;
@@ -220,9 +225,7 @@ const AnswerBtn = styled(Button)`
   margin-top: 50px;
 `;
 const QuestionPage = () => {
-
   useScrollTop();
-
   const navigate = useNavigate();
 
   const params = useParams();
@@ -231,11 +234,21 @@ const QuestionPage = () => {
   const Id = localStorage.getItem("info");
   const memberId = JSON.parse(Id);
 
-  // const tihsQuestion = data.filter((el) => el.id === questionId);
   const [question, setQuestion] = useState();
   const [answers, setAnswers] = useState([]);
   const [comment, setComment] = useState("");
-  // 질문 클릭시 해당 질문 id 가져와서 해당하는 질문만 필터해서 가져오도록 하기
+
+  useEffect(() => {
+    axios
+      .get(`http://13.124.69.107/questions/${questionId}`)
+      .then((res) => setQuestion(res.data.data));
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`http://13.124.69.107/questions/${questionId}/comments`)
+      .then((res) => setAnswers(res.data.data));
+  }, []);
 
   const submmitComment = () => {
     if (comment.trim() === "") {
@@ -250,40 +263,53 @@ const QuestionPage = () => {
       setComment("");
     }
   };
-  useEffect(() => {
-    axios
-      .get(`http://13.124.69.107/questions/${questionId}`)
-      .then((res) => setQuestion(res.data.data));
-  }, []);
-
-  useEffect(() => {
-    axios
-      .get(`http://13.124.69.107/questions/${questionId}/comments`)
-      .then((res) => setAnswers(res.data.data));
-  }, []);
-
-  useEffect(() => {
-    axios
-      .get(`http://13.124.69.107/questions/${questionId}`)
-      .then((res) => setQuestion(res.data.data));
-  }, []);
-
-  useEffect(() => {
-    axios
-      .get(`http://13.124.69.107/questions/${questionId}/comments`)
-      .then((res) => setAnswers(res.data.data));
-  }, []);
 
   const navigateEditpage = (id) => {
     navigate(`/edit/${id}`);
   };
 
   const handleDelete = () => {
-    console.log("클릭!");
     if (window.confirm("정말 삭제하시겠습니까?")) {
       axios
         .delete(`http://13.124.69.107/questions/${questionId}`)
         .then((res) => navigate("/"));
+    }
+  };
+
+  /**
+   * 1. false, false 일때 추천 누르면 like가 true, 비추천 누르면 dislike가 true가 된다.
+   * 2. true, false 일때 어떤 버튼을 누르든 like가 false가 된다.
+   * 3. false, true 일 때 어떤 버튼을 누르든 dislike가 false가 된다.
+   *
+   * 추천 버튼을 눌렀을 때 false/true이면 dislike 요청, false/false 이면 like 요청, true/false이면 like 요청
+   * 비추천 버튼을 눌렀을 때 true/false이면 like 요청 false/false 이면 dislike 요청, false/true이면 dislike 요청,
+   *
+   * */
+
+  const [like, setLike] = useState(false);
+  const [disLike, setDisLike] = useState(false);
+
+  const handleLike = () => {
+    if (!like && disLike) {
+      axios
+        .post(`http://13.124.69.107/questions/${questionId}/unlikes`)
+        .then((res) => setLike(!like));
+    } else {
+      axios
+        .post(`http://13.124.69.107/questions/${questionId}/likes`)
+        .then((res) => setLike(!like));
+    }
+  };
+
+  const handleDisLike = () => {
+    if (like && !disLike) {
+      axios
+        .post(`http://13.124.69.107/questions/${questionId}/likes`)
+        .then((res) => setDisLike(!disLike));
+    } else {
+      axios
+        .post(`http://13.124.69.107/questions/${questionId}/unlikes`)
+        .then((res) => setDisLike(!disLike));
     }
   };
 
@@ -305,19 +331,32 @@ const QuestionPage = () => {
               <div className="createdAt">
                 asked {displayedAt(question?.baseTime.createdAt)}
               </div>
-              <div className="viewed">viewed {question?.views}</div>
+              <div className="viewed">viewed {question?.hits}</div>
             </div>
           </TitleBar>
           <div className="bodyWrapper">
             <BodyArticle>
               <QuestionSection>
                 <div className="recommand">
-                  <RecommandT fill="#babfc4" />
+                  <RecommandT
+                    fill="#babfc4"
+                    onClick={handleLike}
+                    className={like ? "like active" : "like"}
+                  />
                   <span>{question?.recommendCount}</span>
-                  <RecommandB fill="#babfc4" />
+                  <RecommandB
+                    fill="#babfc4"
+                    onClick={handleDisLike}
+                    className={disLike ? "disLike active" : "like"}
+                  />
                 </div>
                 <div className="post-layout">
-                  <div className="post--body">{question?.content}</div>
+                  <MDEditor.Markdown
+                    className="post--body"
+                    source={question?.content}
+                    style={{ whiteSpace: "pre-wrap" }}
+                  />
+                  {/* <div className="post--body">{question?.content}</div> */}
                   <div className="post--tags">
                     <div className="summary_meta_tags">
                       {question?.tags.map((tag, idx) => (
@@ -371,24 +410,24 @@ const QuestionPage = () => {
                     questionId={questionId}
                   />
                 ))}
+                <Editor>
+                  <h2>Your Answer</h2>
+                  <CEditor onChange={setComment} data={comment} />
+                  <p onClick={submmitComment}>
+                    <AnswerBtn buttonName={"Post Your Answer"} />
+                  </p>
+                  <Tag>
+                    Not the answer you're looking for? Browse other questions
+                    tagged
+                    {question?.tags.map((tag, idx) => (
+                      <div key={idx} className="summary_meta_tag">
+                        {tag}
+                      </div>
+                    ))}
+                    or ask your own question.
+                  </Tag>
+                </Editor>
               </AnswerSection>
-              <Editor>
-                <h2>Your Answer</h2>
-                <CEditor onChange={setComment} data={comment} />
-                <p onClick={submmitComment}>
-                  <AnswerBtn buttonName={"Post Your Answe"} />
-                </p>
-                <Tag>
-                  Not the answer you're looking for? Browse other questions
-                  tagged
-                  {question?.tags.map((tag, idx) => (
-                    <div key={idx} className="summary_meta_tag">
-                      {tag}
-                    </div>
-                  ))}
-                  or ask your own question.
-                </Tag>
-              </Editor>
             </BodyArticle>
             <div className="sidebar">
               <YellowBox />

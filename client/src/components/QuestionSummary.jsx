@@ -2,14 +2,15 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 import displayedAt from "../util/displayedAt";
-import  parser from "./Parser"
 
-const QuestionSummary = ({ props}) => {
-
+const QuestionSummary = ({props}) => {
   const navigate = useNavigate();
   const navigateDetailPage = (id) => {
     navigate(`/questionpage/${id}`)
   }
+  
+  const viewTags = 
+   props.tags.map((el) => el.replaceAll("#","").replaceAll("-"," ")).filter((el) =>(el!==""))
 
   return (
     <QuestionSummaryContainer>
@@ -44,11 +45,12 @@ const QuestionSummary = ({ props}) => {
       <div className="summary_title_meta_wrapper">
         <SummaryTitleContents>
           <div className="summary_title" onClick={() => navigateDetailPage(props.id)}>{props.title}</div>
-          <div className="summary_contents">{props.content}</div>
+          {/* <div className="summary_contents">{props.content}</div> */}
+                <div className="summary_contents" dangerouslySetInnerHTML={{ __html: props.content }} />
         </SummaryTitleContents>
         <SummaryMeta>
           <div className="summary_meta_tags">
-            {props.tags.map((tag,idx)=>(
+            {viewTags.map((tag,idx)=>(
                 <div key={idx} className="summary_meta_tag">{tag}</div>
             ))}
           </div>
