@@ -183,14 +183,7 @@ const SignupPage = () => {
   const emailValueCheck = emailRegex.test(email);
   const passwordValueCheck = passwordRegex.test(pwd);
   //초기화기능
-  const clear = () => {
-    setEmail("");
-    setPwd("");
-    setIsValid("");
-    setPwd("");
-    setPwdValid("");
-    setDisplayName("");
-  };
+
   //폼 제출시 서버통신
   const submitHandler = (e) => {
     e.preventDefault();
@@ -202,11 +195,6 @@ const SignupPage = () => {
       setEmailValid("");
       setPwdValid("valid");
     } else if (emailValueCheck && passwordValueCheck) {
-      clear();
-      const data = JSON.stringify({ id: 1, token: "jwt" });
-      localStorage.setItem("info", data);
-      pathNavigate("/");
-      window.location.reload();
       axios({
         method: "post",
         url: "http://13.124.69.107/members/signup",
@@ -217,9 +205,13 @@ const SignupPage = () => {
         },
       }).then((res) => {
         console.log(res);
-        //토큰저장?
-        // localStorage.setItem("isLogin", res.data.token);
-        // localStorage.setItem("UserID", res.data.id);
+        const data = JSON.stringify({
+          id: res.data.data.id,
+          token: res.headers,
+        });
+        localStorage.setItem("info", data);
+        pathNavigate("/");
+        window.location.reload();
       });
       //   .then(navigate("/"))
       //   .catch((error) => {
