@@ -14,15 +14,15 @@ import SignupPage from "./pages/SignupPage";
 import EditQuestionPage from "./pages/EditQuestionPage";
 
 import useStore from "./zustand/store.js";
+import EditAnswerPage from "./pages/EditAnswerPage";
 
 function App() {
   const [searchData, setSearchData] = useState("");
 
   return (
     <div className="App">
-      <Router>
+      <Router basename={process.env.PUBLIC_URL} >
         <Header search={setSearchData} />
-
         <Routes>
           <Route path="/" element={<MainPage data={searchData} />} />
           <Route path="/addquestionpage" element={<AddQuestionPage />} />
@@ -34,6 +34,10 @@ function App() {
           {/* <Route path="/signoutpage" element={<SignoutPage />} /> */}
           <Route path="/signuppage" element={<SignupPage />} />
           <Route path="/edit/:id" element={<EditQuestionPage />} />
+          <Route
+            path="/editanswer/:questionid/:answerid"
+            element={<EditAnswerPage />}
+          />
         </Routes>
       </Router>
     </div>

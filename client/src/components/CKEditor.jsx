@@ -1,41 +1,91 @@
-import React from "react";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import React, { useEffect } from "react";
+import MDEditor from '@uiw/react-md-editor';
 import styled from "styled-components";
 
-const Edit = styled.div`
-  .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
-    padding: 10px;
-    margin: -1px 0 0;
-    height: 200px;
-    width: ${(props) => props.width};
-    line-height: 1.3;
+const Container = styled.div `
+  height: auto;
+  .w-md-editor {
+  overflow: initial;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  background-color: #ffffff;
+
+  > .w-md-editor-content {
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    overflow: initial;
+    background-color: #ffffff;
+
+    > .w-md-editor-input {
+      color: black;
+      background-color: #ffffff;
+      overflow: initial;
+      width: 100%;
+      min-height: 200px;
+      height: auto;
+
+      > .w-md-editor-text {
+        min-height: 200px;
+        height: auto;
+        line-height: 30px;
+      }
+
+    }
+    > .w-md-editor-preview  {
+      color: black;
+      background-color: #ffffff;
+      width: 100%;
+      position: relative;
+  
+      overflow: initial;
+      min-height: 200px;
+      height: auto;
+      box-shadow: none;
+      border-top: 1px solid rgba(0, 0, 0, 0.2);
+
+        > .wmde-markdown-color {
+        color: black;
+        background-color: #ffffff;
+        overflow: initial;
+        height: auto;
+        border: none;
+      }
+    }
   }
-`;
-const CEditor = ({ onChange, data }) => {
+}
+`
+
+const CEditor = ({onChange, data}) => {
+  const [value, setValue] = React.useState(data);
+
+  const changeValue = (e) => {
+    setValue(e)
+  }
+  useEffect(() => {
+    onChange(value)
+  }, [value])
   return (
-    <Edit>
-      <CKEditor
-        editor={ClassicEditor}
-        data={data}
-        onReady={(editor) => {
-          // You can store the "editor" and use when it is needed.
-          // console.log("Editor is ready to use!", editor);
-        }}
-        onChange={(event, editor) => {
-          const content = editor.getData();
-          // console.log({ event });
-          onChange(content);
-        }}
-        onBlur={(event, editor) => {
-          // console.log('Blur.', editor);
-        }}
-        onFocus={(event, editor) => {
-          // console.log('Focus.', editor);
-        }}
+    <Container>
+      <MDEditor
+        style={{
+          backgroundColor: 'white',
+      }}
+        height={'auto'}
+        minHeight={700}
+        
+        value={value}
+        onChange={
+          (e) => {
+            changeValue(e)
+          }
+        }
       />
-    </Edit>
+    </Container>
   );
-};
+}
 
 export default CEditor;

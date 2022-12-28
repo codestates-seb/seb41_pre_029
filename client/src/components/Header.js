@@ -96,7 +96,7 @@ const IconLi = styled.li`
 `;
 const Header = ({ search }) => {
   const [isLogin, setIsLogin] = useState(
-    (localStorage.getItem("UserID") && true) || false
+    (localStorage.getItem("info") && true) || false
   );
   const [data, setData] = useState("");
   const changeValue = (e) => {

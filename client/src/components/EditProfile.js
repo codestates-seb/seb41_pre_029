@@ -43,7 +43,7 @@ const EditProfile = () => {
         setEditValue(res.profile.aboutMe);
       });
   }, []);
-  // console.log(info);
+
   const { createAt, email, lastModifiedAt, link, nickname, profile } = info;
 
   const changeHandler = (e) => {
@@ -61,12 +61,12 @@ const EditProfile = () => {
       nickname,
       location: profile.location,
       title: profile.title,
-      aboutMe: profile.aboutMe,
+      aboutMe: editValue,
       website: link.website,
       github: link.github,
       twitter: link.twitter,
     };
-    console.log(data);
+
     axios({
       url: `http://13.124.69.107/members/${id}`, // 통신할 웹문서
       method: "patch", // 통신 방식
@@ -109,7 +109,6 @@ const EditProfile = () => {
           />
           <Title className="editor">About me</Title>
           <Editor set={setEditValue} get={editValue} />
-          {/* <div dangerouslySetInnerHTML={{ __html: editValue }}></div> */}
         </FormList>
         <Title>Links</Title>
         <FormList className="link">

@@ -30,8 +30,7 @@ const AddQuestionPage = () => {
   }, [submitTags, content]);
 
   useEffect(() => {
-    setSubmitTags(`#${tags.map((el) => el.replaceAll(" ", "-")).join("#")}`);
-    // console.log("제출용 태그 : " + submitTags);
+    setSubmitTags(`##${tags.map((el) => el.replaceAll(" ", "-")).join("##")}`);
   });
 
   const addTags = (event) => {
@@ -51,6 +50,7 @@ const AddQuestionPage = () => {
   };
 
   const handleSubmit = () => {
+    if (input.title.trim().length < 1) return;
     if (window.confirm("Are you sure you want to submit this Question?")) {
       axios({
         url: `http://13.124.69.107/questions`, // 통신할 웹문서
