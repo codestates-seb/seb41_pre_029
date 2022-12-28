@@ -1,4 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 import styled from "styled-components";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
@@ -57,6 +60,13 @@ const SideBar = styled.div`
 
 const MainPage = ({ data }) => {
   const location = useLocation();
+  const [ questionAmount, setQuestionAmount ] = useState();
+
+  useEffect(()=>{
+    axios.get('http://13.124.69.107/questions').then((res) => {
+     setQuestionAmount(res?.data.pageInfo.totalElements)
+    })
+     },[])
 
   return (
     <>
@@ -73,7 +83,7 @@ const MainPage = ({ data }) => {
             />
           </div>
           <div className="data_controller">
-            <div className="question_count">123154 questions</div>
+            <div className="question_count">{`${questionAmount} questions`}</div>
           </div>
           <QuestionList data={data} />
         </MainBar>

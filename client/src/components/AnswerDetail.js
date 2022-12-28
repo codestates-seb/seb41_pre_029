@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import MDEditor from '@uiw/react-md-editor';
 import { useState } from "react";
 
 import displayedAt from "../util/displayedAt";
@@ -41,6 +42,8 @@ const AnswerSection = styled.section`
       word-break: keep-all;
       word-wrap: normal;
       line-height: 22.5px;
+      background-color: white;
+      color: #000;
     }
     > .post--tags {
       margin: 24px 0 12px 0;
@@ -208,7 +211,8 @@ const AnswerDetail = (answer) => {
       </div>
 
       <div className="post-layout">
-        <div className="post--body">{answer.content}</div>
+        <MDEditor.Markdown className="post--body" source={answer.content} style={{ whiteSpace: 'pre-wrap' }} />
+        {/* <div className="post--body">{answer.content}</div> */}
         <div className="post--footer">
           <div className="post--footer-button">
             <span className="button">Share</span>

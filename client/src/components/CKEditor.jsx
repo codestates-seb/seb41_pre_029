@@ -84,7 +84,6 @@ const CEditor = ({onChange, data}) => {
           }
         }
       />
-      {/* <MDEditor.Markdown source={value} style={{ whiteSpace: 'pre-wrap' }} /> */}
     </Container>
   );
 }
