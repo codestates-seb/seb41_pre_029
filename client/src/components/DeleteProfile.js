@@ -83,8 +83,6 @@ const DeleteProfile = () => {
   const navigate = useNavigate();
 
   const [active, setActive] = useState(false);
-  console.log("params:" + params);
-  console.log(active);
 
   const handleActive = () => {
     setActive(!active);
@@ -92,7 +90,6 @@ const DeleteProfile = () => {
 
   //회원 탈퇴 기능
   const handleDeleteProfile = (id) => {
-    console.log("clicked!");
     if (active) {
       if (window.confirm("정말 삭제하시겠습니까?")) {
         //상태 로그아웃으로 만들기

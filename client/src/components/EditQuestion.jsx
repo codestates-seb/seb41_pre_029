@@ -57,7 +57,6 @@ const EditQuestion = ({originData}) => {
   };
 
 
-  // console.log(viewTags);
   /* 태그 추가, 삭제 */
   const addTags = (event) => {
     let inputValue = event.target.value;
@@ -102,8 +101,6 @@ const EditQuestion = ({originData}) => {
   .map((el) => el.replaceAll("#", "").replaceAll("-", " "))
   .filter((el) => el !== ""));
 },[tags])
-console.log(viewTags)
-console.log(tags)
 
   return (
     <>

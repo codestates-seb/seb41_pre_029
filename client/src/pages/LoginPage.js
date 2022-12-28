@@ -160,7 +160,6 @@ const Loginpage = () => {
         // { withCredentials: true }
       )
       .then((res) => {
-        console.log(res);
         const data = JSON.stringify({
           id: res.data.usrename,
           token: res.headers,
@@ -170,7 +169,6 @@ const Loginpage = () => {
         window.location.reload();
       })
       .catch((error) => {
-        console.log(error);
       });
     // }
   };

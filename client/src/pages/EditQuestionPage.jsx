@@ -18,16 +18,7 @@ const EditQuestionPage = () =>{
         axios
         .get(`http://13.124.69.107/questions/${id}/edit`)
         .then((res) => setOriginData(res.data.data))
-
-        // if(questionData.length>= 1) {
-        //     const targetQuestion =questionData.find((it)=>parseInt(it.id) === parseInt(id))
-        //  console.log(targetQuestion)
-        // if(targetQuestion) {
-        //     setOriginData(targetQuestion)
-        // } else {
-        //     navigate('/',{replace:true})
-        // }
-    }, [])// },[id,questionData]);
+      }, [])
 
     return <div>
       {originData && <EditQuestion originData={originData}/>}

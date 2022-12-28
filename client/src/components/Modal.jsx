@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Button from './Button';
 
 const Modal = (props) =>{
-  // console.log(props)
 
   return (
     // 모달 창 외부 클릭 시 닫힘

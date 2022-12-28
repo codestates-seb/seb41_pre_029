@@ -157,9 +157,6 @@ const AnswerDetail = (answer) => {
   const [like, setLike] = useState(false);
   const [disLike, setDisLike] = useState(false);
 
-  // console.log("like:" + like);
-  // console.log("disLike:" + disLike);
-
   const handleLike = () => {
     if (!like && disLike) {
       axios
