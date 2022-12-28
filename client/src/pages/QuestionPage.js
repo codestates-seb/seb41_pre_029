@@ -2,6 +2,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
+import MDEditor from '@uiw/react-md-editor';
 
 import Footer from "../components/Footer";
 import CEditor from "../components/CKEditor";
@@ -102,6 +103,8 @@ const QuestionSection = styled.section`
       word-break: keep-all;
       word-wrap: normal;
       line-height: 22.5px;
+      background-color: white;
+      color: black;
     }
     > .post--tags {
       margin: 24px 0 12px 0;
@@ -307,7 +310,7 @@ const QuestionPage = () => {
               <div className="createdAt">
                 asked {displayedAt(question?.baseTime.createdAt)}
               </div>
-              <div className="viewed">viewed {question?.views}</div>
+              <div className="viewed">viewed {question?.hits}</div>
             </div>
           </TitleBar>
           <div className="bodyWrapper">
@@ -319,7 +322,8 @@ const QuestionPage = () => {
                   <RecommandB fill="#babfc4" />
                 </div>
                 <div className="post-layout">
-                  <div className="post--body">{question?.content}</div>
+                  <MDEditor.Markdown className="post--body" source={question?.content} style={{ whiteSpace: 'pre-wrap' }} />
+                  {/* <div className="post--body">{question?.content}</div> */}
                   <div className="post--tags">
                     <div className="summary_meta_tags">
                       {question?.tags.map((tag, idx) => (
