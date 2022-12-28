@@ -1,41 +1,62 @@
 import React from "react";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import MDEditor from '@uiw/react-md-editor';
 import styled from "styled-components";
 
-const Edit = styled.div`
-  .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
-    padding: 10px;
-    margin: -1px 0 0;
-    height: 200px;
-    width: ${(props) => props.width};
-    line-height: 1.3;
+const Container = styled.div `
+  .w-md-editor {
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  > .w-md-editor-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+
+    > .w-md-editor-input {
+      color: black;
+      background-color: #ffffff;
+      width: 100%;
+    }
+    > .w-md-editor-preview  {
+      color: black;
+      background-color: #ffffff;
+      width: 100%;
+      position: relative;
+      border: 1px solid black;
+
+        > .wmde-markdown-color {
+        color: black;
+        background-color: #ffffff;
+        overflow: visible;
+      }
+    }
   }
-`;
-const CEditor = ({ onChange, data }) => {
+}
+`
+
+const CEditor = ({onChange, data}) => {
+  const [value, setValue] = React.useState(data);
+
+  const changeValue = (e) => {
+    setValue(e)
+  }
   return (
-    <Edit>
-      <CKEditor
-        editor={ClassicEditor}
-        data={data}
-        onReady={(editor) => {
-          // You can store the "editor" and use when it is needed.
-          // console.log("Editor is ready to use!", editor);
-        }}
-        onChange={(event, editor) => {
-          const content = editor.getData();
-          // console.log({ event });
-          onChange(content);
-        }}
-        onBlur={(event, editor) => {
-          // console.log('Blur.', editor);
-        }}
-        onFocus={(event, editor) => {
-          // console.log('Focus.', editor);
-        }}
+    <Container>
+      <MDEditor
+        value={value}
+        onChange={
+          (e) => {
+          changeValue(e)
+          onChange(value)
+          }
+        }
       />
-    </Edit>
+      {/* <MDEditor.Markdown source={value} style={{ whiteSpace: 'pre-wrap' }} /> */}
+    </Container>
   );
-};
+}
 
 export default CEditor;
