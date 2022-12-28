@@ -2,6 +2,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import MDEditor from '@uiw/react-md-editor';
+import { useState } from "react";
 
 import displayedAt from "../util/displayedAt";
 import useScrollTop from "../util/useScrollTop";
@@ -23,6 +24,9 @@ const AnswerSection = styled.section`
       :hover {
         fill: #8a8a8a;
         cursor: pointer;
+      }
+      &.active {
+        fill: #f48225;
       }
     }
     > span {
@@ -130,7 +134,6 @@ const AnswerSection = styled.section`
 
 const AnswerDetail = (answer) => {
   useScrollTop();
-  // console.log(answer.memberIdentityDto.nickname);
 
   const handleDelete = () => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
@@ -145,18 +148,66 @@ const AnswerDetail = (answer) => {
   const params = useParams();
   const questionId = Number(params.id);
   answer = answer.answers;
+  const answerId = answer.id;
   const navigate = useNavigate();
-
   const navigateEditpage = (id) => {
     navigate(`/editanswer/${questionId}/${id}`);
+  };
+
+  const [like, setLike] = useState(false);
+  const [disLike, setDisLike] = useState(false);
+
+  // console.log("like:" + like);
+  // console.log("disLike:" + disLike);
+
+  const handleLike = () => {
+    if (!like && disLike) {
+      axios
+        .post(
+          `http://13.124.69.107/questions/${questionId}/comments/${answerId}/unlikes`
+        )
+        .then((res) => setLike(!like));
+    } else {
+      axios
+        .post(
+          setLike(
+            !like
+          )`http://13.124.69.107/questions/${questionId}/comments/${answerId}/likes`
+        )
+        .then((res) => setLike(!like));
+    }
+  };
+
+  const handleDisLike = () => {
+    if (like && !disLike) {
+      axios
+        .post(
+          `http://13.124.69.107/questions/${questionId}/comments/${answerId}/likes`
+        )
+        .then((res) => setDisLike(!disLike));
+    } else {
+      axios
+        .post(
+          `http://13.124.69.107/questions/${questionId}/comments/${answerId}/unlikes`
+        )
+        .then((res) => setDisLike(!disLike));
+    }
   };
 
   return (
     <AnswerSection>
       <div className="recommand">
-        <RecommandT fill="#babfc4" />
+        <RecommandT
+          fill="#babfc4"
+          onClick={handleLike}
+          className={like ? "like active" : "like"}
+        />
         <span>{answer.recommendCount}</span>
-        <RecommandB fill="#babfc4" />
+        <RecommandB
+          fill="#babfc4"
+          onClick={handleDisLike}
+          className={disLike ? "dislike active" : "dislike"}
+        />
       </div>
 
       <div className="post-layout">

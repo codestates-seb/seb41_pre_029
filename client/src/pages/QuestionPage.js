@@ -89,6 +89,9 @@ const QuestionSection = styled.section`
         fill: #8a8a8a;
         cursor: pointer;
       }
+      &.active {
+        fill: #f48225;
+      }
     }
     > span {
       margin: 2px;
@@ -239,13 +242,12 @@ const QuestionPage = () => {
   const [question, setQuestion] = useState();
   const [answers, setAnswers] = useState([]);
   const [comment, setComment] = useState("");
-  // 질문 클릭시 해당 질문 id 가져와서 해당하는 질문만 필터해서 가져오도록 하기
 
+  // 질문 클릭시 해당 질문 id 가져와서 해당하는 질문만 필터해서 가져오도록 하기
   const submmitComment = () => {
     if (comment.trim() === "") {
       return;
     } else {
-      console.log(comment)
       axios
         .post(`http://13.124.69.107/questions/${questionId}/comments`, {
           content: comment,
@@ -255,18 +257,6 @@ const QuestionPage = () => {
       setComment("");
     }
   };
-  useEffect(() => {
-    axios
-      .get(`http://13.124.69.107/questions/${questionId}`)
-      .then((res) => setQuestion(res.data.data));
-  }, []);
-
-  useEffect(() => {
-    axios
-      .get(`http://13.124.69.107/questions/${questionId}/comments`)
-      .then((res) => setAnswers(res.data.data));
-  }, []);
-
   useEffect(() => {
     axios
       .get(`http://13.124.69.107/questions/${questionId}`)
@@ -289,6 +279,45 @@ const QuestionPage = () => {
       axios
         .delete(`http://13.124.69.107/questions/${questionId}`)
         .then((res) => navigate("/"));
+    }
+  };
+
+  /**
+   * 1. false, false 일때 추천 누르면 like가 true, 비추천 누르면 dislike가 true가 된다.
+   * 2. true, false 일때 어떤 버튼을 누르든 like가 false가 된다.
+   * 3. false, true 일 때 어떤 버튼을 누르든 dislike가 false가 된다.
+   *
+   * 추천 버튼을 눌렀을 때 false/true이면 dislike 요청, false/false 이면 like 요청, true/false이면 like 요청
+   * 비추천 버튼을 눌렀을 때 true/false이면 like 요청 false/false 이면 dislike 요청, false/true이면 dislike 요청,
+   *
+   * */
+
+  const [like, setLike] = useState(false);
+  const [disLike, setDisLike] = useState(false);
+
+  const handleLike = () => {
+    if (!like && disLike) {
+      axios
+        .post(`http://13.124.69.107/questions/${questionId}/unlikes`)
+        .then((res) => setLike(!like));
+    } else {
+      axios
+        .post(`http://13.124.69.107/questions/${questionId}/likes`)
+        .then((res) => setLike(!like));
+    }
+  };
+
+  const handleDisLike = () => {
+    if (like && !disLike) {
+      //like 요청
+      axios
+        .post(`http://13.124.69.107/questions/${questionId}/likes`)
+        .then((res) => setDisLike(!disLike));
+    } else {
+      //dislike 요청
+      axios
+        .post(`http://13.124.69.107/questions/${questionId}/unlikes`)
+        .then((res) => setDisLike(!disLike));
     }
   };
 
@@ -317,9 +346,19 @@ const QuestionPage = () => {
             <BodyArticle>
               <QuestionSection>
                 <div className="recommand">
-                  <RecommandT fill="#babfc4" />
+                  {/* 추천 */}
+                  <RecommandT
+                    fill="#babfc4"
+                    onClick={handleLike}
+                    className={like ? "like active" : "like"}
+                  />
                   <span>{question?.recommendCount}</span>
-                  <RecommandB fill="#babfc4" />
+                  {/* 비추천 */}
+                  <RecommandB
+                    fill="#babfc4"
+                    onClick={handleDisLike}
+                    className={like ? "like active" : "like"}
+                  />
                 </div>
                 <div className="post-layout">
                   <MDEditor.Markdown className="post--body" source={question?.content} style={{ whiteSpace: 'pre-wrap' }} />
@@ -377,25 +416,24 @@ const QuestionPage = () => {
                     questionId={questionId}
                   />
                 ))}
-              <Editor>
-                <h2>Your Answer</h2>
-                <CEditor onChange={setComment} data={comment} />
-                <p onClick={submmitComment}>
-                  <AnswerBtn buttonName={"Post Your Answer"} />
-                </p>
-                <Tag>
-                  Not the answer you're looking for? Browse other questions
-                  tagged
-                  {question?.tags.map((tag, idx) => (
-                    <div key={idx} className="summary_meta_tag">
-                      {tag}
-                    </div>
-                  ))}
-                  or ask your own question.
-                </Tag>
-              </Editor>
+                <Editor>
+                  <h2>Your Answer</h2>
+                  <CEditor onChange={setComment} data={comment} />
+                  <p onClick={submmitComment}>
+                    <AnswerBtn buttonName={"Post Your Answer"} />
+                  </p>
+                  <Tag>
+                    Not the answer you're looking for? Browse other questions
+                    tagged
+                    {question?.tags.map((tag, idx) => (
+                      <div key={idx} className="summary_meta_tag">
+                        {tag}
+                      </div>
+                    ))}
+                    or ask your own question.
+                  </Tag>
+                </Editor>
               </AnswerSection>
-              
             </BodyArticle>
             <div className="sidebar">
               <YellowBox />

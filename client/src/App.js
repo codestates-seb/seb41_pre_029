@@ -23,7 +23,6 @@ function App() {
     <div className="App">
       <Router basename={process.env.PUBLIC_URL} >
         <Header search={setSearchData} />
-
         <Routes>
           <Route path="/" element={<MainPage data={searchData} />} />
           <Route path="/addquestionpage" element={<AddQuestionPage />} />
@@ -35,7 +34,10 @@ function App() {
           {/* <Route path="/signoutpage" element={<SignoutPage />} /> */}
           <Route path="/signuppage" element={<SignupPage />} />
           <Route path="/edit/:id" element={<EditQuestionPage />} />
-          <Route path="/editanswer/:questionid/:answerid" element={<EditAnswerPage />} />
+          <Route
+            path="/editanswer/:questionid/:answerid"
+            element={<EditAnswerPage />}
+          />
         </Routes>
       </Router>
     </div>
