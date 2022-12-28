@@ -24,6 +24,7 @@ const QuestionPageWrapper = styled.div`
   margin: 0 320.5px 0 320.5px;
 `;
 const PageWrapper = styled.div`
+  height: auto;
   padding: 0 24px 0 24px;
 
   > .bodyWrapper {
@@ -72,7 +73,9 @@ const TitleBar = styled.div`
     }
   }
 `;
-const BodyArticle = styled.article``;
+const BodyArticle = styled.article`
+  height: auto;
+`;
 const QuestionSection = styled.section`
   display: flex;
   > .recommand {
@@ -177,6 +180,7 @@ const QuestionSection = styled.section`
   }
 `;
 const AnswerSection = styled.article`
+  height: auto;
   display: flex;
   flex-direction: column;
   > h2 {
@@ -189,10 +193,8 @@ const AnswerSection = styled.article`
   }
 `;
 const Editor = styled.div`
+  height: auto;
   width: 720px;
-
-  bottom: 100px;
-  margin-bottom: 100px;
   > h2 {
     padding: 20px;
     font-size: 1.5rem;
@@ -241,6 +243,7 @@ const QuestionPage = () => {
     if (comment.trim() === "") {
       return;
     } else {
+      console.log(comment)
       axios
         .post(`http://13.124.69.107/questions/${questionId}/comments`, {
           content: comment,
@@ -371,12 +374,11 @@ const QuestionPage = () => {
                     questionId={questionId}
                   />
                 ))}
-              </AnswerSection>
               <Editor>
                 <h2>Your Answer</h2>
                 <CEditor onChange={setComment} data={comment} />
                 <p onClick={submmitComment}>
-                  <AnswerBtn buttonName={"Post Your Answe"} />
+                  <AnswerBtn buttonName={"Post Your Answer"} />
                 </p>
                 <Tag>
                   Not the answer you're looking for? Browse other questions
@@ -389,6 +391,8 @@ const QuestionPage = () => {
                   or ask your own question.
                 </Tag>
               </Editor>
+              </AnswerSection>
+              
             </BodyArticle>
             <div className="sidebar">
               <YellowBox />
