@@ -10,6 +10,10 @@ const QuestionSummary = ({ props}) => {
   const navigateDetailPage = (id) => {
     navigate(`/questionpage/${id}`)
   }
+// console.log(props.tags)
+  const viewTags = 
+   props.tags.map((el) => el.replaceAll("#","").replaceAll("-"," ")).filter((el) =>(el!==""))
+  console.log(viewTags)
 
   return (
     <QuestionSummaryContainer>
@@ -44,11 +48,12 @@ const QuestionSummary = ({ props}) => {
       <div className="summary_title_meta_wrapper">
         <SummaryTitleContents>
           <div className="summary_title" onClick={() => navigateDetailPage(props.id)}>{props.title}</div>
-          <div className="summary_contents">{props.content}</div>
+          {/* <div className="summary_contents">{props.content}</div> */}
+                <div className="summary_contents" dangerouslySetInnerHTML={{ __html: props.content }} />
         </SummaryTitleContents>
         <SummaryMeta>
           <div className="summary_meta_tags">
-            {props.tags.map((tag,idx)=>(
+            {viewTags.map((tag,idx)=>(
                 <div key={idx} className="summary_meta_tag">{tag}</div>
             ))}
           </div>

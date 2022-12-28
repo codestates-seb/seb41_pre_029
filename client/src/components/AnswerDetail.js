@@ -1,12 +1,11 @@
 import styled from "styled-components";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import displayedAt from "../util/displayedAt";
 import useScrollTop from "../util/useScrollTop";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
-import { useNavigate, useParams } from "react-router-dom";
 
 const AnswerSection = styled.section`
   display: flex;
@@ -30,7 +29,6 @@ const AnswerSection = styled.section`
       font-size: 21px;
       padding: 4px 0 4px 0;
     }
-    
   }
   > .post-layout {
     > .post--body {
@@ -85,8 +83,8 @@ const AnswerSection = styled.section`
         > .hoverE {
           :hover {
             cursor: pointer;
-      }
-    }
+          }
+        }
       }
       > .post--footer-profile {
         flex: 1 1 auto;
@@ -128,7 +126,6 @@ const AnswerSection = styled.section`
 `;
 
 const AnswerDetail = (answer) => {
-
   useScrollTop();
   // console.log(answer.memberIdentityDto.nickname);
 
@@ -144,7 +141,7 @@ const AnswerDetail = (answer) => {
 
   const params = useParams();
   const questionId = Number(params.id);
-  answer = answer.answers
+  answer = answer.answers;
   const navigate = useNavigate();
 
   const navigateEditpage = (id) => {
@@ -164,7 +161,12 @@ const AnswerDetail = (answer) => {
         <div className="post--footer">
           <div className="post--footer-button">
             <span className="button">Share</span>
-            <span className='button hoverE' onClick={() => navigateEditpage(answer.id)}>Edit</span>
+            <span
+              className="button hoverE"
+              onClick={() => navigateEditpage(answer.id)}
+            >
+              Edit
+            </span>
             <span className="button">Follow</span>
             <span className="button" onClick={() => handleDelete(questionId)}>
               Delete

@@ -58,6 +58,7 @@ const EditAnswer = ({originData, questionId, answerId}) => {
         <InputBox>
           <div className="title">Answer</div>
           <CEditor onChange={setContent} data={content} /> 
+      
             {/* <Parser html={content} /> */}
         </InputBox>
         <InputBox>

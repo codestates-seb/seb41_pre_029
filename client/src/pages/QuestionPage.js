@@ -220,7 +220,6 @@ const AnswerBtn = styled(Button)`
   margin-top: 50px;
 `;
 const QuestionPage = () => {
-
   useScrollTop();
 
   const navigate = useNavigate();
@@ -287,6 +286,11 @@ const QuestionPage = () => {
     }
   };
 
+  const viewTags = question?.tags
+    .map((el) => el.replaceAll("#", "").replaceAll("-", " "))
+    .filter((el) => el !== "");
+  console.log(viewTags);
+
   return (
     <>
       <QuestionPageWrapper>
@@ -320,7 +324,7 @@ const QuestionPage = () => {
                   <div className="post--body">{question?.content}</div>
                   <div className="post--tags">
                     <div className="summary_meta_tags">
-                      {question?.tags.map((tag, idx) => (
+                      {viewTags?.map((tag, idx) => (
                         <div key={idx} className="summary_meta_tag">
                           {tag}
                         </div>
@@ -381,7 +385,7 @@ const QuestionPage = () => {
                 <Tag>
                   Not the answer you're looking for? Browse other questions
                   tagged
-                  {question?.tags.map((tag, idx) => (
+                  {viewTags?.map((tag, idx) => (
                     <div key={idx} className="summary_meta_tag">
                       {tag}
                     </div>
