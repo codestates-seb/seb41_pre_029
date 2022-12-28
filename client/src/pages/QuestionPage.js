@@ -2,28 +2,25 @@ import axios from "axios";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
-import MDEditor from '@uiw/react-md-editor';
+import MDEditor from "@uiw/react-md-editor";
+import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
+import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
 
 import Footer from "../components/Footer";
 import CEditor from "../components/CKEditor";
 import useScrollTop from "../util/useScrollTop";
-
-import parser from "../components/Parser";
-
 import Nav from "../components/Nav";
 import AnswerDetail from "../components/AnswerDetail";
 import Button from "../components/Button";
 import displayedAt from "../util/displayedAt";
 import YellowBox from "../components/YellowBox";
 import GreyBox from "../components/GreyBox";
-import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
-import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
 
 const QuestionPageWrapper = styled.div`
   display: flex;
-
   margin: 0 320.5px 0 320.5px;
 `;
+
 const PageWrapper = styled.div`
   height: auto;
   padding: 0 24px 0 24px;
@@ -229,7 +226,6 @@ const AnswerBtn = styled(Button)`
 `;
 const QuestionPage = () => {
   useScrollTop();
-
   const navigate = useNavigate();
 
   const params = useParams();
@@ -238,12 +234,22 @@ const QuestionPage = () => {
   const Id = localStorage.getItem("info");
   const memberId = JSON.parse(Id);
 
-  // const tihsQuestion = data.filter((el) => el.id === questionId);
   const [question, setQuestion] = useState();
   const [answers, setAnswers] = useState([]);
   const [comment, setComment] = useState("");
 
-  // 질문 클릭시 해당 질문 id 가져와서 해당하는 질문만 필터해서 가져오도록 하기
+  useEffect(() => {
+    axios
+      .get(`http://13.124.69.107/questions/${questionId}`)
+      .then((res) => setQuestion(res.data.data));
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`http://13.124.69.107/questions/${questionId}/comments`)
+      .then((res) => setAnswers(res.data.data));
+  }, []);
+
   const submmitComment = () => {
     if (comment.trim() === "") {
       return;
@@ -257,17 +263,6 @@ const QuestionPage = () => {
       setComment("");
     }
   };
-  useEffect(() => {
-    axios
-      .get(`http://13.124.69.107/questions/${questionId}`)
-      .then((res) => setQuestion(res.data.data));
-  }, []);
-
-  useEffect(() => {
-    axios
-      .get(`http://13.124.69.107/questions/${questionId}/comments`)
-      .then((res) => setAnswers(res.data.data));
-  }, []);
 
   const navigateEditpage = (id) => {
     navigate(`/edit/${id}`);
@@ -308,12 +303,10 @@ const QuestionPage = () => {
 
   const handleDisLike = () => {
     if (like && !disLike) {
-      //like 요청
       axios
         .post(`http://13.124.69.107/questions/${questionId}/likes`)
         .then((res) => setDisLike(!disLike));
     } else {
-      //dislike 요청
       axios
         .post(`http://13.124.69.107/questions/${questionId}/unlikes`)
         .then((res) => setDisLike(!disLike));
@@ -345,22 +338,24 @@ const QuestionPage = () => {
             <BodyArticle>
               <QuestionSection>
                 <div className="recommand">
-                  {/* 추천 */}
                   <RecommandT
                     fill="#babfc4"
                     onClick={handleLike}
                     className={like ? "like active" : "like"}
                   />
                   <span>{question?.recommendCount}</span>
-                  {/* 비추천 */}
                   <RecommandB
                     fill="#babfc4"
                     onClick={handleDisLike}
-                    className={like ? "like active" : "like"}
+                    className={disLike ? "disLike active" : "like"}
                   />
                 </div>
                 <div className="post-layout">
-                  <MDEditor.Markdown className="post--body" source={question?.content} style={{ whiteSpace: 'pre-wrap' }} />
+                  <MDEditor.Markdown
+                    className="post--body"
+                    source={question?.content}
+                    style={{ whiteSpace: "pre-wrap" }}
+                  />
                   {/* <div className="post--body">{question?.content}</div> */}
                   <div className="post--tags">
                     <div className="summary_meta_tags">

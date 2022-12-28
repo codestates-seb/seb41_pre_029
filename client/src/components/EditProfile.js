@@ -7,32 +7,13 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import StyledButton from "./Button";
 import Input from "./Input";
-// import Editor from "./Editors";
 import axios from "axios";
 
 const EditProfile = () => {
   const navigator = useNavigate();
   const params = useParams();
   const id = params.id;
-
-  const [editValue, setEditValue] = useState("");
-  const [info, setInfo] = useState({
-    // createAt: "",
-    // email: "",
-    // lastModifiedAt: "",
-    // nickname: "",
-    // profile: {
-    //   image: "",
-    //   title: "",
-    //   location: "",
-    //   aboutMe: "",
-    // },
-    // link: {
-    //   website: "",
-    //   twitter: "",
-    //   github: "",
-    // },
-  });
+  const [info, setInfo] = useState({});
 
   useEffect(() => {
     axios
@@ -40,11 +21,10 @@ const EditProfile = () => {
       .then((res) => res.data.data)
       .then((res) => {
         setInfo(res);
-        setEditValue(res.profile.aboutMe);
       });
   }, []);
 
-  const { createAt, email, lastModifiedAt, link, nickname, profile } = info;
+  const { link, nickname, profile } = info;
 
   const changeHandler = (e) => {
     setInfo({
@@ -61,15 +41,15 @@ const EditProfile = () => {
       nickname,
       location: profile.location,
       title: profile.title,
-      aboutMe: editValue,
+      aboutMe: profile.aboutMe,
       website: link.website,
       github: link.github,
       twitter: link.twitter,
     };
 
     axios({
-      url: `http://13.124.69.107/members/${id}`, // 통신할 웹문서
-      method: "patch", // 통신 방식
+      url: `http://13.124.69.107/members/${id}`,
+      method: "patch",
       data,
     }).then((res) => window.location.reload());
   };
@@ -108,7 +88,12 @@ const EditProfile = () => {
             label={"Title"}
           />
           <Title className="editor">About me</Title>
-          {/* <Editor set={setEditValue} get={editValue} /> */}
+          <textarea
+            className="aboutMe"
+            name="aboutMe"
+            value={profile?.aboutMe || ""}
+            onChange={changeHandler}
+          />
         </FormList>
         <Title>Links</Title>
         <FormList className="link">
@@ -144,15 +129,6 @@ const EditProfile = () => {
           </InputDiv>
         </FormList>
         <Title>Private information</Title>
-        {/* <FormList>
-          <Input
-            label={"Full name"}
-            type="text"
-            name="fullName"
-            onChange={changeHandler}
-            value={fullName}
-          />
-        </FormList> */}
         <Btn>
           <div onClick={submitBtn}>
             <StyledButton

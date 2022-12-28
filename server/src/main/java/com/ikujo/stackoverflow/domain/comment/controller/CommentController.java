@@ -18,7 +18,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/questions/{article-id}/comments")
-@CrossOrigin
 @RequiredArgsConstructor
 public class CommentController {
 
