@@ -91,6 +91,7 @@ const DeleteProfile = () => {
   };
 
   //회원 탈퇴 기능
+
   const handleDeleteProfile = (id) => {
     console.log("clicked!");
     if (active) {

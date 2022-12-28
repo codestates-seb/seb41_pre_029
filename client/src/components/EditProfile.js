@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import StyledButton from "./Button";
 import Input from "./Input";
-import Editor from "./Editors";
+import MDEditor from "@uiw/react-md-editor";
 import axios from "axios";
 
 const EditProfile = () => {
@@ -108,7 +108,7 @@ const EditProfile = () => {
             label={"Title"}
           />
           <Title className="editor">About me</Title>
-          <Editor set={setEditValue} get={editValue} />
+          <MDEditor set={setEditValue} get={editValue} />
         </FormList>
         <Title>Links</Title>
         <FormList className="link">

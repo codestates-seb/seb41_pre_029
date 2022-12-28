@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import MDEditor from '@uiw/react-md-editor';
 import { useState } from "react";
-
+import axios from "axios";
 import displayedAt from "../util/displayedAt";
 import useScrollTop from "../util/useScrollTop";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
@@ -193,7 +193,13 @@ const AnswerDetail = (answer) => {
         .then((res) => setDisLike(!disLike));
     }
   };
-
+  const handleSelection = () => {
+    axios
+      .post(
+        http://13.124.69.107/questions/${questionId}/comments/${answerId}/selection
+      )
+      .then((res) => setSelection(!selection));
+  };
   return (
     <AnswerSection>
       <div className="recommand">

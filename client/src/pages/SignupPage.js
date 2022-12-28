@@ -203,20 +203,20 @@ const SignupPage = () => {
           password: pwd,
           nickname: displayName,
         },
-      }).then((res) => {
-        console.log(res);
-        const data = JSON.stringify({
-          id: res.data.data.id,
-          token: res.headers,
+      })
+        .then((res) => {
+          console.log(res);
+          const data = JSON.stringify({
+            id: res.data.data.id,
+            token: res.headers,
+          });
+          localStorage.setItem("info", data);
+          pathNavigate("/");
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.log(error);
         });
-        localStorage.setItem("info", data);
-        pathNavigate("/");
-        window.location.reload();
-      });
-      //   .then(navigate("/"))
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
     }
   };
   return (
