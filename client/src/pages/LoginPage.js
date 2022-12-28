@@ -150,9 +150,9 @@ const Loginpage = () => {
       setEmailValid("");
       setPwdValid("valid");
     } else {
+      const data = JSON.stringify({ id: 1, token: "jwt" });
+      localStorage.setItem("info", data);
       clear();
-      const data = { id: 1, token: "jwt" };
-
       navigate("/");
       window.location.reload();
       // axios({
@@ -165,7 +165,8 @@ const Loginpage = () => {
       // })
       //   .then((res) => {
       //     console.log(res);
-      //     //토큰저장?
+      //     const data = JSON.stringify({ id: res.data.id, token: res.data.token });
+      //     localStorage.setItem("info", data);
       //     localStorage.setItem("isLogin", res.data.token);
       //     localStorage.setItem("UserID", res.data.id);
       //   })
