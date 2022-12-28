@@ -1,4 +1,4 @@
-package com.ikujo.stackoverflow.global.auth;
+package com.ikujo.stackoverflow.global.auth.utils;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;

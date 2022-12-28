@@ -1,4 +1,4 @@
-package com.ikujo.stackoverflow.global.auth;
+package com.ikujo.stackoverflow.global.auth.dto;
 
 import lombok.Getter;
 
@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public class LoginDto {
 
-    private String username;
+    private String email;
     private String password;
 
 }

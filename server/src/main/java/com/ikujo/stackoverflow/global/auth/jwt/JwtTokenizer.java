@@ -1,4 +1,4 @@
-package com.ikujo.stackoverflow.global.auth;
+package com.ikujo.stackoverflow.global.auth.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -113,5 +113,18 @@ public class JwtTokenizer {
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
         return key;
+    }
+
+    public Long tokenToMemberId(String token) {
+        Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(this.secretKey));
+        String jws = token.replace("Bearer ", "");
+
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(jws)
+                .getBody();
+
+        return claims.get("id", Long.class);
     }
 }

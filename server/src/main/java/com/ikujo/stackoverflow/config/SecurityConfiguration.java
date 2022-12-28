@@ -1,15 +1,21 @@
 package com.ikujo.stackoverflow.config;
 
-import com.ikujo.stackoverflow.global.auth.JwtAuthenticationFilter;
-import com.ikujo.stackoverflow.global.auth.JwtTokenizer;
+import com.ikujo.stackoverflow.global.auth.filter.JwtAuthenticationFilter;
+import com.ikujo.stackoverflow.global.auth.filter.JwtVerificationFilter;
+import com.ikujo.stackoverflow.global.auth.handler.MemberAccessDeniedHandler;
+import com.ikujo.stackoverflow.global.auth.handler.MemberAuthenticationEntryPoint;
+import com.ikujo.stackoverflow.global.auth.jwt.JwtTokenizer;
 import com.ikujo.stackoverflow.global.auth.handler.MemberAuthenticationFailureHandler;
 import com.ikujo.stackoverflow.global.auth.handler.MemberAuthenticationSuccessHandler;
+import com.ikujo.stackoverflow.global.auth.utils.CustomAuthorityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -26,6 +32,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfiguration {
 
     private final JwtTokenizer jwtTokenizer;
+    private final CustomAuthorityUtils authorityUtils;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -35,11 +42,23 @@ public class SecurityConfiguration {
                 .and()
                 .csrf().disable() // csrf 공격에 대한 설정 비활성화
                 .cors(withDefaults()) // withDefaults()일 경우 corsConfigurationSource 이름으로 등록된 Bean 이용
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션을 생성하지 않도록 설정
+                .and()
                 .formLogin().disable() // 인증 관련 Security Filter 비활성화
                 .httpBasic().disable() // HTTP Basic 인증 방식 비활성화
+                .exceptionHandling()
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
+                .accessDeniedHandler(new MemberAccessDeniedHandler())
+                .and()
                 .apply(new CustomFilterConfigurer()) // 직접 구현한 JwtAuthenticationFilter 등록
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.POST, "/questions/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.PATCH, "/questions/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "/questions/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/members/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.PATCH, "/members/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "/members/**").hasRole("USER")
                         .anyRequest().permitAll() // 모든 HTTP request 요청에 접근 허용
                 );
 
@@ -93,8 +112,12 @@ public class SecurityConfiguration {
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
+            // JwtVerificationFilter 생성
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
+
             // Spring Security Filter Chain 추가
-            builder.addFilter(jwtAuthenticationFilter);
+            builder.addFilter(jwtAuthenticationFilter)
+                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }
     }
 

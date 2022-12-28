@@ -19,18 +19,6 @@ public record MemberDto(
         LocalDateTime lastModifiedAt
 ) {
 
-//    public static MemberDto of(MemberLoginPost memberLoginPost) {
-//        return new MemberDto(
-//                null,
-//                memberLoginPost.email(),
-//                memberLoginPost.password(),
-//                null,
-//                null,
-//                null,
-//                null,
-//                null);
-//    }
-
     public static MemberDto of(MemberSignupPost memberSignupPost) {
 
         Profile profile = new Profile(
@@ -52,22 +40,6 @@ public record MemberDto(
                 LocalDateTime.now()
                 );
     }
-
-    // 리팩토링 필요!
-//    public static MemberDto of(Long id, MemberProfilePatch memberProfilePatch) {
-//
-//        Profile profile = new Profile(memberProfilePatch.location(), memberProfilePatch.title(), memberProfilePatch.aboutMe());
-//
-//        return new MemberDto(
-//                id,
-//                null,
-//                null,
-//                memberProfilePatch.nickname(),
-//                profile,
-//                null,
-//                null
-//                );
-//    }
 
     public Member toEntity() {
         return Member.of(

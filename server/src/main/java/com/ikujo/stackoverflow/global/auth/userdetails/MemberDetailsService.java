@@ -1,7 +1,8 @@
-package com.ikujo.stackoverflow.global.auth;
+package com.ikujo.stackoverflow.global.auth.userdetails;
 
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.repository.MemberRepository;
+import com.ikujo.stackoverflow.global.auth.utils.CustomAuthorityUtils;
 import com.ikujo.stackoverflow.global.exception.BusinessLogicException;
 import com.ikujo.stackoverflow.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,14 @@ public class MemberDetailsService implements UserDetailsService {
         return new MemberDetails(findMember);
     }
 
+    /**
+     * MemberDetails : UserDetails 구현체 (CustomUserDetails)
+     */
     private final class MemberDetails extends Member implements UserDetails {
 
+        /**
+         * 로그인 생성자
+         */
         MemberDetails(Member member) {
             setId(member.getId());
             setEmail(member.getEmail());
@@ -38,6 +45,9 @@ public class MemberDetailsService implements UserDetailsService {
             setRoles(member.getRoles());
         }
 
+        /**
+         * 로그인한 유저의 권한 얻기
+         */
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
             return authorityUtils.createAuthorities(this.getRoles());
@@ -48,21 +58,33 @@ public class MemberDetailsService implements UserDetailsService {
             return getEmail();
         }
 
+        /**
+         * 계정 만료 여부
+         */
         @Override
         public boolean isAccountNonExpired() {
             return true;
         }
 
+        /**
+         * 계정 잠김 여부
+         */
         @Override
         public boolean isAccountNonLocked() {
             return true;
         }
 
+        /**
+         * 크리덴셜 만료 여부
+         */
         @Override
         public boolean isCredentialsNonExpired() {
             return true;
         }
 
+        /**
+         * 사용자 활성화 여부
+         */
         @Override
         public boolean isEnabled() {
             return true;

@@ -1,7 +1,9 @@
-package com.ikujo.stackoverflow.global.auth;
+package com.ikujo.stackoverflow.global.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
+import com.ikujo.stackoverflow.global.auth.jwt.JwtTokenizer;
+import com.ikujo.stackoverflow.global.auth.dto.LoginDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,11 +33,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
 
-        ObjectMapper objectMapper = new ObjectMapper(); // Username, Password를 역직렬화하기 위한 ObjectMapper
+        ObjectMapper objectMapper = new ObjectMapper(); // email, Password를 역직렬화하기 위한 ObjectMapper
         LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class); // LoginDto 클래스로 역직렬화
 
-        // Username과 Password 정보를 포함한 토큰 생성
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
+        // email Password 정보를 포함한 토큰 생성
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
 
         // AuthenticationManager에게 인증 위임
         return authenticationManager.authenticate(authenticationToken);
@@ -68,7 +70,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         // 인증된 사용자와 관련된 정보 추가
         Map<String, Object> claims = new HashMap<>();
-        claims.put("username", member.getEmail());
+        claims.put("email", member.getEmail());
+        claims.put("id", member.getId());
         claims.put("roles", member.getRoles());
 
         String subject = member.getEmail(); // JWT 제목

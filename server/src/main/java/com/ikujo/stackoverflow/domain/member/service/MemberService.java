@@ -6,7 +6,7 @@ import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberProfilePat
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberSignupPost;
 import com.ikujo.stackoverflow.domain.member.entity.dto.response.MemberResponse;
 import com.ikujo.stackoverflow.domain.member.repository.MemberRepository;
-import com.ikujo.stackoverflow.global.auth.CustomAuthorityUtils;
+import com.ikujo.stackoverflow.global.auth.utils.CustomAuthorityUtils;
 import com.ikujo.stackoverflow.global.exception.BusinessLogicException;
 import com.ikujo.stackoverflow.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
@@ -85,18 +85,6 @@ public class MemberService {
 
         return memberRepository.save(findMember);
     }
-
-    /**
-     * 회원 로그인 (리팩토링 필요!!)
-     */
-//    public void loginMember(MemberLoginPost memberLoginPost) {
-//        Optional<Member> findMember = memberRepository.findByEmail(memberLoginPost.email());
-//        if (!findMember.isPresent()) {
-//            throw new BusinessLogicException(ExceptionCode.EMAIL_NOT_FOUND);
-//        }
-//
-//        // 비밀번호 검증 로직
-//    }
 
     /**
      * 회원 삭제
