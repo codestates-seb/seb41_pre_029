@@ -203,9 +203,10 @@ const SignupPage = () => {
       setPwdValid("valid");
     } else if (emailValueCheck && passwordValueCheck) {
       clear();
-      localStorage.setItem("info", "임시로그인");
+      const data = JSON.stringify({ id: 1, token: "jwt" });
+      localStorage.setItem("info", data);
       pathNavigate("/");
-      // window.location.reload();
+      window.location.reload();
       axios({
         method: "post",
         url: "http://13.124.69.107/members/signup",
