@@ -80,18 +80,6 @@ public class CommentService {
 
     }
 
-    public CommentRecommendResponse createLikes(Long articleId, Long commentId,
-                                                CommentRecommendPost commentRecommendPost) {
-
-        Comment comment = findVerifiedComment(commentId);
-        Member member = findVerifiedMember(commentRecommendPost.memberId());
-        CommentRecommendDto commentRecommendDto = CommentRecommendDto.of(member, comment, commentRecommendPost);
-        CommentRecommend commentRecommend = commentRecommendDto.toEntity();
-        commentRecommendRepository.save(commentRecommend);
-
-        return null;
-    }
-
     public Article findVerifiedArticle(Long articleId) {
 
         Optional<Article> optionalArticle = articleRepository.findById(articleId);

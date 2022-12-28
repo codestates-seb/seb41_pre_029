@@ -72,8 +72,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{comment-id}")
-    public ResponseEntity deleteComment(@PathVariable("article-id") @Positive Long articleId,
-                                        @PathVariable("comment-id") @Positive Long commentId) {
+    public ResponseEntity deleteComment(@PathVariable("comment-id") @Positive Long commentId) {
 
         commentService.deleteComment(commentId);
 
@@ -81,8 +80,7 @@ public class CommentController {
     }
 
     @PostMapping("/{comment-id}/likes")
-    public ResponseEntity postLikes(@PathVariable("article-id") @Positive Long articleId,
-                                    @PathVariable("comment-id") @Positive Long commentId,
+    public ResponseEntity postLikes(@PathVariable("comment-id") @Positive Long commentId,
                                     @Valid @RequestBody CommentRecommendPost commentRecommendPost) {
         return null;
     }
