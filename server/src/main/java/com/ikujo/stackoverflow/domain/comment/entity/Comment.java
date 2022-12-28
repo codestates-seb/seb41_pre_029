@@ -1,7 +1,6 @@
 package com.ikujo.stackoverflow.domain.comment.entity;
 
 import com.ikujo.stackoverflow.domain.article.entity.Article;
-import com.ikujo.stackoverflow.domain.comment.entity.CommentRecommend;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.global.entity.BaseTime;
 import jakarta.persistence.*;

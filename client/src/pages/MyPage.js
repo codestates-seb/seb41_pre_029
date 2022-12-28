@@ -155,6 +155,8 @@ const MyPage = () => {
       .then((res) => setUserInfo(res.data.data));
   }, []);
 
+  // console.log(userInfo.profile);
+
   const handleClickEdit = () => {
     if (!activeEdit) {
       setActiveEdit(true);

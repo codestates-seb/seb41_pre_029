@@ -4,19 +4,21 @@ import { useNavigate } from "react-router-dom";
 import displayedAt from "../util/displayedAt";
 import  parser from "./Parser"
 
-const QuestionSummary = ({ props }) => {
+const QuestionSummary = ({ props}) => {
 
   const navigate = useNavigate();
   const navigateDetailPage = (id) => {
     navigate(`/questionpage/${id}`)
   }
+  const viewTags = 
+   props.tags.map((el) => el.replaceAll("#","").replaceAll("-"," ")).filter((el) =>(el!==""))
 
   return (
     <QuestionSummaryContainer>
       <SummaryStats>
         <div className="summary_item">
-          <span className="summary_item_number">{props.hits || 0}</span>
-          <span className="summary_item_unit">{props.hits === 1? "vote" : "votes"
+          <span className="summary_item_number">{props.recommendCount || 0}</span>
+          <span className="summary_item_unit">{props.recommendCount === 1? "vote" : "votes"
           }</span>
         </div>
         <div className="summary_item">
@@ -28,27 +30,28 @@ const QuestionSummary = ({ props }) => {
             </span>
           </span>
           : 
-          <span className={props.recommendCount>=1? "recommneded" :"summary_item_number"}>
-            {props.recommendCount}
+          <span className={props.commentCount>=1? "recommneded" :"summary_item_number"}>
+            {props.commentCount}
             <span  className="summary_item_unit">
-              {props.recommendCount === 1? " answer" : " answers"}
+              {props.commentCount === 1? " answer" : " answers"}
             </span>
           </span>
            }
         </div>
         <div className="summary_item">
-          <span className="summary_item_number">0</span>
+          <span className="summary_item_number">{props.hits}</span>
           <span className="summary_item_unit">views</span>
         </div>
       </SummaryStats>
       <div className="summary_title_meta_wrapper">
         <SummaryTitleContents>
           <div className="summary_title" onClick={() => navigateDetailPage(props.id)}>{props.title}</div>
-          <div className="summary_contents">{props.content}</div>
+          {/* <div className="summary_contents">{props.content}</div> */}
+                <div className="summary_contents" dangerouslySetInnerHTML={{ __html: props.content }} />
         </SummaryTitleContents>
         <SummaryMeta>
           <div className="summary_meta_tags">
-            {props.tags.map((tag,idx)=>(
+            {viewTags.map((tag,idx)=>(
                 <div key={idx} className="summary_meta_tag">{tag}</div>
             ))}
           </div>
