@@ -213,10 +213,6 @@ const SignupPage = () => {
         pathNavigate("/");
         window.location.reload();
       });
-      //   .then(navigate("/"))
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
     }
   };
   return (

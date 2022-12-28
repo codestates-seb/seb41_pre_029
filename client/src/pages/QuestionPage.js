@@ -269,7 +269,6 @@ const QuestionPage = () => {
   };
 
   const handleDelete = () => {
-    console.log("클릭!");
     if (window.confirm("정말 삭제하시겠습니까?")) {
       axios
         .delete(`http://13.124.69.107/questions/${questionId}`)

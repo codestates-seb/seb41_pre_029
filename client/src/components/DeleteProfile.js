@@ -94,6 +94,7 @@ const DeleteProfile = () => {
   // console.log(memberId);
 
   //회원 탈퇴 기능
+
   const handleDeleteProfile = () => {
     if (active) {
       if (window.confirm("정말 삭제하시겠습니까?")) {
