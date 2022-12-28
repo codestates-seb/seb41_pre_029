@@ -7,8 +7,6 @@ import useScrollTop from "../util/useScrollTop";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
 
-import { useNavigate } from "react-router-dom";
-
 const AnswerSection = styled.section`
   display: flex;
   padding: 16px 0 16px 0;
