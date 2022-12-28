@@ -57,11 +57,4 @@ public class MemberController {
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity login(@Valid @RequestBody MemberLoginPost memberLoginPost) {
-//        memberService.loginMember(memberLoginPost);
-//
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-
 }
