@@ -8,6 +8,7 @@ import Button from "../components/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+
 //스타일 감싸는 div
 const Flex = styled.div`
   display: flex;
@@ -197,7 +198,7 @@ const SignupPage = () => {
     } else if (emailValueCheck && passwordValueCheck) {
       axios({
         method: "post",
-        url: "http://13.124.69.107/members/signup",
+        url: `${process.env.REACT_APP_API_URL}/members/signup`,
         data: {
           email,
           password: pwd,

@@ -14,8 +14,8 @@ const Nav = ({ location }) => {
   const id = params.id;
 
   const userData = JSON.parse(localStorage.getItem("info"));
-  const userId = userData.id;
-  const userToken = userData.token;
+  const userId = userData?.id;
+  const userToken = userData?.token;
 
   const menu = [
     { name: "Questions", link: "/" },

@@ -152,14 +152,15 @@ const Loginpage = () => {
     // } else {
     axios
       .post(
-        "http://13.124.69.107/members/login",
+        `${process.env.REACT_APP_API_URL}/members/login`,
         {
           usrename: email,
           password: pwd,
-        }
-        // { withCredentials: true }
+        },
+        { withCredentials: true }
       )
       .then((res) => {
+        console.log(res);
         const data = JSON.stringify({
           id: res.data.usrename,
           token: res.headers,
@@ -168,8 +169,7 @@ const Loginpage = () => {
         navigate("/");
         window.location.reload();
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
     // }
   };
   return (

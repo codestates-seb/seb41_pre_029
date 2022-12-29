@@ -57,12 +57,11 @@ const PageContainer = styled.div`
 const QuestionList = ({ data }) => {
   const [questions, setQuestions] = useState([]);
 
-useEffect(()=>{
- axios.get('http://13.124.69.107/questions').then((res) => {
-  setQuestions(res?.data.data)
-  })
-  },[])
-
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/questions`).then((res) => {
+      setQuestions(res?.data.data);
+    });
+  }, []);
 
   const filtered = questions.filter(
     (el) => el.content.includes(data) || el.title.includes(data)

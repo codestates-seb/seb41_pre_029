@@ -17,7 +17,7 @@ const EditProfile = () => {
 
   useEffect(() => {
     axios
-      .get(`http://13.124.69.107/members/${id}`)
+      .get(`${process.env.REACT_APP_API_URL}/members/${id}`)
       .then((res) => res.data.data)
       .then((res) => {
         setInfo(res);
@@ -48,7 +48,7 @@ const EditProfile = () => {
     };
 
     axios({
-      url: `http://13.124.69.107/members/${id}`,
+      url: `${process.env.REACT_APP_API_URL}/members/${id}`,
       method: "patch",
       data,
     }).then((res) => window.location.reload());

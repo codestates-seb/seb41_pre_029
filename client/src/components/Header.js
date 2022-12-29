@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import Button from "./Button";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-
+import axios from "axios";
 const HeaderSearch = styled.header`
   height: 50px;
   box-sizing: border-box;
@@ -109,6 +109,15 @@ const Header = ({ search }) => {
     }
   };
   const navigate = useNavigate();
+  const token = JSON.parse(localStorage.getItem("info"));
+  const [profile, setProfile] = useState("");
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/members/${token?.id}`)
+      .then((res) => {
+        setProfile(res.data.data.profile);
+      });
+  }, []);
 
   return (
     <HeaderSearch>
@@ -174,11 +183,8 @@ const Header = ({ search }) => {
           {isLogin ? (
             <>
               <IconUl>
-                <IconLi>
-                  <img
-                    alt="profile"
-                    src="https://cdn.pixabay.com/photo/2018/05/26/18/06/dog-3431913_1280.jpg"
-                  ></img>
+                <IconLi onClick={() => navigate(`/mypage/${token.id}`)}>
+                  <img alt="profile" src={`${profile?.image}`}></img>
                 </IconLi>
 
                 <IconLi>

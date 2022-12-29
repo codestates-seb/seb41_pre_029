@@ -53,7 +53,7 @@ const AddQuestionPage = () => {
     if (input.title.trim().length < 1) return;
     if (window.confirm("Are you sure you want to submit this Question?")) {
       axios({
-        url: `http://13.124.69.107/questions`, // 통신할 웹문서
+        url: `${process.env.REACT_APP_API_URL}/questions`, // 통신할 웹문서
         method: "post", // 통신 방식
         data: {
           title: input.title,

@@ -240,13 +240,13 @@ const QuestionPage = () => {
 
   useEffect(() => {
     axios
-      .get(`http://13.124.69.107/questions/${questionId}`)
+      .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`)
       .then((res) => setQuestion(res.data.data));
   }, []);
 
   useEffect(() => {
     axios
-      .get(`http://13.124.69.107/questions/${questionId}/comments`)
+      .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`)
       .then((res) => setAnswers(res.data.data));
   }, []);
 
@@ -255,10 +255,13 @@ const QuestionPage = () => {
       return;
     } else {
       axios
-        .post(`http://13.124.69.107/questions/${questionId}/comments`, {
-          content: comment,
-          memberId: memberId.id,
-        })
+        .post(
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`,
+          {
+            content: comment,
+            memberId: memberId.id,
+          }
+        )
         .then((res) => window.location.reload());
       setComment("");
     }
@@ -271,7 +274,7 @@ const QuestionPage = () => {
   const handleDelete = () => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
       axios
-        .delete(`http://13.124.69.107/questions/${questionId}`)
+        .delete(`${process.env.REACT_APP_API_URL}/questions/${questionId}`)
         .then((res) => navigate("/"));
     }
   };
@@ -292,11 +295,13 @@ const QuestionPage = () => {
   const handleLike = () => {
     if (!like && disLike) {
       axios
-        .post(`http://13.124.69.107/questions/${questionId}/unlikes`)
+        .post(
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`
+        )
         .then((res) => setLike(!like));
     } else {
       axios
-        .post(`http://13.124.69.107/questions/${questionId}/likes`)
+        .post(`${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`)
         .then((res) => setLike(!like));
     }
   };
@@ -304,11 +309,13 @@ const QuestionPage = () => {
   const handleDisLike = () => {
     if (like && !disLike) {
       axios
-        .post(`http://13.124.69.107/questions/${questionId}/likes`)
+        .post(`${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`)
         .then((res) => setDisLike(!disLike));
     } else {
       axios
-        .post(`http://13.124.69.107/questions/${questionId}/unlikes`)
+        .post(
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`
+        )
         .then((res) => setDisLike(!disLike));
     }
   };
