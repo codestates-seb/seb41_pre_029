@@ -1,6 +1,7 @@
 package com.ikujo.stackoverflow.domain.article.dto.response;
 
 import com.ikujo.stackoverflow.domain.article.entity.Article;
+import com.ikujo.stackoverflow.domain.article.entity.ArticleRecommend;
 import com.ikujo.stackoverflow.domain.member.entity.dto.MemberIdentityDto;
 import com.ikujo.stackoverflow.global.dto.BaseTimeDto;
 
@@ -16,11 +17,13 @@ public record ArticleDetailResponse(
         List<String> tags,
         Integer recommendCount,
         Long hits,
-        BaseTimeDto baseTime
+        BaseTimeDto baseTime,
+        ArticleLikeInfo articleLikeInfo
+
 ) {
 
     public static ArticleDetailResponse of(MemberIdentityDto member, Long id, String title, String content,
-                                           String tag, Integer recommendCount, Long hits, BaseTimeDto baseTime) {
+                                           String tag, Integer recommendCount, Long hits, BaseTimeDto baseTime, ArticleLikeInfo articleLikeInfo) {
         List<String> tags = tagSplit(tag);
 
         return new ArticleDetailResponse(
@@ -31,14 +34,34 @@ public record ArticleDetailResponse(
                 tags,
                 recommendCount,
                 hits,
-                baseTime
+                baseTime,
+                articleLikeInfo
         );
     }
 
-    public static ArticleDetailResponse from(Article article) {
+    public static ArticleDetailResponse from(Article article, Long memberId) {
         List<String> tags = tagSplit(article.getTag());
         MemberIdentityDto memberIdentityResponse = MemberIdentityDto.of(article.getMember().getId(), article.getMember().getProfile().getImage(), article.getMember().getNickname());
         BaseTimeDto baseTimeDto = BaseTimeDto.of(article.getCreatedAt(), article.getLastModifiedAt());
+        Integer totalLike = article.getArticleRecommendList().stream()
+                .mapToInt(ArticleRecommend::getFlag)
+                .sum();
+        Integer flag = article.getArticleRecommendList().stream()
+                .filter(a -> a.getMember().getId().equals(memberId))
+                .findFirst()
+                .map(ArticleRecommend::getFlag)
+                .orElse(0);
+        String currentState = null;
+        if(flag == 0) {
+            currentState = "nothing";
+        }
+        if(flag == 1){
+            currentState = "like";
+        }
+        if(flag == -1){
+            currentState = "unlike";
+        }
+        ArticleLikeInfo articleLikeInfo = ArticleLikeInfo.of(currentState, totalLike);
 
         return new ArticleDetailResponse(
                 memberIdentityResponse,
@@ -48,7 +71,30 @@ public record ArticleDetailResponse(
                 tags,
                 article.getArticleRecommendList().size(),
                 article.getHits(),
-                baseTimeDto
+                baseTimeDto,
+                articleLikeInfo
+        );
+    }
+
+    public static ArticleDetailResponse from(Article article) {
+        List<String> tags = tagSplit(article.getTag());
+        MemberIdentityDto memberIdentityResponse = MemberIdentityDto.of(article.getMember().getId(), article.getMember().getProfile().getImage(), article.getMember().getNickname());
+        BaseTimeDto baseTimeDto = BaseTimeDto.of(article.getCreatedAt(), article.getLastModifiedAt());
+        Integer totalLike = article.getArticleRecommendList().stream()
+                .mapToInt(ArticleRecommend::getFlag)
+                .sum();
+        ArticleLikeInfo articleLikeInfo = ArticleLikeInfo.of("nothing", totalLike);
+
+        return new ArticleDetailResponse(
+                memberIdentityResponse,
+                article.getId(),
+                article.getTitle(),
+                article.getContent(),
+                tags,
+                article.getArticleRecommendList().size(),
+                article.getHits(),
+                baseTimeDto,
+                articleLikeInfo
         );
     }
 

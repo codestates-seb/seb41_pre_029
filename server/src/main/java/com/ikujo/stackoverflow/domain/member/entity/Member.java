@@ -63,4 +63,10 @@ public class Member extends BaseTime {
         ROLE_USER
     }
 
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                '}';
+    }
 }

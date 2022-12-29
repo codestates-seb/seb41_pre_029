@@ -2,12 +2,10 @@ package com.ikujo.stackoverflow.domain.article.entity;
 
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
 @Entity
 public class ArticleRecommend {
@@ -26,6 +24,10 @@ public class ArticleRecommend {
     private Article article;
 
     @Column(nullable = false)
-    private Boolean flag;
+    private Integer flag;
+
+    public static ArticleRecommend of(Long id, Member member, Article article, Integer flag) {
+        return new ArticleRecommend(id, member, article, flag);
+    }
 
 }

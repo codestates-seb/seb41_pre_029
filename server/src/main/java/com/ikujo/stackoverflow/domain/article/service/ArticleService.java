@@ -12,7 +12,7 @@ public interface ArticleService {
 
     Page<ArticleResponse> findArticles(Pageable pageable);
 
-    ArticleDetailResponse findArticle(Long articleId);
+    ArticleDetailResponse findArticle(Long articleId, Long memberId);
 
     ArticleDto saveArticle(ArticleRequest articlePost, Long memberId);
 

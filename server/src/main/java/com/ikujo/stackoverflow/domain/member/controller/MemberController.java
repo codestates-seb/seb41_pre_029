@@ -20,36 +20,8 @@ public class MemberController {
     private final MemberService memberService;
 
     /**
-     * 테스트 후 주석 달기
+     * 회원 가입
      */
-
-    @GetMapping("/{id}")
-    public ResponseEntity getMemberProfile(@PathVariable("id") Long id) {
-        Member findMember = memberService.findMember(id);
-        MemberResponse response = MemberResponse.from(findMember);
-
-        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
-    }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity patchMemberProfile(@PathVariable("id") Long id,
-                                             @Valid @RequestBody MemberProfilePatch profilePatchDto) {
-
-        Member updateMember = memberService.updateMember(id, profilePatchDto);
-
-        MemberResponse response = MemberResponse.from(updateMember);
-
-        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteMember(@PathVariable("id") Long id) {
-        memberService.deleteMember(id);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-
     @PostMapping("/signup")
     public ResponseEntity signup(@Valid @RequestBody MemberSignupPost memberSignupPost) {
         MemberResponse response = memberService.createMember(memberSignupPost);
@@ -57,11 +29,42 @@ public class MemberController {
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity login(@Valid @RequestBody MemberLoginPost memberLoginPost) {
-//        memberService.loginMember(memberLoginPost);
-//
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
+    /**
+     * 회원 프로필 조회
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity getMemberProfile(@PathVariable("id") Long id,
+                                           @RequestHeader(name = "Authorization") String token) {
+        Member findMember = memberService.findByToken(token);
+        MemberResponse response = MemberResponse.from(findMember);
+
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
+    }
+
+    /**
+     * 회원 프로필 수정
+     */
+    @PatchMapping("/{id}")
+    public ResponseEntity patchMemberProfile(@PathVariable("id") Long id,
+                                             @Valid @RequestBody MemberProfilePatch profilePatchDto,
+                                             @RequestHeader(name = "Authorization") String token) {
+
+        Member updateMember = memberService.updateMember(token, profilePatchDto);
+
+        MemberResponse response = MemberResponse.from(updateMember);
+
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
+    }
+
+    /**
+     * 회원 삭제
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteMember(@PathVariable("id") Long id,
+                                       @RequestHeader(name = "Authorization") String token) {
+        memberService.deleteMember(token);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 }
