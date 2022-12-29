@@ -94,21 +94,32 @@ const IconLi = styled.li`
     height: 24px;
   }
 `;
-const Header = ({ search }) => {
+const Header = ({ search, find }) => {
   const [isLogin, setIsLogin] = useState(
     (localStorage.getItem("info") && true) || false
   );
   const [data, setData] = useState("");
+  const [list, setList] = useState("");
+  const navigate = useNavigate();
   const changeValue = (e) => {
     setData(e.target.value);
   };
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      search(data);
-      setData("");
+      axios.get(`${process.env.REACT_APP_API_URL}/questions`).then((res) => {
+        setList(res?.data.data);
+        const filtered = list?.filter(
+          (el) => el.content.includes(data) || el.title.includes(data)
+        );
+        find("find");
+        navigate("/");
+        search(filtered);
+        setData("");
+      });
     }
+    find("");
   };
-  const navigate = useNavigate();
+
   const token = JSON.parse(localStorage.getItem("info"));
   const [profile, setProfile] = useState("");
   useEffect(() => {

@@ -151,18 +151,14 @@ const Loginpage = () => {
     //   setPwdValid("valid");
     // } else {
     axios
-      .post(
-        `${process.env.REACT_APP_API_URL}/members/login`,
-        {
-          usrename: email,
-          password: pwd,
-        },
-        { withCredentials: true }
-      )
+      .post(`${process.env.REACT_APP_API_URL}/members/login`, {
+        email: email,
+        password: pwd,
+      })
       .then((res) => {
         console.log(res);
         const data = JSON.stringify({
-          id: res.data.usrename,
+          id: res.data.email,
           token: res.headers,
         });
         localStorage.setItem("info", data);
