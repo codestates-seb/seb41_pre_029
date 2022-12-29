@@ -9,7 +9,8 @@ public enum ExceptionCode {
     EMAIL_EXISTS(409, "Email exists"),
     ARTICLE_NOT_FOUND(404, "Article not found"),
     ARTICLE_EXISTS(409, "Article exists"),
-    COMMENT_NOT_FOUND(404, "Comment not found");
+    COMMENT_NOT_FOUND(404, "Comment not found"),
+    FLAG_DUPLICATED(404, "Flag not found");
 
     @Getter
     private int status;

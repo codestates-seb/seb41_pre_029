@@ -3,15 +3,17 @@ package com.ikujo.stackoverflow.domain.comment.controller;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPatch;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPost;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentMultiResponseDto;
+import com.ikujo.stackoverflow.domain.comment.dto.response.CommentRecommendResponse;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentResponse;
-import com.ikujo.stackoverflow.domain.comment.entity.Comment;
+import com.ikujo.stackoverflow.domain.comment.service.CommentRecommendService;
 import com.ikujo.stackoverflow.domain.comment.service.CommentService;
-
 import com.ikujo.stackoverflow.global.dto.SingleResponseDto;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,25 +21,27 @@ import java.util.List;
 @RestController
 @RequestMapping("/questions/{article-id}/comments")
 @RequiredArgsConstructor
+@Validated
 public class CommentController {
 
     private final CommentService commentService;
 
+    private final CommentRecommendService commentRecommendService;
+
     @PostMapping
     public ResponseEntity postComment(@PathVariable("article-id") @Positive Long articleId,
-                                      @RequestBody CommentPost commentPost) {
+                                      @RequestHeader(name = "Authorization") String token,
+                                      @Valid @RequestBody CommentPost commentPost) {
 
-        Comment comment = commentService.createComment(articleId, commentPost);
-        CommentResponse commentResponse = CommentResponse.from(comment);
+        CommentResponse commentResponse = commentService.createComment(articleId, token, commentPost);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(commentResponse), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{comment-id}")
-    public ResponseEntity patchComment(@PathVariable("article-id") @Positive Long articleId,
-                                       @PathVariable("comment-id") @Positive Long commentId,
-                                       @RequestBody CommentPatch commentPatch) {
+    public ResponseEntity patchComment(@PathVariable("comment-id") @Positive Long commentId,
+                                       @Valid @RequestBody CommentPatch commentPatch) {
 
         commentService.updateComment(commentId, commentPatch);
 
@@ -45,12 +49,10 @@ public class CommentController {
 
     }
 
-    @GetMapping("/{comment-id}")
-    public ResponseEntity getComment(@PathVariable("article-id") @Positive Long articleId,
-                                     @PathVariable("comment-id") @Positive Long commentId) {
+    @GetMapping("/{comment-id}") // 답글 수정을 위한 단일 조회
+    public ResponseEntity getComment(@PathVariable("comment-id") @Positive Long commentId) {
 
-        Comment comment = commentService.findComment(commentId);
-        CommentResponse commentResponse = CommentResponse.from(comment);
+        CommentResponse commentResponse = commentService.findComment(commentId);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(commentResponse), HttpStatus.OK);
@@ -71,12 +73,32 @@ public class CommentController {
     }
 
     @DeleteMapping("/{comment-id}")
-    public ResponseEntity deleteComment(@PathVariable("article-id") @Positive Long articleId,
-                                        @PathVariable("comment-id") @Positive Long commentId) {
+    public ResponseEntity deleteComment(@PathVariable("comment-id") @Positive Long commentId) {
 
         commentService.deleteComment(commentId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PostMapping("/{comment-id}/likes")
+    public ResponseEntity postLikes(@PathVariable("comment-id") @Positive Long commentId,
+                                    @RequestHeader(name = "Authorization") String token) {
+
+        CommentRecommendResponse commentRecommendResponse =
+                commentRecommendService.Likes(commentId, token);
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(commentRecommendResponse), HttpStatus.OK);
+    }
+
+    @PostMapping("/{comment-id}/unlikes")
+    public ResponseEntity postUnlikes(@PathVariable("comment-id") @Positive Long commentId,
+                                       @RequestHeader(name = "Authorization") String token) {
+
+        CommentRecommendResponse commentRecommendResponse =
+                commentRecommendService.UnLikes(commentId, token);
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(commentRecommendResponse), HttpStatus.OK);
+    }
 }

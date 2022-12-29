@@ -10,6 +10,9 @@ import com.ikujo.stackoverflow.domain.comment.entity.Comment;
 import com.ikujo.stackoverflow.domain.comment.repository.CommentRepository;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.repository.MemberRepository;
+import com.ikujo.stackoverflow.global.auth.jwt.JwtTokenizer;
+import com.ikujo.stackoverflow.global.exception.BusinessLogicException;
+import com.ikujo.stackoverflow.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,15 +27,19 @@ public class CommentService {
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
 
-    public Comment createComment(Long articleId, CommentPost commentPost) {
+    private final JwtTokenizer jwtTokenizer;
+
+    public CommentResponse createComment(Long articleId, String token, CommentPost commentPost) {
 
         Article article = findVerifiedArticle(articleId);
-        Member member = findVerifiedMember(commentPost.memberId());
+        Long memberId = jwtTokenizer.tokenToMemberId(token);
+        Member member = findVerifiedMember(memberId);
 
         CommentDto commentDto = CommentDto.of(commentPost, article, member);
         Comment comment = commentDto.toEntity();
+        commentRepository.save(comment);
 
-        return commentRepository.save(comment);
+        return CommentResponse.from(comment);
 
     }
 
@@ -45,9 +52,11 @@ public class CommentService {
 
     }
 
-    public Comment findComment(Long commentId) {
+    public CommentResponse findComment(Long commentId) {
 
-        return findVerifiedComment(commentId);
+        Comment comment = findVerifiedComment(commentId);
+
+        return CommentResponse.from(comment);
     }
 
     public List<CommentResponse> findComments(Long articleId) {
@@ -72,7 +81,7 @@ public class CommentService {
 
         Optional<Article> optionalArticle = articleRepository.findById(articleId);
         Article findArticle = optionalArticle
-                .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_FOUND));
 
         return findArticle;
 
@@ -82,7 +91,7 @@ public class CommentService {
 
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         Member findMember = optionalMember
-                .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다."));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         return findMember;
 
@@ -92,7 +101,7 @@ public class CommentService {
 
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         Comment findComment = optionalComment
-                .orElseThrow(() -> new RuntimeException("답글이 존재하지 않습니다."));
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
 
         return findComment;
 
