@@ -93,7 +93,7 @@ public class CommentController {
 
     @PostMapping("/{comment-id}/unlikes")
     public ResponseEntity postUnlikes(@PathVariable("comment-id") @Positive Long commentId,
-                                      @RequestHeader(name = "Authorization") String token) {
+                                       @RequestHeader(name = "Authorization") String token) {
 
         CommentRecommendResponse commentRecommendResponse =
                 commentRecommendService.UnLikes(commentId, token);
@@ -101,8 +101,4 @@ public class CommentController {
         return new ResponseEntity<>(
                 new SingleResponseDto<>(commentRecommendResponse), HttpStatus.OK);
     }
-
-
-
-
 }
