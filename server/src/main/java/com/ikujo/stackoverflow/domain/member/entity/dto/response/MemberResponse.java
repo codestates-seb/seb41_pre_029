@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public record MemberResponse(
 
-        Long id,
+        Long memberId,
 
         String email,
 
