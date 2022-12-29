@@ -38,13 +38,13 @@ const AnswerSection = styled.section`
     }
     > .select-wrapper {
       > .selected {
-        fill: #2F800A;
+        fill: #2f800a;
         width: 62px;
         height: 62px;
       }
       > .not_selected {
         :hover {
-          fill: #2F800A;
+          fill: #2f800a;
           cursor: pointer;
         }
       }
@@ -150,7 +150,7 @@ const AnswerSection = styled.section`
   }
 `;
 
-const AnswerDetail = ({answer, isSelected}) => {
+const AnswerDetail = ({ answer, isSelected }) => {
   useScrollTop();
 
   const handleDelete = () => {
@@ -215,10 +215,9 @@ const AnswerDetail = ({answer, isSelected}) => {
       .post(
         `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selection`
       )
-      .then(
-        (res) => { 
-          setSelection(!selection)
-          window.location.reload()
+      .then((res) => {
+        setSelection(!selection);
+        window.location.reload();
       });
   };
 
@@ -236,12 +235,9 @@ const AnswerDetail = ({answer, isSelected}) => {
           onClick={handleDisLike}
           className={disLike ? "dislike active" : "dislike"}
         />
-        <div
-          onClick={handleSelection}
-          className="select-wrapper"
-        >
-          {(isSelected && selection) && <Select className={"selected"} />}
-          {!isSelected && <Select className="not_selected" />} 
+        <div onClick={handleSelection} className="select-wrapper">
+          {isSelected && selection && <Select className={"selected"} />}
+          {!isSelected && <Select className="not_selected" />}
         </div>
       </div>
 
@@ -276,7 +272,7 @@ const AnswerDetail = ({answer, isSelected}) => {
               </div>
               <div className="profile-user">
                 <div className="userName">
-                  {answer.memberIdentityDto.nickname}
+                  {answer?.memberIdentityDto?.nickname}
                 </div>
                 <div className="user-follower">
                   <span className="follower">1,120</span>

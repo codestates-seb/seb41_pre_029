@@ -2,23 +2,13 @@ import axios from "axios";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import  {useLocation} from 'react-router-dom'
-
 import NoSearch from "./noSearch";
 import QuestionSummary from "./QuestionSummary";
 import Pagination from "./Pagination";
 
 const QuestionList = ({ data, find }) => {
   const [questions, setQuestions] = useState([]);
-
   const [totalQuestions,setTotalQuestions] = useState(0);
-
-  useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/questions`).then((res) => {
-      setQuestions(res?.data.data);
-    });
-  }, []);
-
-
   const [isActive, setIsActive] = useState("15");
 
   //페이지 당 게시물 수
@@ -27,15 +17,16 @@ const QuestionList = ({ data, find }) => {
   //현재 페이지
   const [page, setPage] = useState(1);
 
-  //첫 게시물의 위치
-  const offset = (page - 1) * limit;
   const location = useLocation();
 
-  console.log(offset)
+   useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/questions`).then((res) => {
+      setQuestions(res?.data.data);
+    });
+  }, []);
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/questions${location.search}`).then((res) => {
-      console.log(res.data.data)
       setQuestions(res.data.data)
       setTotalQuestions(res.data?.pageInfo.totalElements)
     })
@@ -63,7 +54,7 @@ const QuestionList = ({ data, find }) => {
               ))}
         <PageContainer>
           <Pagination
-            total={questions.length}
+            total={totalQuestions}
             limit={limit}
             page={page}
             setPage={setPage}

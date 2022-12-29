@@ -1,6 +1,8 @@
 import "./App.css";
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { CookiesProvider } from "react-cookie";
+
 import Header from "./components/Header";
 import MainPage from "./pages/MainPage";
 import AddQuestionPage from "./pages/AddQuestionPage";
@@ -19,30 +21,32 @@ function App() {
   const [searchData, setSearchData] = useState("");
   const [find, setFind] = useState("");
   return (
-    <div className="App">
-      <Router basename={process.env.PUBLIC_URL}>
-        <Header search={setSearchData} find={setFind} />
-        <Routes>
-          <Route
-            path="/"
-            element={<MainPage data={searchData} find={find} />}
-          />
-          <Route path="/addquestionpage" element={<AddQuestionPage />} />
-          <Route path="/*" element={<ErrorPage />} />
-          <Route path="/loginpage" element={<LoginPage />} />
-          <Route path="/logoutpage" element={<LogoutPage />} />
-          <Route path="/mypage/:id" element={<MyPage />} />
-          <Route path="/questionpage/:id" element={<QuestionPage />} />
-          {/* <Route path="/signoutpage" element={<SignoutPage />} /> */}
-          <Route path="/signuppage" element={<SignupPage />} />
-          <Route path="/edit/:id" element={<EditQuestionPage />} />
-          <Route
-            path="/editanswer/:questionid/:answerid"
-            element={<EditAnswerPage />}
-          />
-        </Routes>
-      </Router>
-    </div>
+    <CookiesProvider>
+      <div className="App">
+        <Router basename={process.env.PUBLIC_URL}>
+          <Header search={setSearchData} find={setFind} />
+          <Routes>
+            <Route
+              path="/"
+              element={<MainPage data={searchData} find={find} />}
+            />
+            <Route path="/addquestionpage" element={<AddQuestionPage />} />
+            <Route path="/*" element={<ErrorPage />} />
+            <Route path="/loginpage" element={<LoginPage />} />
+            <Route path="/logoutpage" element={<LogoutPage />} />
+            <Route path="/mypage/:id" element={<MyPage />} />
+            <Route path="/questionpage/:id" element={<QuestionPage />} />
+            {/* <Route path="/signoutpage" element={<SignoutPage />} /> */}
+            <Route path="/signuppage" element={<SignupPage />} />
+            <Route path="/edit/:id" element={<EditQuestionPage />} />
+            <Route
+              path="/editanswer/:questionid/:answerid"
+              element={<EditAnswerPage />}
+            />
+          </Routes>
+        </Router>
+      </div>
+    </CookiesProvider>
   );
 }
 
