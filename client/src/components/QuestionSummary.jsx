@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import displayedAt from "../util/displayedAt";
 
 const QuestionSummary = ({props}) => {
+  
   const navigate = useNavigate();
   const navigateDetailPage = (id) => {
     navigate(`/questionpage/${id}`)
   }
-  console.log(props.selection)
   
   const viewTags = 
    props.tags.map((el) => el.replaceAll("#","").replaceAll("-"," ")).filter((el) =>(el!==""))

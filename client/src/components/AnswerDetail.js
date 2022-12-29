@@ -1,14 +1,157 @@
-import styled from "styled-components";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import styled from "styled-components";
 import MDEditor from "@uiw/react-md-editor";
 import { useState } from "react";
-
-import displayedAt from "../util/displayedAt";
-import useScrollTop from "../util/useScrollTop";
+import { useNavigate, useParams } from "react-router-dom";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
 import { ReactComponent as Select } from "../assets/select.svg";
+
+import displayedAt from "../util/displayedAt";
+import useScrollTop from "../util/useScrollTop";
+
+const AnswerDetail = ({ answer, isSelected }) => {
+  useScrollTop();
+
+  const handleDelete = () => {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      axios
+        .delete(
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answer.id}`
+        )
+        .then((res) => window.location.reload());
+    }
+  };
+
+  const params = useParams();
+  const questionId = Number(params.id);
+
+  const answerId = answer.id;
+  const navigate = useNavigate();
+  const navigateEditpage = (id) => {
+    navigate(`/editanswer/${questionId}/${id}`);
+  };
+
+  const [like, setLike] = useState(false);
+  const [disLike, setDisLike] = useState(false);
+  const [selection, setSelection] = useState(answer.selection);
+  // console.log("like:" + like);
+  // console.log("disLike:" + disLike);
+
+  const handleLike = () => {
+    if (!like && disLike) {
+      axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`
+        )
+        .then((res) => setLike(!like));
+    } else {
+      axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`
+        )
+        .then((res) => setLike(!like));
+    }
+  };
+
+  const handleDisLike = () => {
+    if (like && !disLike) {
+      axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`
+        )
+        .then((res) => setDisLike(!disLike));
+    } else {
+      axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`
+        )
+        .then((res) => setDisLike(!disLike));
+    }
+  };
+
+  const handleSelection = () => {
+    axios
+      .patch(
+        `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selections`,
+        {
+          selection: true,
+        }
+      )
+      .then((res) => {
+        setSelection(!selection);
+        window.location.reload();
+      });
+  };
+
+  return (
+    <AnswerSection>
+      <div className="recommand">
+        <RecommandT
+          fill="#babfc4"
+          onClick={handleLike}
+          className={like ? "like active" : "like"}
+        />
+        <span>{answer.recommendCount}</span>
+        <RecommandB
+          fill="#babfc4"
+          onClick={handleDisLike}
+          className={disLike ? "dislike active" : "dislike"}
+        />
+        <div className="select-wrapper">
+          {isSelected && selection && <Select className={"selected"} />}
+          {!isSelected && (
+            <Select onClick={() => handleSelection} className="not_selected" />
+          )}
+        </div>
+      </div>
+
+      <div className="post-layout">
+        <MDEditor.Markdown
+          className="post--body"
+          source={answer.content}
+          style={{ whiteSpace: "pre-wrap", backgroundColor: "white" }}
+        />
+        {/* <div className="post--body">{answer.content}</div> */}
+        <div className="post--footer">
+          <div className="post--footer-button">
+            <span className="button">Share</span>
+            <span
+              className="button hoverE"
+              onClick={() => navigateEditpage(answer.id)}
+            >
+              Edit
+            </span>
+            <span className="button">Follow</span>
+            <span className="button" onClick={() => handleDelete(questionId)}>
+              Delete
+            </span>
+          </div>
+          <div className="post--footer-profile">
+            <div className="imgwrapper">
+              <img src="https://www.gravatar.com/avatar/580884d16248daa81e53e8a669f60361?s=64&d=identicon&r=PG&f=1"></img>
+            </div>
+            <div className="profile-wrapper">
+              <div className="profile-time">
+                asked {displayedAt(answer.createdAt)}
+              </div>
+              <div className="profile-user">
+                <div className="userName">
+                  {answer?.memberIdentityDto?.nickname}
+                </div>
+                <div className="user-follower">
+                  <span className="follower">1,120</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </AnswerSection>
+  );
+};
+
+export default AnswerDetail;
 
 const AnswerSection = styled.section`
   display: flex;
@@ -149,147 +292,3 @@ const AnswerSection = styled.section`
     }
   }
 `;
-
-
-const AnswerDetail = ({ answer, isSelected }) => {
-  useScrollTop();
-
-  const handleDelete = () => {
-    if (window.confirm("정말 삭제하시겠습니까?")) {
-      axios
-        .delete(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answer.id}`
-        )
-        .then((res) => window.location.reload());
-    }
-  };
-
-  const params = useParams();
-  const questionId = Number(params.id);
-
-  const answerId = answer.id;
-  const navigate = useNavigate();
-  const navigateEditpage = (id) => {
-    navigate(`/editanswer/${questionId}/${id}`);
-  };
-
-  const [like, setLike] = useState(false);
-  const [disLike, setDisLike] = useState(false);
-  const [selection, setSelection] = useState(answer.selection);
-  // console.log("like:" + like);
-  // console.log("disLike:" + disLike);
-
-  const handleLike = () => {
-    if (!like && disLike) {
-      axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`
-        )
-        .then((res) => setLike(!like));
-    } else {
-      axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`
-        )
-        .then((res) => setLike(!like));
-    }
-  };
-
-  const handleDisLike = () => {
-    if (like && !disLike) {
-      axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`
-        )
-        .then((res) => setDisLike(!disLike));
-    } else {
-      axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`
-        )
-        .then((res) => setDisLike(!disLike));
-    }
-  };
-
-  const handleSelection = () => {
-    axios
-      .patch(
-        `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selections`,
-        {
-          selection : true
-        }
-      )
-      .then((res) => {
-        setSelection(!selection);
-        window.location.reload();
-      });
-  };
-
-  return (
-    <AnswerSection>
-      <div className="recommand">
-        <RecommandT
-          fill="#babfc4"
-          onClick={handleLike}
-          className={like ? "like active" : "like"}
-        />
-        <span>{answer.recommendCount}</span>
-        <RecommandB
-          fill="#babfc4"
-          onClick={handleDisLike}
-          className={disLike ? "dislike active" : "dislike"}
-        />
-        <div
-          className="select-wrapper"
-        >
-          {(isSelected && selection) && <Select className={"selected"} />}
-          {!isSelected && <Select onClick={() => handleSelection} className="not_selected" />} 
-        </div>
-      </div>
-
-      <div className="post-layout">
-        <MDEditor.Markdown
-          className="post--body"
-          source={answer.content}
-          style={{ whiteSpace: "pre-wrap", backgroundColor: "white" }}
-        />
-        {/* <div className="post--body">{answer.content}</div> */}
-        <div className="post--footer">
-          <div className="post--footer-button">
-            <span className="button">Share</span>
-            <span
-              className="button hoverE"
-              onClick={() => navigateEditpage(answer.id)}
-            >
-              Edit
-            </span>
-            <span className="button">Follow</span>
-            <span className="button" onClick={() => handleDelete(questionId)}>
-              Delete
-            </span>
-          </div>
-          <div className="post--footer-profile">
-            <div className="imgwrapper">
-              <img src="https://www.gravatar.com/avatar/580884d16248daa81e53e8a669f60361?s=64&d=identicon&r=PG&f=1"></img>
-            </div>
-            <div className="profile-wrapper">
-              <div className="profile-time">
-                asked {displayedAt(answer.createdAt)}
-              </div>
-              <div className="profile-user">
-                <div className="userName">
-                  {answer?.memberIdentityDto?.nickname}
-                </div>
-                <div className="user-follower">
-                  <span className="follower">1,120</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </AnswerSection>
-  );
-};
-
-export default AnswerDetail;

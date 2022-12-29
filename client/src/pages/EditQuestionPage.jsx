@@ -1,8 +1,8 @@
-import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import EditQuestion from "../components/EditQuestion";
-import axios from "axios";
 
 const EditQuestionPage = () => {
   const [originData, setOriginData] = useState();

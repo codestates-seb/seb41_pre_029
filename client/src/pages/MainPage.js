@@ -1,14 +1,62 @@
+import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
 
-import styled from "styled-components";
 import Nav from "../components/Nav";
+import styled from "styled-components";
 import Footer from "../components/Footer";
-import QuestionList from "../components/QuestionList";
 import Button from "../components/Button";
 import GreyBox from "../components/GreyBox";
 import YellowBox from "../components/YellowBox";
+import QuestionList from "../components/QuestionList";
+
+const MainPage = ({ data, find }) => {
+  const location = useLocation();
+  const [questionAmount, setQuestionAmount] = useState();
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/questions`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setQuestionAmount(res?.data.pageInfo.totalElements);
+      });
+  }, []);
+
+  return (
+    <>
+      <MainPageContainer>
+        <Nav location={location} />
+        <MainBar>
+          <div className="head">
+            <h1>All Questions</h1>
+            <Button
+              className="go_add_question"
+              buttonName="Ask Question"
+              link="/addquestionpage"
+              width="103px"
+            />
+          </div>
+          <div className="data_controller">
+            <div className="question_count">{`${questionAmount} questions`}</div>
+          </div>
+          <QuestionList data={data} find={find} />
+        </MainBar>
+        <SideBar>
+          <YellowBox />
+          <GreyBox title="Custom Filters"></GreyBox>
+          <GreyBox title="Watched Tags Filters"></GreyBox>
+          <GreyBox title="Ignored Tags"></GreyBox>
+          <GreyBox title="Collectives"></GreyBox>
+        </SideBar>
+      </MainPageContainer>
+      <Footer />
+    </>
+  );
+};
+
+export default MainPage;
 
 const MainPageContainer = styled.div`
   display: flex;
@@ -57,47 +105,3 @@ const SideBar = styled.div`
     margin-bottom: 15px;
   }
 `;
-
-const MainPage = ({ data, find }) => {
-  const location = useLocation();
-  const [questionAmount, setQuestionAmount] = useState();
-
-  useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/questions`).then((res) => {
-      setQuestionAmount(res?.data.pageInfo.totalElements);
-    });
-  }, []);
-
-  return (
-    <>
-      <MainPageContainer>
-        <Nav location={location} />
-        <MainBar>
-          <div className="head">
-            <h1>All Questions</h1>
-            <Button
-              className="go_add_question"
-              buttonName="Ask Question"
-              link="/addquestionpage"
-              width="103px"
-            />
-          </div>
-          <div className="data_controller">
-            <div className="question_count">{`${questionAmount} questions`}</div>
-          </div>
-          <QuestionList data={data} find={find} />
-        </MainBar>
-        <SideBar>
-          <YellowBox />
-          <GreyBox title="Custom Filters"></GreyBox>
-          <GreyBox title="Watched Tags Filters"></GreyBox>
-          <GreyBox title="Ignored Tags"></GreyBox>
-          <GreyBox title="Collectives"></GreyBox>
-        </SideBar>
-      </MainPageContainer>
-      <Footer />
-    </>
-  );
-};
-
-export default MainPage;

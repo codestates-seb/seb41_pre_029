@@ -1,17 +1,5 @@
 import styled from "styled-components";
-const Wrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  width: 100vh;
-`;
-const Title = styled.h1`
-  margin: 40px 0px;
-  line-height: 20px;
-  font-size: 20px;
-`;
+
 const NoSearch = () => {
   return (
     <Wrap>
@@ -34,3 +22,17 @@ const NoSearch = () => {
   );
 };
 export default NoSearch;
+
+const Wrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100vh;
+`;
+const Title = styled.h1`
+  margin: 40px 0px;
+  line-height: 20px;
+  font-size: 20px;
+`;

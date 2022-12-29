@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+
+import useStore from "../zustand/store";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Nav = ({ location }) => {
   const [active, setActive] = useState(location.pathname);
@@ -9,14 +11,10 @@ const Nav = ({ location }) => {
   const handleClick = (link) => {
     setActive(link);
   };
+  const navigate = useNavigate();
 
-  const params = useParams();
-  const id = params.id;
-  const navigate = useNavigate()
-
-  const userData = JSON.parse(localStorage.getItem("info"));
-  const userId = userData?.id;
-  const userToken = userData?.token;
+  const { GetId } = useStore((state) => state);
+  const userId = GetId();
 
   const menu = [
     { name: "Questions", link: "/" },

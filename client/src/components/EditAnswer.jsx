@@ -1,13 +1,12 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Nav from "./Nav";
+import axios from "axios";
+import Button from "./Button";
 import Footer from "./Footer";
 import CEditor from "./CKEditor";
-import Parser from "./Parser";
-import Button from "./Button";
-import axios from "axios";
 
 const EditAnswer = ({ originData, questionId, answerId }) => {
   const location = { pathname: "/" };
@@ -64,8 +63,6 @@ const EditAnswer = ({ originData, questionId, answerId }) => {
           <InputBox>
             <div className="title">Answer</div>
             <CEditor onChange={setContent} data={content} />
-
-            {/* <Parser html={content} /> */}
           </InputBox>
           <InputBox>
             <div className="title">Edit Summary</div>
@@ -182,78 +179,6 @@ const InputBox = styled.div`
   & > :focus {
     box-shadow: 1px 1px 1px 2px #cde9fe, -1px -1px 1px 2px #cde9fe;
     outline: none !important;
-  }
-`;
-const TagsInput = styled.div`
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  min-height: 48px;
-  padding: 0 8px;
-  border: 1px solid rgb(214, 216, 218);
-  border-radius: 6px;
-
-  > ul {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0;
-    margin: 10px 0 0 0;
-
-    > .tag {
-      width: auto;
-      height: 24px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      /* justify-content: center; */
-      color: #39739d;
-      padding: 1px 4px;
-      font-size: 12px;
-      list-style: none;
-      border-radius: 3px;
-      margin: 2px;
-      background: #e1ecf4;
-      line-height: 22px;
-      > .tag_close_icon {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        width: 13px;
-        height: 13px;
-        font-size: 20px;
-        font-weight: 700;
-        margin-top: -2px;
-        margin-left: 4px;
-        color: #39739d;
-        border-radius: 3px;
-        background: #e1ecf4;
-        cursor: pointer;
-        padding: 1px;
-        &:hover {
-          color: #e1ecf4;
-          background: #39739d;
-          padding-bottom: 3px;
-          margin-top: 3px;
-        }
-      }
-    }
-  }
-
-  > input {
-    flex: 1;
-    border: none;
-    height: 46px;
-    font-size: 14px;
-    margin-left: 7px;
-    padding: 4px 0 0 0;
-    :focus {
-      outline: transparent;
-    }
-  }
-
-  &:focus-within {
-    border: 1px solid #39739d;
-    box-shadow: 1px 1px 1px 2px #cde9fe, -1px -1px 1px 2px #cde9fe;
   }
 `;
 

@@ -1,20 +1,252 @@
 import axios from "axios";
 import styled from "styled-components";
+import MDEditor from "@uiw/react-md-editor";
 import { useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
-import MDEditor from "@uiw/react-md-editor";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
 
-import Footer from "../components/Footer";
-import CEditor from "../components/CKEditor";
-import useScrollTop from "../util/useScrollTop";
 import Nav from "../components/Nav";
-import AnswerDetail from "../components/AnswerDetail";
+import Footer from "../components/Footer";
 import Button from "../components/Button";
-import displayedAt from "../util/displayedAt";
-import YellowBox from "../components/YellowBox";
 import GreyBox from "../components/GreyBox";
+import CEditor from "../components/CKEditor";
+import displayedAt from "../util/displayedAt";
+import useScrollTop from "../util/useScrollTop";
+import YellowBox from "../components/YellowBox";
+import AnswerDetail from "../components/AnswerDetail";
+
+const QuestionPage = () => {
+  useScrollTop();
+  const navigate = useNavigate();
+
+  const params = useParams();
+  const location = useLocation();
+  const memberId = JSON.parse(Id);
+  const questionId = Number(params.id);
+  const Id = localStorage.getItem("info");
+
+  const [question, setQuestion] = useState();
+  const [answers, setAnswers] = useState([]);
+  const [comment, setComment] = useState("");
+  const [isSelected, setIsSelected] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`)
+      .then((res) => setQuestion(res.data.data));
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`)
+      .then((res) => {
+        res.data.data.map((el) => (el.selection ? setIsSelected(true) : null));
+        setAnswers(res.data.data);
+      });
+  }, []);
+
+  const submmitComment = () => {
+    if (comment.trim() === "") {
+      return;
+    } else {
+      axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`,
+          {
+            content: comment,
+            memberId: memberId.id,
+          }
+        )
+        .then((res) => window.location.reload());
+      setComment("");
+    }
+  };
+
+  const navigateEditpage = (id) => {
+    navigate(`/edit/${id}`);
+  };
+
+  const handleDelete = () => {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      axios
+        .delete(`${process.env.REACT_APP_API_URL}/questions/${questionId}`)
+        .then((res) => navigate("/"));
+    }
+  };
+
+  /**
+   * 1. false, false 일때 추천 누르면 like가 true, 비추천 누르면 dislike가 true가 된다.
+   * 2. true, false 일때 어떤 버튼을 누르든 like가 false가 된다.
+   * 3. false, true 일 때 어떤 버튼을 누르든 dislike가 false가 된다.
+   *
+   * 추천 버튼을 눌렀을 때 false/true이면 dislike 요청, false/false 이면 like 요청, true/false이면 like 요청
+   * 비추천 버튼을 눌렀을 때 true/false이면 like 요청 false/false 이면 dislike 요청, false/true이면 dislike 요청,
+   *
+   * */
+
+  const [like, setLike] = useState(false);
+  const [disLike, setDisLike] = useState(false);
+
+  const handleLike = () => {
+    if (!like && disLike) {
+      axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`
+        )
+        .then((res) => setLike(!like));
+    } else {
+      axios
+        .post(`${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`)
+        .then((res) => setLike(!like));
+    }
+  };
+
+  const handleDisLike = () => {
+    if (like && !disLike) {
+      axios
+        .post(`${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`)
+        .then((res) => setDisLike(!disLike));
+    } else {
+      axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`
+        )
+        .then((res) => setDisLike(!disLike));
+    }
+  };
+
+  return (
+    <>
+      <QuestionPageWrapper>
+        <Nav location={location} />
+        <PageWrapper>
+          <TitleBar>
+            <div className="head">
+              <h1>{question?.title}</h1>
+              <Button
+                buttonName="Ask Question"
+                link="/addquestionpage"
+                width="103px"
+              />
+            </div>
+            <div className="infoWrapper">
+              <div className="createdAt">
+                asked {displayedAt(question?.baseTime.createdAt)}
+              </div>
+              <div className="viewed">viewed {question?.hits}</div>
+            </div>
+          </TitleBar>
+          <div className="bodyWrapper">
+            <BodyArticle>
+              <QuestionSection>
+                <div className="recommand">
+                  <RecommandT
+                    fill="#babfc4"
+                    onClick={handleLike}
+                    className={like ? "like active" : "like"}
+                  />
+                  <span>{question?.recommendCount}</span>
+                  <RecommandB
+                    fill="#babfc4"
+                    onClick={handleDisLike}
+                    className={disLike ? "disLike active" : "like"}
+                  />
+                </div>
+                <div className="post-layout">
+                  <MDEditor.Markdown
+                    className="post--body"
+                    source={question?.content}
+                    style={{ whiteSpace: "pre-wrap" }}
+                  />
+                  {/* <div className="post--body">{question?.content}</div> */}
+                  <div className="post--tags">
+                    <div className="summary_meta_tags">
+                      {question?.tags.map((tag, idx) => (
+                        <div key={idx} className="summary_meta_tag">
+                          {tag}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="post--footer">
+                    <div className="post--footer-button">
+                      <span className="button">Share</span>
+                      <span
+                        className="button"
+                        onClick={() => navigateEditpage(question?.id)}
+                      >
+                        Edit
+                      </span>
+                      <span className="button">Follow</span>
+                      <span className="button" onClick={handleDelete}>
+                        Delete
+                      </span>
+                    </div>
+                    <div className="post--footer-profile">
+                      <div className="imgwrapper">
+                        <img
+                          src="https://www.gravatar.com/avatar/580884d16248daa81e53e8a669f60361?s=64&d=identicon&r=PG&f=1"
+                          alt="questionPage_image1"
+                        ></img>
+                      </div>
+                      <div className="profile-wrapper">
+                        <div className="profile-time">
+                          asked {displayedAt(question?.baseTime.createdAt)}
+                        </div>
+                        <div className="profile-user">
+                          <div className="userName">
+                            {question?.member.nickname}
+                          </div>
+                          <div className="user-follower">
+                            <span className="follower">1,120</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </QuestionSection>
+              <AnswerSection>
+                <h2 className="answerAmount">{answers?.length} Answers</h2>
+                {answers?.map((el, idx) => (
+                  <AnswerDetail key={idx} answer={el} isSelected={isSelected} />
+                ))}
+                <Editor>
+                  <h2>Your Answer</h2>
+                  <CEditor onChange={setComment} data={comment} />
+                  <p onClick={submmitComment}>
+                    <AnswerBtn buttonName={"Post Your Answer"} />
+                  </p>
+                  <Tag>
+                    Not the answer you're looking for? Browse other questions
+                    tagged
+                    {question?.tags.map((tag, idx) => (
+                      <div key={idx} className="summary_meta_tag">
+                        {tag}
+                      </div>
+                    ))}
+                    or ask your own question.
+                  </Tag>
+                </Editor>
+              </AnswerSection>
+            </BodyArticle>
+            <div className="sidebar">
+              <YellowBox />
+              <GreyBox title="Custom Filters"></GreyBox>
+              <GreyBox title="Watched Tags Filters"></GreyBox>
+              <GreyBox title="Ignored Tags"></GreyBox>
+              <GreyBox title="Collectives"></GreyBox>
+            </div>
+          </div>
+        </PageWrapper>
+      </QuestionPageWrapper>
+      <Footer />
+    </>
+  );
+};
+
+export default QuestionPage;
 
 const QuestionPageWrapper = styled.div`
   display: flex;
@@ -229,239 +461,3 @@ const Tag = styled.div`
 const AnswerBtn = styled(Button)`
   margin-top: 50px;
 `;
-const QuestionPage = () => {
-  useScrollTop();
-  const navigate = useNavigate();
-
-  const params = useParams();
-  const questionId = Number(params.id);
-  const location = useLocation();
-  const Id = localStorage.getItem("info");
-  const memberId = JSON.parse(Id);
-
-  const [question, setQuestion] = useState();
-  const [answers, setAnswers] = useState([]);
-  const [comment, setComment] = useState("");
-  const [isSelected, setIsSelected] = useState(null);
-
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`)
-      .then((res) => setQuestion(res.data.data))
-  }, []);
-
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`)
-      .then((res) => {
-        res.data.data.map(el => el.selection ? setIsSelected(true) : null)
-        setAnswers(res.data.data)
-      })
-      // .then(() => {if(isSelected === null){setIsSelected(false)}})
-  }, []);
-
-  const submmitComment = () => {
-    if (comment.trim() === "") {
-      return;
-    } else {
-      axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`,
-          {
-            content: comment,
-            memberId: memberId.id,
-          }
-        )
-        .then((res) => window.location.reload());
-      setComment("");
-    }
-  };
-
-  const navigateEditpage = (id) => {
-    navigate(`/edit/${id}`);
-  };
-
-  const handleDelete = () => {
-    if (window.confirm("정말 삭제하시겠습니까?")) {
-      axios
-        .delete(`${process.env.REACT_APP_API_URL}/questions/${questionId}`)
-        .then((res) => navigate("/"));
-    }
-  };
-
-  /**
-   * 1. false, false 일때 추천 누르면 like가 true, 비추천 누르면 dislike가 true가 된다.
-   * 2. true, false 일때 어떤 버튼을 누르든 like가 false가 된다.
-   * 3. false, true 일 때 어떤 버튼을 누르든 dislike가 false가 된다.
-   *
-   * 추천 버튼을 눌렀을 때 false/true이면 dislike 요청, false/false 이면 like 요청, true/false이면 like 요청
-   * 비추천 버튼을 눌렀을 때 true/false이면 like 요청 false/false 이면 dislike 요청, false/true이면 dislike 요청,
-   *
-   * */
-
-  const [like, setLike] = useState(false);
-  const [disLike, setDisLike] = useState(false);
-
-  const handleLike = () => {
-    if (!like && disLike) {
-      axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`
-        )
-        .then((res) => setLike(!like));
-    } else {
-      axios
-        .post(`${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`)
-        .then((res) => setLike(!like));
-    }
-  };
-
-  const handleDisLike = () => {
-    if (like && !disLike) {
-      axios
-        .post(`${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`)
-        .then((res) => setDisLike(!disLike));
-    } else {
-      axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`
-        )
-        .then((res) => setDisLike(!disLike));
-    }
-  };
-
-  return (
-    <>
-      <QuestionPageWrapper>
-        <Nav location={location} />
-        <PageWrapper>
-          <TitleBar>
-            <div className="head">
-              <h1>{question?.title}</h1>
-              <Button
-                buttonName="Ask Question"
-                link="/addquestionpage"
-                width="103px"
-              />
-            </div>
-            <div className="infoWrapper">
-              <div className="createdAt">
-                asked {displayedAt(question?.baseTime.createdAt)}
-              </div>
-              <div className="viewed">viewed {question?.hits}</div>
-            </div>
-          </TitleBar>
-          <div className="bodyWrapper">
-            <BodyArticle>
-              <QuestionSection>
-                <div className="recommand">
-                  <RecommandT
-                    fill="#babfc4"
-                    onClick={handleLike}
-                    className={like ? "like active" : "like"}
-                  />
-                  <span>{question?.recommendCount}</span>
-                  <RecommandB
-                    fill="#babfc4"
-                    onClick={handleDisLike}
-                    className={disLike ? "disLike active" : "like"}
-                  />
-                </div>
-                <div className="post-layout">
-                  <MDEditor.Markdown
-                    className="post--body"
-                    source={question?.content}
-                    style={{ whiteSpace: "pre-wrap" }}
-                  />
-                  {/* <div className="post--body">{question?.content}</div> */}
-                  <div className="post--tags">
-                    <div className="summary_meta_tags">
-                      {question?.tags.map((tag, idx) => (
-                        <div key={idx} className="summary_meta_tag">
-                          {tag}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="post--footer">
-                    <div className="post--footer-button">
-                      <span className="button">Share</span>
-                      <span
-                        className="button"
-                        onClick={() => navigateEditpage(question?.id)}
-                      >
-                        Edit
-                      </span>
-                      <span className="button">Follow</span>
-                      <span className="button" onClick={handleDelete}>
-                        Delete
-                      </span>
-                    </div>
-                    <div className="post--footer-profile">
-                      <div className="imgwrapper">
-                        <img
-                          src="https://www.gravatar.com/avatar/580884d16248daa81e53e8a669f60361?s=64&d=identicon&r=PG&f=1"
-                          alt="questionPage_image1"
-                        ></img>
-                      </div>
-                      <div className="profile-wrapper">
-                        <div className="profile-time">
-                          asked {displayedAt(question?.baseTime.createdAt)}
-                        </div>
-                        <div className="profile-user">
-                          <div className="userName">
-                            {question?.member.nickname}
-                          </div>
-                          <div className="user-follower">
-                            <span className="follower">1,120</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </QuestionSection>
-              <AnswerSection>
-                <h2 className="answerAmount">{answers?.length} Answers</h2>
-                {answers?.map((el, idx) => (
-                  <AnswerDetail
-                    key={idx}
-                    answer={el}
-                    isSelected={isSelected}
-                  />
-                ))}
-                <Editor>
-                  <h2>Your Answer</h2>
-                  <CEditor onChange={setComment} data={comment} />
-                  <p onClick={submmitComment}>
-                    <AnswerBtn buttonName={"Post Your Answer"} />
-                  </p>
-                  <Tag>
-                    Not the answer you're looking for? Browse other questions
-                    tagged
-                    {question?.tags.map((tag, idx) => (
-                      <div key={idx} className="summary_meta_tag">
-                        {tag}
-                      </div>
-                    ))}
-                    or ask your own question.
-                  </Tag>
-                </Editor>
-              </AnswerSection>
-            </BodyArticle>
-            <div className="sidebar">
-              <YellowBox />
-              <GreyBox title="Custom Filters"></GreyBox>
-              <GreyBox title="Watched Tags Filters"></GreyBox>
-              <GreyBox title="Ignored Tags"></GreyBox>
-              <GreyBox title="Collectives"></GreyBox>
-            </div>
-          </div>
-        </PageWrapper>
-      </QuestionPageWrapper>
-      <Footer />
-    </>
-  );
-};
-
-export default QuestionPage;

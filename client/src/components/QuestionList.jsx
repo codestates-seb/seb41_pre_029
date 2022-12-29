@@ -1,10 +1,11 @@
 import axios from "axios";
 import styled from "styled-components";
+import { useLocation } from 'react-router-dom'
 import { useEffect, useState } from "react";
-import  {useLocation} from 'react-router-dom'
+
 import NoSearch from "./noSearch";
-import QuestionSummary from "./QuestionSummary";
 import Pagination from "./Pagination";
+import QuestionSummary from "./QuestionSummary";
 
 const QuestionList = ({ data, find }) => {
   const [questions, setQuestions] = useState([]);
@@ -22,7 +23,7 @@ const QuestionList = ({ data, find }) => {
 
    useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/questions`,
-    { withCredentials: true }))
+    { withCredentials: true })
     .then((res) => {
       setQuestions(res?.data.data);
     });
@@ -41,7 +42,6 @@ const QuestionList = ({ data, find }) => {
     });
     setLimit(Number(e.target.value));
   };
-  console.log(data);
   return (
     <>
       {find && data.length === 0 && <NoSearch></NoSearch>}

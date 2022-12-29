@@ -1,5 +1,15 @@
 import styled from "styled-components";
 
+const Input = ({ label, value, name, ...rest }) => {
+  return (
+    <Wrap>
+      <Label>{label}</Label>
+      <InputEdit type="text" {...rest} value={value} name={name} />
+    </Wrap>
+  );
+};
+export default Input;
+
 const Wrap = styled.div`
   height: 60px;
   display: flex;
@@ -22,12 +32,3 @@ const Label = styled.div`
   font-family: inherit;
   font-weight: 600;
 `;
-const Input = ({ label, value, name, ...rest }) => {
-  return (
-    <Wrap>
-      <Label>{label}</Label>
-      <InputEdit type="text" {...rest} value={value} name={name} />
-    </Wrap>
-  );
-};
-export default Input;

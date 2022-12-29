@@ -1,13 +1,6 @@
 import styled from "styled-components";
 import SyncLoader from "react-spinners/SyncLoader";
-const Div = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  filter: alpha(opacity=100);
-  opacity: alpha * 0.5;
-  text-align: center;
-`;
+
 const LoadingPage = () => {
   return (
     <Div>
@@ -16,3 +9,12 @@ const LoadingPage = () => {
   );
 };
 export default LoadingPage;
+
+const Div = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  filter: alpha(opacity=100);
+  opacity: alpha * 0.5;
+  text-align: center;
+`;
