@@ -51,10 +51,10 @@ const AnswerSection = styled.section`
     }
   }
   > .post-layout {
+    width: 750px;
     > .post--body {
       padding-right: 16px;
-      min-width: 718px;
-      max-width: 720px;
+      width: 100%;
       word-break: keep-all;
       word-wrap: normal;
       line-height: 22.5px;
@@ -85,10 +85,10 @@ const AnswerSection = styled.section`
       }
     }
     > .post--footer {
+      width: 100%;
       margin-top: 32px;
       display: flex;
       justify-content: space-between;
-      max-width: 672px;
 
       > .post--footer-button {
         flex: 1 1 auto;

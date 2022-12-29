@@ -18,7 +18,7 @@ import GreyBox from "../components/GreyBox";
 
 const QuestionPageWrapper = styled.div`
   display: flex;
-  margin: 0 320.5px 0 320.5px;
+  margin: 0 160px 0 160px;
 `;
 
 const PageWrapper = styled.div`
@@ -98,9 +98,10 @@ const QuestionSection = styled.section`
     }
   }
   > .post-layout {
+    width: 750px;
     > .post--body {
-      min-width: 718px;
-      max-width: 720px;
+      padding-right: 16px;
+      width: 100%;
       word-break: keep-all;
       word-wrap: normal;
       line-height: 22.5px;
@@ -131,10 +132,10 @@ const QuestionSection = styled.section`
       margin-top: 32px;
       display: flex;
       justify-content: space-between;
-      max-width: 672px;
+      width: 100%;
 
       > .post--footer-button {
-        flex: 5 1 auto;
+        flex: 1 1 auto;
         > .button {
           margin: 4px;
           color: #838c95;
@@ -147,6 +148,8 @@ const QuestionSection = styled.section`
       }
       > .post--footer-profile {
         flex: 1 1 auto;
+        width: 173px;
+        max-width: 173px;
         padding-right: 46px;
         display: flex;
         align-items: center;
@@ -199,7 +202,7 @@ const AnswerSection = styled.article`
 `;
 const Editor = styled.div`
   height: auto;
-  width: 720px;
+  width: 100%;
   > h2 {
     padding: 20px;
     font-size: 1.5rem;
