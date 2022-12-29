@@ -2,6 +2,7 @@ package com.ikujo.stackoverflow.domain.comment.controller;
 
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPatch;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPost;
+import com.ikujo.stackoverflow.domain.comment.dto.request.CommentSelection;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentMultiResponseDto;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentRecommendResponse;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentResponse;
@@ -100,5 +101,14 @@ public class CommentController {
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(commentRecommendResponse), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{comment-id}/selections")
+    public ResponseEntity patchSelection(@PathVariable("comment-id") @Positive Long commentId,
+                                         @RequestBody CommentSelection commentSelection) {
+
+        commentService.updateSelection(commentId ,commentSelection);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
