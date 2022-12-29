@@ -53,17 +53,15 @@ public class Comment extends BaseTime {
         return this.selection;
     }
 
-    public Comment(Article article, Member member, String content, Boolean selection,
-                   List<CommentRecommend> commentRecommendList) {
+    public Comment(Long id, Article article, Member member, String content, Boolean selection) {
+        this.id = id;
         this.article = article;
         this.member = member;
         this.content = content;
         this.selection = selection;
-        this.commentRecommendList = commentRecommendList;
     }
 
-    public static Comment of(Long id, Article article, Member member, String content, Boolean selection,
-                             List<CommentRecommend> commentRecommendList) {
-        return new Comment(id, article, member, content, selection, commentRecommendList);
+    public static Comment of(Long id, Article article, Member member, String content, Boolean selection) {
+        return new Comment(id, article, member, content, selection);
     }
 }

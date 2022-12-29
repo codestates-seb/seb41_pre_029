@@ -8,25 +8,26 @@ import com.ikujo.stackoverflow.domain.comment.entity.CommentRecommend;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 public record CommentDto(Long id,
                          Article article,
                          Member member,
                          String content,
                          Boolean selection,
-                         List<CommentRecommend> commentRecommendList,
                          LocalDateTime createdAt,
                          LocalDateTime lastModifiedAt) {
 
     public static CommentDto of(CommentPost commentPost, Article article, Member member) {
-        return new CommentDto(null, article, member, commentPost.content(), null,
-                null, LocalDateTime.now(), LocalDateTime.now());
+
+
+        return new CommentDto(null ,article, member, commentPost.content(), false,
+                null, null);
     }
 
     public static CommentDto of(Comment comment, CommentPatch commentPatch) {
         return new CommentDto(comment.getId(), comment.getArticle(), comment.getMember(), commentPatch.content(),
-               comment.getSelection() , comment.getCommentRecommendList(),
-                comment.getCreatedAt(), LocalDateTime.now());
+               comment.getSelection() , comment.getCreatedAt(), null);
     }
 
     public Comment toEntity() {
@@ -35,8 +36,7 @@ public record CommentDto(Long id,
                 article,
                 member,
                 content,
-                selection,
-                commentRecommendList
+                selection
         );
 
     }
