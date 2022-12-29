@@ -58,15 +58,15 @@ const SideBar = styled.div`
   }
 `;
 
-const MainPage = ({ data }) => {
+const MainPage = ({ data, find }) => {
   const location = useLocation();
-  const [ questionAmount, setQuestionAmount ] = useState();
+  const [questionAmount, setQuestionAmount] = useState();
 
-  useEffect(()=>{
-    axios.get('http://13.124.69.107/questions').then((res) => {
-     setQuestionAmount(res?.data.pageInfo.totalElements)
-    })
-     },[])
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/questions`).then((res) => {
+      setQuestionAmount(res?.data.pageInfo.totalElements);
+    });
+  }, []);
 
   return (
     <>
@@ -85,7 +85,7 @@ const MainPage = ({ data }) => {
           <div className="data_controller">
             <div className="question_count">{`${questionAmount} questions`}</div>
           </div>
-          <QuestionList data={data} />
+          <QuestionList data={data} find={find} />
         </MainBar>
         <SideBar>
           <YellowBox />

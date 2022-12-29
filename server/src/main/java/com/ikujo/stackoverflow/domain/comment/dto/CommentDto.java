@@ -14,19 +14,18 @@ public record CommentDto(Long id,
                          Member member,
                          String content,
                          Boolean selection,
-                         Integer recommendCount,
                          List<CommentRecommend> commentRecommendList,
                          LocalDateTime createdAt,
                          LocalDateTime lastModifiedAt) {
 
     public static CommentDto of(CommentPost commentPost, Article article, Member member) {
         return new CommentDto(null, article, member, commentPost.content(), null,
-                null, null, LocalDateTime.now(), LocalDateTime.now());
+                null, LocalDateTime.now(), LocalDateTime.now());
     }
 
     public static CommentDto of(Comment comment, CommentPatch commentPatch) {
         return new CommentDto(comment.getId(), comment.getArticle(), comment.getMember(), commentPatch.content(),
-               comment.getSelection() ,comment.getRecommendCount(), comment.getCommentRecommendList(),
+               comment.getSelection() , comment.getCommentRecommendList(),
                 comment.getCreatedAt(), LocalDateTime.now());
     }
 
@@ -37,10 +36,8 @@ public record CommentDto(Long id,
                 member,
                 content,
                 selection,
-                recommendCount,
                 commentRecommendList
         );
+
     }
-
-
 }

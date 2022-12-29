@@ -139,7 +139,7 @@ const AnswerDetail = (answer) => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
       axios
         .delete(
-          `http://13.124.69.107/questions/${questionId}/comments/${answer.id}`
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answer.id}`
         )
         .then((res) => window.location.reload());
     }
@@ -164,13 +164,13 @@ const AnswerDetail = (answer) => {
     if (!like && disLike) {
       axios
         .post(
-          `http://13.124.69.107/questions/${questionId}/comments/${answerId}/unlikes`
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`
         )
         .then((res) => setLike(!like));
     } else {
       axios
         .post(
-          `http://13.124.69.107/questions/${questionId}/comments/${answerId}/likes`
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`
         )
         .then((res) => setLike(!like));
     }
@@ -180,13 +180,13 @@ const AnswerDetail = (answer) => {
     if (like && !disLike) {
       axios
         .post(
-          `http://13.124.69.107/questions/${questionId}/comments/${answerId}/likes`
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`
         )
         .then((res) => setDisLike(!disLike));
     } else {
       axios
         .post(
-          `http://13.124.69.107/questions/${questionId}/comments/${answerId}/unlikes`
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`
         )
         .then((res) => setDisLike(!disLike));
     }
@@ -195,7 +195,7 @@ const AnswerDetail = (answer) => {
   const handleSelection = () => {
     axios
       .post(
-        `http://13.124.69.107/questions/${questionId}/comments/${answerId}/selection`
+        `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selection`
       )
       .then((res) => setSelection(!selection));
   };

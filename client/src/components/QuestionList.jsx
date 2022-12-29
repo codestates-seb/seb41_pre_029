@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import NoSearch from "./noSearch";
 import QuestionSummary from "./QuestionSummary";
 import Pagination from "./Pagination";
 
@@ -54,19 +54,14 @@ const PageContainer = styled.div`
   }
 `;
 
-const QuestionList = ({ data }) => {
+const QuestionList = ({ data, find }) => {
   const [questions, setQuestions] = useState([]);
 
-useEffect(()=>{
- axios.get('http://13.124.69.107/questions').then((res) => {
-  setQuestions(res?.data.data)
-  })
-  },[])
-
-
-  const filtered = questions.filter(
-    (el) => el.content.includes(data) || el.title.includes(data)
-  );
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/questions`).then((res) => {
+      setQuestions(res?.data.data);
+    });
+  }, []);
 
   const [isActive, setIsActive] = useState("15");
 
@@ -85,59 +80,62 @@ useEffect(()=>{
     });
     setLimit(Number(e.target.value));
   };
-
+  console.log(data);
   return (
-    <QuestionListContainer>
-      {filtered
-        ? filtered
-            .slice(offset, offset + limit)
-            .map((question) => (
-              <QuestionSummary key={question.id} props={question} />
-            ))
-        : questions
-            .slice(offset, offset + limit)
-            .map((question) => (
-              <QuestionSummary key={question.id} props={question} />
-            ))}
-      <PageContainer>
-        <Pagination
-          total={questions.length}
-          limit={limit}
-          page={page}
-          setPage={setPage}
-        />
-        <div className="select_buttons">
-          <button
-            value="15"
-            className={
-              isActive === "15" ? "active select_button" : "select_button"
-            }
-            onClick={handleActive}
-          >
-            15
-          </button>
-          <button
-            value="30"
-            className={
-              isActive === "30" ? "active select_button" : "select_button"
-            }
-            onClick={handleActive}
-          >
-            30
-          </button>
-          <button
-            value="50"
-            className={
-              isActive === "50" ? "active select_button" : "select_button"
-            }
-            onClick={handleActive}
-          >
-            50
-          </button>
-          <div className="per_page">per page</div>
-        </div>
-      </PageContainer>
-    </QuestionListContainer>
+    <>
+      {find && data.length === 0 && <NoSearch></NoSearch>}
+      <QuestionListContainer>
+        {data
+          ? data
+              .slice(offset, offset + limit)
+              .map((question) => (
+                <QuestionSummary key={question.id} props={question} />
+              ))
+          : questions
+              .slice(offset, offset + limit)
+              .map((question) => (
+                <QuestionSummary key={question.id} props={question} />
+              ))}
+        <PageContainer>
+          <Pagination
+            total={questions.length}
+            limit={limit}
+            page={page}
+            setPage={setPage}
+          />
+          <div className="select_buttons">
+            <button
+              value="15"
+              className={
+                isActive === "15" ? "active select_button" : "select_button"
+              }
+              onClick={handleActive}
+            >
+              15
+            </button>
+            <button
+              value="30"
+              className={
+                isActive === "30" ? "active select_button" : "select_button"
+              }
+              onClick={handleActive}
+            >
+              30
+            </button>
+            <button
+              value="50"
+              className={
+                isActive === "50" ? "active select_button" : "select_button"
+              }
+              onClick={handleActive}
+            >
+              50
+            </button>
+            <div className="per_page">per page</div>
+          </div>
+        </PageContainer>
+      </QuestionListContainer>
+    </>
   );
 };
 
