@@ -5,7 +5,7 @@ import { useLocation, useParams, useNavigate } from "react-router-dom";
 import MDEditor from "@uiw/react-md-editor";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
-
+import useStore from "../zustand/store";
 import Footer from "../components/Footer";
 import CEditor from "../components/CKEditor";
 import useScrollTop from "../util/useScrollTop";
@@ -232,12 +232,13 @@ const AnswerBtn = styled(Button)`
 const QuestionPage = () => {
   useScrollTop();
   const navigate = useNavigate();
+  const { GetId, GetToken } = useStore((state) => state);
+  const userId = GetId();
+  const token = GetToken();
 
   const params = useParams();
   const questionId = Number(params.id);
   const location = useLocation();
-  const Id = localStorage.getItem("info");
-  const memberId = JSON.parse(Id);
 
   const [question, setQuestion] = useState();
   const [answers, setAnswers] = useState([]);
@@ -246,18 +247,31 @@ const QuestionPage = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`)
-      .then((res) => setQuestion(res.data.data))
+      .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      })
+      .then((res) => setQuestion(res.data.data));
   }, []);
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`)
+      .get(
+        `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`,
+        {
+          headers: {
+            Authorization: token,
+            withCredentials: true,
+          },
+        }
+      )
       .then((res) => {
-        res.data.data.map(el => el.selection ? setIsSelected(true) : null)
-        setAnswers(res.data.data)
-      })
-      // .then(() => {if(isSelected === null){setIsSelected(false)}})
+        res.data.data.map((el) => (el.selection ? setIsSelected(true) : null));
+        setAnswers(res.data.data);
+      });
+    // .then(() => {if(isSelected === null){setIsSelected(false)}})
   }, []);
 
   const submmitComment = () => {
@@ -268,8 +282,14 @@ const QuestionPage = () => {
         .post(
           `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`,
           {
+            headers: {
+              Authorization: token,
+              withCredentials: true,
+            },
+          },
+          {
             content: comment,
-            memberId: memberId.id,
+            memberId: userId.id,
           }
         )
         .then((res) => window.location.reload());
@@ -284,7 +304,12 @@ const QuestionPage = () => {
   const handleDelete = () => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
       axios
-        .delete(`${process.env.REACT_APP_API_URL}/questions/${questionId}`)
+        .delete(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
+          headers: {
+            Authorization: token,
+            withCredentials: true,
+          },
+        })
         .then((res) => navigate("/"));
     }
   };
@@ -306,12 +331,26 @@ const QuestionPage = () => {
     if (!like && disLike) {
       axios
         .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`,
+          {
+            headers: {
+              Authorization: token,
+              withCredentials: true,
+            },
+          }
         )
         .then((res) => setLike(!like));
     } else {
       axios
-        .post(`${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`)
+        .post(
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`,
+          {
+            headers: {
+              Authorization: token,
+              withCredentials: true,
+            },
+          }
+        )
         .then((res) => setLike(!like));
     }
   };
@@ -319,12 +358,26 @@ const QuestionPage = () => {
   const handleDisLike = () => {
     if (like && !disLike) {
       axios
-        .post(`${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`)
+        .post(
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`,
+          {
+            headers: {
+              Authorization: token,
+              withCredentials: true,
+            },
+          }
+        )
         .then((res) => setDisLike(!disLike));
     } else {
       axios
         .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`,
+          {
+            headers: {
+              Authorization: token,
+              withCredentials: true,
+            },
+          }
         )
         .then((res) => setDisLike(!disLike));
     }
@@ -424,11 +477,7 @@ const QuestionPage = () => {
               <AnswerSection>
                 <h2 className="answerAmount">{answers?.length} Answers</h2>
                 {answers?.map((el, idx) => (
-                  <AnswerDetail
-                    key={idx}
-                    answer={el}
-                    isSelected={isSelected}
-                  />
+                  <AnswerDetail key={idx} answer={el} isSelected={isSelected} />
                 ))}
                 <Editor>
                   <h2>Your Answer</h2>

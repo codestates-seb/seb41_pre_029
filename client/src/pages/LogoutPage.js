@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import useCookies from "../zustand/store";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -117,9 +117,9 @@ const Explanation = styled.h2`
 
 const LogoutPage = () => {
   const navigate = useNavigate();
-
+  const [removeCookie] = useCookies(["ikuzo"]);
   function logoutHandler() {
-    localStorage.clear();
+    removeCookie("ikuzo");
     navigate("/");
     window.location.reload();
   }
