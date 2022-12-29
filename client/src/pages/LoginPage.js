@@ -154,15 +154,14 @@ const Loginpage = () => {
       .post(
         `${process.env.REACT_APP_API_URL}/members/login`,
         {
-          usrename: email,
+          email: email,
           password: pwd,
         },
-        { withCredentials: true }
       )
       .then((res) => {
         console.log(res);
         const data = JSON.stringify({
-          id: res.data.usrename,
+          id: res.data.email,
           token: res.headers,
         });
         localStorage.setItem("info", data);
