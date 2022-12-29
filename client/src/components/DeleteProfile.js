@@ -100,7 +100,7 @@ const DeleteProfile = () => {
       if (window.confirm("정말 삭제하시겠습니까?")) {
         //상태 로그아웃으로 만들기
         axios
-          .delete(`http://13.124.69.107/members/${memberId}`)
+          .delete(`${process.env.REACT_APP_API_URL}/members/${memberId}`)
           .then(() => {
             localStorage.removeItem("info");
             alert("그동안 이용해주셔서 감사합니다.");

@@ -1,11 +1,11 @@
-//연결 안됨 미구현
+// //연결 안됨 미구현
 
-import Nav from "../components/Nav";
+// import Nav from "../components/Nav";
 
-const TagsPage = () => {
-  <TagsContainer>
-    <Nav link={"/tagspage"} />
-  </TagsContainer>;
-};
+// const TagsPage = () => {
+//   <TagsContainer>
+//     <Nav link={"/tagspage"} />
+//   </TagsContainer>;
+// };
 
-export default TagsPage;
+// export default TagsPage;
