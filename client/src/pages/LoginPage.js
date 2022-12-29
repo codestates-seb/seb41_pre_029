@@ -8,6 +8,7 @@ import Button from "../components/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 //스타일 감싸는 div
 const Flex = styled.div`
   display: flex;
@@ -131,6 +132,8 @@ const Loginpage = () => {
   //test : 대응되는 문자열이 있는지 검사하는 메소드 true 나 false를 반환
   const emailValueCheck = emailRegex.test(email);
   const passwordValueCheck = passwordRegex.test(pwd);
+
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   //초기화기능
   // const clear = () => {
   //   setEmail("");
@@ -152,23 +155,27 @@ const Loginpage = () => {
     //   setPwdValid("valid");
     // } else {
     axios
-      .post(`${process.env.REACT_APP_API_URL}/members/login`, {
-        email: email,
-        password: pwd,
-      })
+      .post(
+        `${process.env.REACT_APP_API_URL}/members/login`,
+        {
+          email: email,
+          password: pwd,
+        },
+        { withCredentials: true }
+      )
       .then((res) => {
         console.log(res);
         const data = JSON.stringify({
-          id: res.data.email,
-          token: res.headers,
+          id: res.data.id,
+          token: res.headers.authorization,
         });
-        localStorage.setItem("info", data);
+        setCookie("ikuzo", data);
         navigate("/");
         window.location.reload();
       })
       .catch((error) => {});
-    // }
   };
+
   return (
     <Flex>
       <Wrap>

@@ -34,6 +34,16 @@ const SvgDiv = styled.div`
 const Div = styled.div`
   display: flex;
   align-items: center;
+  > :first-child {
+    :hover {
+      background-color: #e0f4f5;
+    }
+  }
+  > :last-child {
+    :hover {
+      background-color: #015366;
+    }
+  }
 `;
 //검색창 구현
 const Input = styled.input`

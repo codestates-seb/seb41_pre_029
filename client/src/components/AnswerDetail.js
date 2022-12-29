@@ -38,13 +38,13 @@ const AnswerSection = styled.section`
     }
     > .select-wrapper {
       > .selected {
-        fill: #2F800A;
+        fill: #2f800a;
         width: 62px;
         height: 62px;
       }
       > .not_selected {
         :hover {
-          fill: #2F800A;
+          fill: #2f800a;
           cursor: pointer;
         }
       }
@@ -150,8 +150,8 @@ const AnswerSection = styled.section`
   }
 `;
 
-const AnswerDetail = ({answer, isSelected}) => {
-  console.log(isSelected)
+
+const AnswerDetail = ({ answer, isSelected }) => {
   useScrollTop();
 
   const handleDelete = () => {
@@ -219,10 +219,9 @@ const AnswerDetail = ({answer, isSelected}) => {
           selection : true
         }
       )
-      .then(
-        (res) => { 
-          setSelection(!selection)
-          window.location.reload()
+      .then((res) => {
+        setSelection(!selection);
+        window.location.reload();
       });
   };
 
