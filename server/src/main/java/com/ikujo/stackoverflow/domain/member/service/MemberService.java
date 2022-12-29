@@ -8,10 +8,12 @@ import com.ikujo.stackoverflow.domain.member.entity.dto.response.MemberResponse;
 import com.ikujo.stackoverflow.domain.member.repository.MemberRepository;
 import com.ikujo.stackoverflow.global.auth.jwt.JwtTokenizer;
 import com.ikujo.stackoverflow.global.auth.utils.CustomAuthorityUtils;
+import com.ikujo.stackoverflow.global.email.event.MemberRegistrationApplicationEvent;
 import com.ikujo.stackoverflow.global.exception.BusinessLogicException;
 import com.ikujo.stackoverflow.global.exception.ExceptionCode;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
     private final JwtTokenizer jwtTokenizer;
+    private final ApplicationEventPublisher publisher;
 
     /**
      * 회원 가입
@@ -47,6 +50,7 @@ public class MemberService {
         Member savedMember = memberRepository.save(member);
 
         // 이메일 인증 로직 필요
+        publisher.publishEvent(new MemberRegistrationApplicationEvent(this, savedMember));
 
         return MemberResponse.from(savedMember);
     }
@@ -97,6 +101,15 @@ public class MemberService {
     }
 
     /**
+     * 이메일 확인 실패시 회원 삭제
+     */
+    public void emailVerifyFailed(Long id) {
+        Member verifiedMember = findVerifiedMember(id);
+
+        memberRepository.delete(verifiedMember);
+    }
+
+    /**
      * 토큰으로 회원 조회
      */
     public Member findByToken(String token) {
@@ -108,14 +121,6 @@ public class MemberService {
 
         return findVerifiedMember(id);
     }
-
-    /**
-     * 회원 조회 : 사용 안하게 됨.
-     */
-//    @Transactional(readOnly = true)
-//    public Member findMember(Long id) {
-//        return findVerifiedMember(id);
-//    }
 
     /**
      * 이메일 중복 검증

@@ -78,14 +78,20 @@ public class SecurityConfiguration {
      */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*")); // 모든 출처에 대해 스크립트 기반 HTTP 통신 허용
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE")); // 지정한 HTTP Method에 대한 통신 허용
+
+        configuration.setAllowCredentials(true); // ??
+
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://13.124.69.107", "https://localhost:3000", "https://13.124.69.107")); // * 은 문제 발생
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS")); // OPTIONS?
+        configuration.setAllowedHeaders(Arrays.asList("*")); // 문제발생
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource(); // UrlBasedCorsConfigurationSource 생성
         source.registerCorsConfiguration("/**", configuration); // 모든 URL에 앞에서 구성한 CORS 정책 적용
 
         return source;
+
     }
 
     /**
