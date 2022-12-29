@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import MDEditor from '@uiw/react-md-editor';
+import MDEditor from "@uiw/react-md-editor";
 import { useState } from "react";
 
 import displayedAt from "../util/displayedAt";
@@ -139,7 +139,7 @@ const AnswerDetail = (answer) => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
       axios
         .delete(
-          `http://13.124.69.107/questions/${questionId}/comments/${answer.id}`
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answer.id}`
         )
         .then((res) => window.location.reload());
     }
@@ -156,7 +156,7 @@ const AnswerDetail = (answer) => {
 
   const [like, setLike] = useState(false);
   const [disLike, setDisLike] = useState(false);
-
+  const [selection, setSelection] = useState(answer.selection);
   // console.log("like:" + like);
   // console.log("disLike:" + disLike);
 
@@ -164,15 +164,13 @@ const AnswerDetail = (answer) => {
     if (!like && disLike) {
       axios
         .post(
-          `http://13.124.69.107/questions/${questionId}/comments/${answerId}/unlikes`
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`
         )
         .then((res) => setLike(!like));
     } else {
       axios
         .post(
-          setLike(
-            !like
-          )`http://13.124.69.107/questions/${questionId}/comments/${answerId}/likes`
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`
         )
         .then((res) => setLike(!like));
     }
@@ -182,16 +180,24 @@ const AnswerDetail = (answer) => {
     if (like && !disLike) {
       axios
         .post(
-          `http://13.124.69.107/questions/${questionId}/comments/${answerId}/likes`
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`
         )
         .then((res) => setDisLike(!disLike));
     } else {
       axios
         .post(
-          `http://13.124.69.107/questions/${questionId}/comments/${answerId}/unlikes`
+          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`
         )
         .then((res) => setDisLike(!disLike));
     }
+  };
+
+  const handleSelection = () => {
+    axios
+      .post(
+        `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selection`
+      )
+      .then((res) => setSelection(!selection));
   };
 
   return (
@@ -208,10 +214,20 @@ const AnswerDetail = (answer) => {
           onClick={handleDisLike}
           className={disLike ? "dislike active" : "dislike"}
         />
+        <div
+          onClick={handleSelection}
+          className={selection ? "selected" : "not_selected"}
+        >
+          ❌
+        </div>
       </div>
 
       <div className="post-layout">
-        <MDEditor.Markdown className="post--body" source={answer.content} style={{ whiteSpace: 'pre-wrap' }} />
+        <MDEditor.Markdown
+          className="post--body"
+          source={answer.content}
+          style={{ whiteSpace: "pre-wrap", backgroundColor: "white" }}
+        />
         {/* <div className="post--body">{answer.content}</div> */}
         <div className="post--footer">
           <div className="post--footer-button">

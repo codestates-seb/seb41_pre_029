@@ -60,13 +60,13 @@ const SideBar = styled.div`
 
 const MainPage = ({ data }) => {
   const location = useLocation();
-  const [ questionAmount, setQuestionAmount ] = useState();
+  const [questionAmount, setQuestionAmount] = useState();
 
-  useEffect(()=>{
-    axios.get('http://13.124.69.107/questions').then((res) => {
-     setQuestionAmount(res?.data.pageInfo.totalElements)
-    })
-     },[])
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/questions`).then((res) => {
+      setQuestionAmount(res?.data.pageInfo.totalElements);
+    });
+  }, []);
 
   return (
     <>

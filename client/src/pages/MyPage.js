@@ -143,7 +143,6 @@ const MyPage = () => {
   const [page, setPage] = useState("theme");
 
   const [userInfo, setUserInfo] = useState({});
-  console.log("render!");
 
   const params = useParams();
   const id = params.id;
@@ -151,11 +150,9 @@ const MyPage = () => {
 
   useEffect(() => {
     axios
-      .get(`http://13.124.69.107/members/${id}`)
+      .get(`${process.env.REACT_APP_API_URL}/members/${id}`)
       .then((res) => setUserInfo(res.data.data));
   }, []);
-
-  // console.log(userInfo.profile);
 
   const handleClickEdit = () => {
     if (!activeEdit) {

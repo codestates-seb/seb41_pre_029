@@ -13,10 +13,14 @@ const Nav = ({ location }) => {
   const params = useParams();
   const id = params.id;
 
+  const userData = JSON.parse(localStorage.getItem("info"));
+  const userId = userData?.id;
+  const userToken = userData?.token;
+
   const menu = [
     { name: "Questions", link: "/" },
     { name: "Tags", link: "/tags" },
-    { name: "Users", link: `/mypage/1` },
+    { name: "Users", link: `/mypage/${userId}` },
     { name: "Companies", link: "/companies" },
   ];
 

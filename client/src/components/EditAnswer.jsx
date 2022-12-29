@@ -1,28 +1,27 @@
 import styled from "styled-components";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import Nav from "./Nav";
 import Footer from "./Footer";
-import CEditor from './CKEditor';
+import CEditor from "./CKEditor";
 import Parser from "./Parser";
 import Button from "./Button";
 import axios from "axios";
 
-const EditAnswer = ({originData, questionId, answerId}) => {
+const EditAnswer = ({ originData, questionId, answerId }) => {
+  const location = { pathname: "/" };
+  const [content, setContent] = useState(originData.content);
 
-    const location = {pathname:'/'}
-    const [content, setContent] = useState(originData.content);
+  const [input, setInput] = useState({
+    content: originData.content,
+  });
 
-    const [input, setInput] = useState({
-      content : originData.content,
+  useEffect(() => {
+    setInput({
+      content,
     });
-
-    useEffect(() => {
-      setInput({
-        content
-      });
-    }, [content]);
+  }, [content]);
 
   const handleChange = (e) => {
     setInput({
@@ -34,64 +33,75 @@ const EditAnswer = ({originData, questionId, answerId}) => {
   const navigate = useNavigate();
 
   const cancleEdit = () => {
-    navigate(`/questionpage/${questionId}`)
-  }
+    navigate(`/questionpage/${questionId}`);
+  };
 
   const handleClickEdit = () => {
     axios
-    .patch(`http://13.124.69.107/questions/${questionId}/comments/${answerId}`, {
-      "content" : input.content,
-    })
-    .then(() => navigate(`/questionpage/${questionId}`))
-  }
+      .patch(
+        `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
+        {
+          content: input.content,
+        }
+      )
+      .then(() => navigate(`/questionpage/${questionId}`));
+  };
   return (
     <>
-    <EditContainer>
-      <Nav location={location} />
-      <Main>
-      <YellowBoxContainer className="main_box" padding="10px" >
-        Your edit will be placed in a queue until it is peer reviewed.
-        <br />
-        <br />
-      We welcome edits that make the post easier to understand and more valuable for readers. Because community members review edits, please try to make the post substantially better than how you found it, for example, by fixing grammar or adding additional resources and hyperlinks.
-      </YellowBoxContainer>
-        <InputBox>
-          <div className="title">Answer</div>
-          <CEditor onChange={setContent} data={content} /> 
-      
+      <EditContainer>
+        <Nav location={location} />
+        <Main>
+          <YellowBoxContainer className="main_box" padding="10px">
+            Your edit will be placed in a queue until it is peer reviewed.
+            <br />
+            <br />
+            We welcome edits that make the post easier to understand and more
+            valuable for readers. Because community members review edits, please
+            try to make the post substantially better than how you found it, for
+            example, by fixing grammar or adding additional resources and
+            hyperlinks.
+          </YellowBoxContainer>
+          <InputBox>
+            <div className="title">Answer</div>
+            <CEditor onChange={setContent} data={content} />
+
             {/* <Parser html={content} /> */}
-        </InputBox>
-        <InputBox>
-          <div className="title">Edit Summary</div>
-          <input className="input" placeholder="brieflt explain your changes" name="summary" onChange={handleChange}>
-          </input>
-        </InputBox>
-        <SubmitContainer>
-          <p onClick={handleClickEdit}>
-            <Button buttonName={"Save edits"}/>
-          </p>
-          <div onClick={cancleEdit}>Cancle</div>
-        </SubmitContainer>
-    </Main>
-      <RightBar>
-        <YellowBoxContainer width="300px">
-          <Title>
-            How to Edit
-          </Title>
-          <Content>
-            • Correct minor typos or mistakes <br />
-            • Clarify meaning without changing it<br />
-            • Add related resources or links<br />
-            • Always respect the author’s intent<br />
-            • Don’t use edits to reply to the author
-          </Content>
-        </YellowBoxContainer>
-      </RightBar>
-    </EditContainer>
-      <Footer/>
-      </>
-    ) 
-  }
+          </InputBox>
+          <InputBox>
+            <div className="title">Edit Summary</div>
+            <input
+              className="input"
+              placeholder="brieflt explain your changes"
+              name="summary"
+              onChange={handleChange}
+            ></input>
+          </InputBox>
+          <SubmitContainer>
+            <p onClick={handleClickEdit}>
+              <Button buttonName={"Save edits"} />
+            </p>
+            <div onClick={cancleEdit}>Cancle</div>
+          </SubmitContainer>
+        </Main>
+        <RightBar>
+          <YellowBoxContainer width="300px">
+            <Title>How to Edit</Title>
+            <Content>
+              • Correct minor typos or mistakes <br />
+              • Clarify meaning without changing it
+              <br />
+              • Add related resources or links
+              <br />
+              • Always respect the author’s intent
+              <br />• Don’t use edits to reply to the author
+            </Content>
+          </YellowBoxContainer>
+        </RightBar>
+      </EditContainer>
+      <Footer />
+    </>
+  );
+};
 export default EditAnswer;
 
 const EditContainer = styled.div`
@@ -99,83 +109,81 @@ const EditContainer = styled.div`
   flex-direction: row;
   width: 100%;
 
-    margin-left: 320.5px;
-    margin-right: 320.5px;
-`
+  margin-left: 320.5px;
+  margin-right: 320.5px;
+`;
 const YellowBoxContainer = styled.div`
- width: ${(props) => props.width || "Auto"};
-  background-color:#fdf7e2;
-  padding:${(props) => props.padding || 0};
-  margin: 20px 0 ;
+  width: ${(props) => props.width || "Auto"};
+  background-color: #fdf7e2;
+  padding: ${(props) => props.padding || 0};
+  margin: 20px 0;
   margin-right: 10px;
-  box-shadow: 0 1px 2px hsla(0,0%,0%,0.05), 0 1px 4px hsla(0, 0%, 0%, 0.05), 0 2px 8px hsla(0, 0%, 0%, 0.05);
-  border-left: 1px solid #FDEBAA;
- border-right: 1px solid #FDEBAA;
-  border-radius:3px;
-  font-size : 12px;
+  box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.05),
+    0 2px 8px hsla(0, 0%, 0%, 0.05);
+  border-left: 1px solid #fdebaa;
+  border-right: 1px solid #fdebaa;
+  border-radius: 3px;
+  font-size: 12px;
   line-height: 16px;
-  color : #525960;
-   &.main_box{
-   border: 1px solid #FDEBAA;
- }
-`
+  color: #525960;
+  &.main_box {
+    border: 1px solid #fdebaa;
+  }
+`;
 
 const Title = styled.div`
-  width:270px;
+  width: 270px;
   padding: 10px 15px;
-  font-size : 12px;
+  font-size: 12px;
   font-weight: bold;
   line-height: 16px;
-  color : #525960;
+  color: #525960;
   background-color: #fbf3d5;
-  border-top:1px solid #FDEBAA;
-  border-bottom:1px solid #FDEBAA;
-`
+  border-top: 1px solid #fdebaa;
+  border-bottom: 1px solid #fdebaa;
+`;
 const Content = styled.ol`
-  margin-top:12px;
+  margin-top: 12px;
   margin-bottom: 15px;
   padding: 0 16px;
- padding-bottom :15px ;
-  width:300px;
+  padding-bottom: 15px;
+  width: 300px;
   display: flex;
-  flex-direction:column;
-  `
+  flex-direction: column;
+`;
 
 const Main = styled.div`
   width: 800px;
-  margin:20px;
+  margin: 20px;
 
   > div {
-  > .title {
-     font-size: 17px;
-    font-weight: 600;
-    padding: 0 2px;
-    margin: 15px 0;
-  }
+    > .title {
+      font-size: 17px;
+      font-weight: 600;
+      padding: 0 2px;
+      margin: 15px 0;
+    }
 
-  > .input{
-   padding: 7.8px 9.2px;
-    width: 97.1%;
-    border-radius: 3px;
-    border: 1px solid #e3e6e8;
+    > .input {
+      padding: 7.8px 9.2px;
+      width: 97.1%;
+      border-radius: 3px;
+      border: 1px solid #e3e6e8;
 
-    &:focus {
-      box-shadow: 1px 1px 1px 2px #cde9fe, -1px -1px 1px 2px #cde9fe;
-      outline: none !important;
-      border-color: #8cb3d0;
+      &:focus {
+        box-shadow: 1px 1px 1px 2px #cde9fe, -1px -1px 1px 2px #cde9fe;
+        outline: none !important;
+        border-color: #8cb3d0;
+      }
     }
   }
-}
-
-  
-  `
+`;
 const InputBox = styled.div`
   & > :focus {
-      box-shadow: 1px 1px 1px 2px #cde9fe, -1px -1px 1px 2px #cde9fe;
-            outline: none !important;
-    }
-  
-`
+    box-shadow: 1px 1px 1px 2px #cde9fe, -1px -1px 1px 2px #cde9fe;
+    outline: none !important;
+  }
+`;
 const TagsInput = styled.div`
   display: flex;
   align-items: flex-start;
@@ -184,8 +192,6 @@ const TagsInput = styled.div`
   padding: 0 8px;
   border: 1px solid rgb(214, 216, 218);
   border-radius: 6px;
-
-
 
   > ul {
     display: flex;
@@ -259,7 +265,7 @@ const SubmitContainer = styled.div`
     margin-right: 30px;
     font-size: 13px;
   }
-  > :first-child >  {
+  > :first-child > {
     :hover {
       background-color: #0063bf;
     }
@@ -274,4 +280,4 @@ const SubmitContainer = styled.div`
     }
   }
 `;
-const RightBar = styled.div``
+const RightBar = styled.div``;
