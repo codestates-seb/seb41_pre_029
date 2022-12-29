@@ -1,7 +1,9 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const Pagination = ({ total, limit, page, setPage }) => {
   const numPages = Math.ceil(total / limit);
+  const  navigate  = useNavigate();
 
   return (
     <>
@@ -11,7 +13,11 @@ const Pagination = ({ total, limit, page, setPage }) => {
           .map((_, i) => (
             <Button
               key={i + 1}
-              onClick={() => setPage(i + 1)}
+                         onClick={() => {
+                 setPage(i + 1)
+                navigate(`/?page=${i}&size=${limit}`)
+                  }}
+            
               aria-current={page === i + 1 ? "page" : null}
             >
               {i + 1}

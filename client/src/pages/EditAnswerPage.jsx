@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import useStore from "../zustand/store.js";
 
 import EditAnswer from "../components/EditAnswer.jsx";
 import axios from "axios";
