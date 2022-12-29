@@ -3,6 +3,8 @@ import Button from "./Button";
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+
+import useStore from "../zustand/store";
 const HeaderSearch = styled.header`
   height: 50px;
   box-sizing: border-box;
@@ -111,6 +113,11 @@ const Header = ({ search, find }) => {
   const [data, setData] = useState("");
   const [list, setList] = useState("");
   const navigate = useNavigate();
+
+  const { GetId, GetToken } = useStore((state) => state);
+  const userId = GetId();
+  const token = GetToken();
+
   const changeValue = (e) => {
     setData(e.target.value);
   };
@@ -130,11 +137,10 @@ const Header = ({ search, find }) => {
     find("");
   };
 
-  const token = JSON.parse(localStorage.getItem("info"));
   const [profile, setProfile] = useState("");
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/members/${token?.id}`)
+      .get(`${process.env.REACT_APP_API_URL}/members/${userId}`)
       .then((res) => {
         setProfile(res.data.data.profile);
       });

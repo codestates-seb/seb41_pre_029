@@ -22,7 +22,7 @@ const QuestionList = ({ data, find }) => {
 
    useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/questions`,
-    { withCredentials: true }))
+    { withCredentials: true })
     .then((res) => {
       setQuestions(res?.data.data);
     });
