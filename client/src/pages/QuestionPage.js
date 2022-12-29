@@ -77,6 +77,7 @@ const BodyArticle = styled.article`
 const QuestionSection = styled.section`
   display: flex;
   > .recommand {
+    width: 62px;
     display: flex;
     flex-direction: column;
     padding-right: 16px;
@@ -183,6 +184,7 @@ const QuestionSection = styled.section`
   }
 `;
 const AnswerSection = styled.article`
+  padding-right: 16px;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -237,17 +239,22 @@ const QuestionPage = () => {
   const [question, setQuestion] = useState();
   const [answers, setAnswers] = useState([]);
   const [comment, setComment] = useState("");
+  const [isSelected, setIsSelected] = useState(null);
 
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`)
-      .then((res) => setQuestion(res.data.data));
+      .then((res) => setQuestion(res.data.data))
   }, []);
 
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`)
-      .then((res) => setAnswers(res.data.data));
+      .then((res) => {
+        res.data.data.map(el => el.section ? setIsSelected(true) : null)
+        if(isSelected === null){setIsSelected(false)}
+        setAnswers(res.data.data)
+      })
   }, []);
 
   const submmitComment = () => {
@@ -416,8 +423,8 @@ const QuestionPage = () => {
                 {answers?.map((el, idx) => (
                   <AnswerDetail
                     key={idx}
-                    answers={el}
-                    questionId={questionId}
+                    answer={el}
+                    isSelected={isSelected}
                   />
                 ))}
                 <Editor>
