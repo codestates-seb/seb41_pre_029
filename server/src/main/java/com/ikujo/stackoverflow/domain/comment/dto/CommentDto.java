@@ -5,12 +5,9 @@ import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPatch;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPost;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentSelection;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
-import com.ikujo.stackoverflow.domain.comment.entity.CommentRecommend;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 public record CommentDto(Long id,
                          Article article,
                          Member member,
