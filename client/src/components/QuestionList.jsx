@@ -2,7 +2,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import  {useLocation} from 'react-router-dom'
-import axios from "axios";
+
 import NoSearch from "./noSearch";
 import QuestionSummary from "./QuestionSummary";
 import Pagination from "./Pagination";
