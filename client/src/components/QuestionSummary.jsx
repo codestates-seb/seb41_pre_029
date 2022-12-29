@@ -8,6 +8,7 @@ const QuestionSummary = ({props}) => {
   const navigateDetailPage = (id) => {
     navigate(`/questionpage/${id}`)
   }
+  console.log(props.selection)
   
   const viewTags = 
    props.tags.map((el) => el.replaceAll("#","").replaceAll("-"," ")).filter((el) =>(el!==""))

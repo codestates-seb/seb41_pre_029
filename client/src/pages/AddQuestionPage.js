@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useCookies } from "react-cookie";
+import useStore from "../zustand/store";
 
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -9,6 +11,8 @@ import Modal from "../components/Modal";
 import CEditor from "../components/CKEditor";
 
 const AddQuestionPage = () => {
+  const { GetToken } = useStore((state) => state);
+
   const [modal, setModal] = useState(false);
   const [tags, setTags] = useState([]);
   const [content, setContent] = useState("");
@@ -48,6 +52,11 @@ const AddQuestionPage = () => {
       })
     );
   };
+  // const [cookies] = useCookies(["ikuzo"]);
+  // const token = cookies.ikuzo.token;
+  // console.log(token);
+
+  const token = GetToken();
 
   const handleSubmit = () => {
     if (input.title.trim().length < 1) return;
@@ -55,6 +64,10 @@ const AddQuestionPage = () => {
       axios({
         url: `${process.env.REACT_APP_API_URL}/questions`, // 통신할 웹문서
         method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
         data: {
           title: input.title,
           content: input.content,
