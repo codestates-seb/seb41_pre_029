@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -58,7 +58,7 @@ const SideBar = styled.div`
   }
 `;
 
-const MainPage = ({ data }) => {
+const MainPage = ({ data, find }) => {
   const location = useLocation();
   const [questionAmount, setQuestionAmount] = useState();
 
@@ -85,7 +85,7 @@ const MainPage = ({ data }) => {
           <div className="data_controller">
             <div className="question_count">{`${questionAmount} questions`}</div>
           </div>
-          <QuestionList data={data} />
+          <QuestionList data={data} find={find} />
         </MainBar>
         <SideBar>
           <YellowBox />

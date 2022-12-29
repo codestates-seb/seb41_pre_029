@@ -1,5 +1,8 @@
 package com.ikujo.stackoverflow.global.auth.handler;
 
+import com.google.gson.Gson;
+import com.ikujo.stackoverflow.domain.member.entity.Member;
+import com.ikujo.stackoverflow.global.auth.dto.Principal;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,8 +22,15 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
+        Gson gson = new Gson();
+        Member member = (Member) authentication.getPrincipal();
+
+        Principal principal = new Principal(member.getEmail(), member.getId());
+        String s = gson.toJson(principal);
+
+        response.setContentType("application/json");
+        response.getWriter().write(s);
 
         log.info("로그인 인증 성공");
-
     }
 }

@@ -222,26 +222,38 @@ const SignupPage = () => {
         <Title>Join the Stack Overflow community</Title>
         <List>
           <CommunitySpan>
-            <img src="https://github.com/codestates-seb/seb40_pre_014/blob/main/client/src/assets/images/signup1.png?raw=true" />
+            <img
+              src="https://github.com/codestates-seb/seb40_pre_014/blob/main/client/src/assets/images/signup1.png?raw=true"
+              alt="signup_image1"
+            />
           </CommunitySpan>
           Get unstuck — ask a question
         </List>
 
         <List>
           <CommunitySpan>
-            <img src="https://raw.githubusercontent.com/codestates-seb/seb40_pre_014/d7e59081970952ae87bec1e87646f314ced39747/client/src/assets/images/signup3.png" />
+            <img
+              src="https://raw.githubusercontent.com/codestates-seb/seb40_pre_014/d7e59081970952ae87bec1e87646f314ced39747/client/src/assets/images/signup3.png"
+              alt="signup_image2"
+            />
           </CommunitySpan>
           Unlock new privileges like voting and commenting
         </List>
         <List>
           <CommunitySpan>
-            <img src="https://raw.githubusercontent.com/codestates-seb/seb40_pre_014/d7e59081970952ae87bec1e87646f314ced39747/client/src/assets/images/signup2.png" />
+            <img
+              src="https://raw.githubusercontent.com/codestates-seb/seb40_pre_014/d7e59081970952ae87bec1e87646f314ced39747/client/src/assets/images/signup2.png"
+              alt="signup_image3"
+            />
           </CommunitySpan>
           Save your favorite tags, filters, and jobs
         </List>
         <List>
           <CommunitySpan>
-            <img src="https://raw.githubusercontent.com/codestates-seb/seb40_pre_014/d7e59081970952ae87bec1e87646f314ced39747/client/src/assets/images/signup4.png" />
+            <img
+              src="https://raw.githubusercontent.com/codestates-seb/seb40_pre_014/d7e59081970952ae87bec1e87646f314ced39747/client/src/assets/images/signup4.png"
+              alt="signup_image4"
+            />
           </CommunitySpan>
           Earn reputation and badges
         </List>

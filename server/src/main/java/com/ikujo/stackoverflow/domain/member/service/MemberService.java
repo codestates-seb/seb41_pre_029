@@ -6,14 +6,14 @@ import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberProfilePat
 import com.ikujo.stackoverflow.domain.member.entity.dto.request.MemberSignupPost;
 import com.ikujo.stackoverflow.domain.member.entity.dto.response.MemberResponse;
 import com.ikujo.stackoverflow.domain.member.repository.MemberRepository;
+import com.ikujo.stackoverflow.global.auth.jwt.JwtTokenizer;
 import com.ikujo.stackoverflow.global.auth.utils.CustomAuthorityUtils;
 import com.ikujo.stackoverflow.global.exception.BusinessLogicException;
 import com.ikujo.stackoverflow.global.exception.ExceptionCode;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -27,6 +27,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
+    private final JwtTokenizer jwtTokenizer;
 
     /**
      * 회원 가입
@@ -53,9 +54,9 @@ public class MemberService {
     /**
      * 회원 프로필 수정 (리팩토링 필요!)
      */
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public Member updateMember(Long id, MemberProfilePatch memberProfilePatch) {
-        Member findMember = findVerifiedMember(id);
+    @Transactional
+    public Member updateMember(String token, MemberProfilePatch memberProfilePatch) {
+        Member findMember = findByToken(token);
 
         // 닉네임은 필수
         Optional.of(memberProfilePatch.nickname())
@@ -89,19 +90,32 @@ public class MemberService {
     /**
      * 회원 삭제
      */
-    public void deleteMember(Long id) {
-        Member findMember = findVerifiedMember(id);
+    public void deleteMember(String token) {
+        Member findMember = findByToken(token);
 
         memberRepository.delete(findMember);
     }
 
     /**
-     * 회원 조회
+     * 토큰으로 회원 조회
      */
-    @Transactional(readOnly = true)
-    public Member findMember(Long id) {
+    public Member findByToken(String token) {
+        String key = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+        String jws = token.replace("Bearer ", "");
+        Claims claims = jwtTokenizer.getClaims(jws, key).getBody();
+
+        Long id = claims.get("id", Long.class);
+
         return findVerifiedMember(id);
     }
+
+    /**
+     * 회원 조회 : 사용 안하게 됨.
+     */
+//    @Transactional(readOnly = true)
+//    public Member findMember(Long id) {
+//        return findVerifiedMember(id);
+//    }
 
     /**
      * 이메일 중복 검증
@@ -122,4 +136,5 @@ public class MemberService {
 
         return findMember;
     }
+
 }

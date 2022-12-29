@@ -396,7 +396,10 @@ const QuestionPage = () => {
                     </div>
                     <div className="post--footer-profile">
                       <div className="imgwrapper">
-                        <img src="https://www.gravatar.com/avatar/580884d16248daa81e53e8a669f60361?s=64&d=identicon&r=PG&f=1"></img>
+                        <img
+                          src="https://www.gravatar.com/avatar/580884d16248daa81e53e8a669f60361?s=64&d=identicon&r=PG&f=1"
+                          alt="questionPage_image1"
+                        ></img>
                       </div>
                       <div className="profile-wrapper">
                         <div className="profile-time">
