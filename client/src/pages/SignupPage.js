@@ -196,23 +196,37 @@ const SignupPage = () => {
       setEmailValid("");
       setPwdValid("valid");
     } else if (emailValueCheck && passwordValueCheck) {
-      axios({
-        method: "post",
-        url: `${process.env.REACT_APP_API_URL}/members/signup`,
-        data: {
-          email,
-          password: pwd,
-          nickname: displayName,
+      axios(
+        {
+          method: "post",
+          url: `${process.env.REACT_APP_API_URL}/members/signup`,
+          data: {
+            email,
+            password: pwd,
+            nickname: displayName,
+          },
         },
-      }).then((res) => {
-        console.log(res);
-        const data = JSON.stringify({
-          id: res.data.data.id,
-          token: res.headers,
-        });
-        localStorage.setItem("info", data);
-        pathNavigate("/");
-        window.location.reload();
+        { withCredentials: true }
+      ).then((res) => {
+        axios
+          .post(
+            `${process.env.REACT_APP_API_URL}/members/login`,
+            {
+              email: email,
+              password: pwd,
+            },
+            { withCredentials: true }
+          )
+          .then((res) => {
+            console.log(res);
+            const data = JSON.stringify({
+              id: res.data.id,
+              token: res.headers.authorization,
+            });
+            localStorage.setItem("info", data);
+            pathNavigate("/");
+            window.location.reload();
+          });
       });
     }
   };
