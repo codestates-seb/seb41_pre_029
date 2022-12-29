@@ -5,6 +5,7 @@ import com.ikujo.stackoverflow.domain.article.repository.ArticleRepository;
 import com.ikujo.stackoverflow.domain.comment.dto.CommentDto;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPatch;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPost;
+import com.ikujo.stackoverflow.domain.comment.dto.request.CommentSelection;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentResponse;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
 import com.ikujo.stackoverflow.domain.comment.repository.CommentRepository;
@@ -74,6 +75,15 @@ public class CommentService {
 
         Comment comment = findVerifiedComment(commentId);
         commentRepository.delete(comment);
+
+    }
+
+    public void updateSelection(Long commentId, CommentSelection commentSelection) {
+
+        Comment comment = findVerifiedComment(commentId);
+        CommentDto commentDto = CommentDto.of(comment, commentSelection);
+
+        commentRepository.save(commentDto.toEntity());
 
     }
 
