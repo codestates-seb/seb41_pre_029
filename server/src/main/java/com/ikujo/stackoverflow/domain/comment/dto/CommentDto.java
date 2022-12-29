@@ -3,6 +3,7 @@ package com.ikujo.stackoverflow.domain.comment.dto;
 import com.ikujo.stackoverflow.domain.article.entity.Article;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPatch;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPost;
+import com.ikujo.stackoverflow.domain.comment.dto.request.CommentSelection;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
 import com.ikujo.stackoverflow.domain.comment.entity.CommentRecommend;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
@@ -28,6 +29,11 @@ public record CommentDto(Long id,
     public static CommentDto of(Comment comment, CommentPatch commentPatch) {
         return new CommentDto(comment.getId(), comment.getArticle(), comment.getMember(), commentPatch.content(),
                comment.getSelection() , comment.getCreatedAt(), null);
+    }
+
+    public static CommentDto of(Comment comment, CommentSelection commentSelection) {
+        return new CommentDto(comment.getId(), comment.getArticle(), comment.getMember(), comment.getContent(),
+                commentSelection.selection(), comment.getCreatedAt(), null);
     }
 
     public Comment toEntity() {
