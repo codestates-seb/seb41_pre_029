@@ -42,9 +42,16 @@ public class ArticleController {
     }
 
     @GetMapping("{article-id}")
-    public ResponseEntity getQuestion(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity getQuestion(@RequestHeader(name = "Authorization", defaultValue = "true") String token,
                                       @Positive @PathVariable("article-id") Long articleId) {
-        Long memberId = jwtTokenizer.tokenToMemberId(token);
+
+        Long memberId;
+        if(token.equals("true")){
+            memberId = null;
+        } else {
+            memberId = jwtTokenizer.tokenToMemberId(token);
+        }
+
         log.info("GET: getQuestion 요청이 들어왔습니다. 현재 로그인 memberId : {} 입니다.", memberId);
         ArticleDetailResponse articleDetailDto = articleService.findArticle(articleId, memberId);
 

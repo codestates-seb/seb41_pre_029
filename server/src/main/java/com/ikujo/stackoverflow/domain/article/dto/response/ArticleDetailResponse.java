@@ -15,7 +15,6 @@ public record ArticleDetailResponse(
         String title,
         String content,
         List<String> tags,
-        Integer recommendCount,
         Long hits,
         BaseTimeDto baseTime,
         ArticleLikeInfo articleLikeInfo
@@ -32,7 +31,6 @@ public record ArticleDetailResponse(
                 title,
                 content,
                 tags,
-                recommendCount,
                 hits,
                 baseTime,
                 articleLikeInfo
@@ -69,7 +67,6 @@ public record ArticleDetailResponse(
                 article.getTitle(),
                 article.getContent(),
                 tags,
-                article.getArticleRecommendList().size(),
                 article.getHits(),
                 baseTimeDto,
                 articleLikeInfo
@@ -91,7 +88,6 @@ public record ArticleDetailResponse(
                 article.getTitle(),
                 article.getContent(),
                 tags,
-                article.getArticleRecommendList().size(),
                 article.getHits(),
                 baseTimeDto,
                 articleLikeInfo
