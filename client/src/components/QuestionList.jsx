@@ -1,9 +1,111 @@
+import axios from "axios";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
+import  {useLocation} from 'react-router-dom'
 import axios from "axios";
 import NoSearch from "./noSearch";
 import QuestionSummary from "./QuestionSummary";
 import Pagination from "./Pagination";
+
+const QuestionList = ({ data, find }) => {
+  const [questions, setQuestions] = useState([]);
+
+  const [totalQuestions,setTotalQuestions] = useState(0);
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/questions`).then((res) => {
+      setQuestions(res?.data.data);
+    });
+  }, []);
+
+
+  const [isActive, setIsActive] = useState("15");
+
+  //페이지 당 게시물 수
+  const [limit, setLimit] = useState(15);
+
+  //현재 페이지
+  const [page, setPage] = useState(1);
+
+  //첫 게시물의 위치
+  const offset = (page - 1) * limit;
+  const location = useLocation();
+
+  console.log(offset)
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/questions${location.search}`).then((res) => {
+      console.log(res.data.data)
+      setQuestions(res.data.data)
+      setTotalQuestions(res.data?.pageInfo.totalElements)
+    })
+  }, [location]);
+
+  const handleActive = (e) => {
+    setIsActive(() => {
+      return e.target.value;
+    });
+    setLimit(Number(e.target.value));
+  };
+  console.log(data);
+  return (
+    <>
+      {find && data.length === 0 && <NoSearch></NoSearch>}
+      <QuestionListContainer>
+        {data
+          ? data
+              .map((question) => (
+                <QuestionSummary key={question.id} props={question} />
+              ))
+          : questions
+              .map((question) => (
+                <QuestionSummary key={question.id} props={question} />
+              ))}
+        <PageContainer>
+          <Pagination
+            total={questions.length}
+            limit={limit}
+            page={page}
+            setPage={setPage}
+          />
+          <div className="select_buttons">
+            <button
+              value="15"
+              className={
+                isActive === "15" ? "active select_button" : "select_button"
+              }
+              onClick={handleActive}
+            >
+              15
+            </button>
+            <button
+              value="30"
+              className={
+                isActive === "30" ? "active select_button" : "select_button"
+              }
+              onClick={handleActive}
+            >
+              30
+            </button>
+            <button
+              value="50"
+              className={
+                isActive === "50" ? "active select_button" : "select_button"
+              }
+              onClick={handleActive}
+            >
+              50
+            </button>
+            <div className="per_page">per page</div>
+          </div>
+        </PageContainer>
+      </QuestionListContainer>
+    </>
+  );
+};
+
+export default QuestionList;
+
 
 const QuestionListContainer = styled.div`
   border-top: solid 1px #d6d9dc;
@@ -53,90 +155,3 @@ const PageContainer = styled.div`
     }
   }
 `;
-
-const QuestionList = ({ data, find }) => {
-  const [questions, setQuestions] = useState([]);
-
-  useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/questions`).then((res) => {
-      setQuestions(res?.data.data);
-    });
-  }, []);
-
-  const [isActive, setIsActive] = useState("15");
-
-  //페이지 당 게시물 수
-  const [limit, setLimit] = useState(15);
-
-  //현재 페이지
-  const [page, setPage] = useState(1);
-
-  //첫 게시물의 위치
-  const offset = (page - 1) * limit;
-
-  const handleActive = (e) => {
-    setIsActive(() => {
-      return e.target.value;
-    });
-    setLimit(Number(e.target.value));
-  };
-  console.log(data);
-  return (
-    <>
-      {find && data.length === 0 && <NoSearch></NoSearch>}
-      <QuestionListContainer>
-        {data
-          ? data
-              .slice(offset, offset + limit)
-              .map((question) => (
-                <QuestionSummary key={question.id} props={question} />
-              ))
-          : questions
-              .slice(offset, offset + limit)
-              .map((question) => (
-                <QuestionSummary key={question.id} props={question} />
-              ))}
-        <PageContainer>
-          <Pagination
-            total={questions.length}
-            limit={limit}
-            page={page}
-            setPage={setPage}
-          />
-          <div className="select_buttons">
-            <button
-              value="15"
-              className={
-                isActive === "15" ? "active select_button" : "select_button"
-              }
-              onClick={handleActive}
-            >
-              15
-            </button>
-            <button
-              value="30"
-              className={
-                isActive === "30" ? "active select_button" : "select_button"
-              }
-              onClick={handleActive}
-            >
-              30
-            </button>
-            <button
-              value="50"
-              className={
-                isActive === "50" ? "active select_button" : "select_button"
-              }
-              onClick={handleActive}
-            >
-              50
-            </button>
-            <div className="per_page">per page</div>
-          </div>
-        </PageContainer>
-      </QuestionListContainer>
-    </>
-  );
-};
-
-export default QuestionList;

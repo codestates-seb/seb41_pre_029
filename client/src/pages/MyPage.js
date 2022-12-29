@@ -1,7 +1,7 @@
 // about 내용, 아이콘 날짜 정보 받아와야 함
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
 import Theme from "../components/Theme";
@@ -10,7 +10,6 @@ import DeleteProfile from "../components/DeleteProfile";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import displayedAt from "../util/displayedAt";
-import parser from "../components/Parser";
 
 const PageWrapper = styled.div`
   display: flex;
@@ -185,7 +184,7 @@ const MyPage = () => {
         <Nav location={pathLocation} />
         <ContentsWrapper>
           <div className="content-userBar">
-            <img src={userInfo?.profile?.image}></img>
+            <img src={userInfo?.profile?.image} alt="profile_image"></img>
             <div className="content-userBar--flexItems">
               <div className="username">{userInfo?.nickname}</div>
               <ul className="icons">
