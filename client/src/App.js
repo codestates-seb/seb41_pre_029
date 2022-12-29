@@ -13,7 +13,6 @@ import SignoutPage from "./pages/SignoutPage";
 import SignupPage from "./pages/SignupPage";
 import EditQuestionPage from "./pages/EditQuestionPage";
 
-import useStore from "./zustand/store.js";
 import EditAnswerPage from "./pages/EditAnswerPage";
 
 function App() {

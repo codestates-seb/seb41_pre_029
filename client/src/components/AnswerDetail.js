@@ -8,6 +8,7 @@ import displayedAt from "../util/displayedAt";
 import useScrollTop from "../util/useScrollTop";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
+import { ReactComponent as Select } from "../assets/select.svg";
 
 const AnswerSection = styled.section`
   display: flex;
@@ -15,6 +16,7 @@ const AnswerSection = styled.section`
   border-bottom: 1px solid hsl(210deg 8% 90%);
   max-width: 930px;
   > .recommand {
+    width: 62px;
     padding-right: 16px;
     display: flex;
     flex-direction: column;
@@ -34,11 +36,25 @@ const AnswerSection = styled.section`
       font-size: 21px;
       padding: 4px 0 4px 0;
     }
+    > .select-wrapper {
+      > .selected {
+        fill: #2F800A;
+        width: 62px;
+        height: 62px;
+      }
+      > .not_selected {
+        :hover {
+          fill: #2F800A;
+          cursor: pointer;
+        }
+      }
+    }
   }
   > .post-layout {
+    width: 750px;
     > .post--body {
-      min-width: 718px;
-      max-width: 720px;
+      padding-right: 16px;
+      width: 100%;
       word-break: keep-all;
       word-wrap: normal;
       line-height: 22.5px;
@@ -46,7 +62,7 @@ const AnswerSection = styled.section`
       color: #000;
     }
     > .post--tags {
-      margin: 24px 0 12px 0;
+      margin: 50px 0 12px 0;
       > .summary_meta_tags {
         display: flex;
         flex-direction: row;
@@ -69,13 +85,13 @@ const AnswerSection = styled.section`
       }
     }
     > .post--footer {
+      width: 100%;
       margin-top: 32px;
       display: flex;
       justify-content: space-between;
-      max-width: 672px;
 
       > .post--footer-button {
-        flex: 5 1 auto;
+        flex: 1 1 auto;
         > .button {
           margin: 4px;
           color: #838c95;
@@ -95,6 +111,8 @@ const AnswerSection = styled.section`
       }
       > .post--footer-profile {
         flex: 1 1 auto;
+        width: 173px;
+        max-width: 173px;
         padding-right: 46px;
         display: flex;
         align-items: center;
@@ -132,7 +150,7 @@ const AnswerSection = styled.section`
   }
 `;
 
-const AnswerDetail = (answer) => {
+const AnswerDetail = ({answer, isSelected}) => {
   useScrollTop();
 
   const handleDelete = () => {
@@ -147,7 +165,7 @@ const AnswerDetail = (answer) => {
 
   const params = useParams();
   const questionId = Number(params.id);
-  answer = answer.answers;
+
   const answerId = answer.id;
   const navigate = useNavigate();
   const navigateEditpage = (id) => {
@@ -197,7 +215,11 @@ const AnswerDetail = (answer) => {
       .post(
         `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selection`
       )
-      .then((res) => setSelection(!selection));
+      .then(
+        (res) => { 
+          setSelection(!selection)
+          window.location.reload()
+      });
   };
 
   return (
@@ -216,9 +238,10 @@ const AnswerDetail = (answer) => {
         />
         <div
           onClick={handleSelection}
-          className={selection ? "selected" : "not_selected"}
+          className="select-wrapper"
         >
-          ❌
+          {(isSelected && selection) && <Select className={"selected"} />}
+          {!isSelected && <Select className="not_selected" />} 
         </div>
       </div>
 
