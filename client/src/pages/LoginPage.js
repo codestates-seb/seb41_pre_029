@@ -120,6 +120,7 @@ const Loginpage = () => {
   const [isvalid, setIsValid] = useState("");
   const [emailValid, setEmailValid] = useState("");
   const [pwdValid, setPwdValid] = useState("");
+
   const navigate = useNavigate();
   //정규식 표현 '@' 포함여부와 대문자,소문자를 구분하지않게 표현식끝에 i 사용
   const emailRegex =
@@ -151,18 +152,14 @@ const Loginpage = () => {
     //   setPwdValid("valid");
     // } else {
     axios
-      .post(
-        `${process.env.REACT_APP_API_URL}/members/login`,
-        {
-          usrename: email,
-          password: pwd,
-        },
-        { withCredentials: true }
-      )
+      .post(`${process.env.REACT_APP_API_URL}/members/login`, {
+        email: email,
+        password: pwd,
+      })
       .then((res) => {
         console.log(res);
         const data = JSON.stringify({
-          id: res.data.usrename,
+          id: res.data.email,
           token: res.headers,
         });
         localStorage.setItem("info", data);

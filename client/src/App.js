@@ -13,7 +13,6 @@ import SignoutPage from "./pages/SignoutPage";
 import SignupPage from "./pages/SignupPage";
 import EditQuestionPage from "./pages/EditQuestionPage";
 
-import useStore from "./zustand/store.js";
 import EditAnswerPage from "./pages/EditAnswerPage";
 
 function App() {
@@ -21,7 +20,7 @@ function App() {
 
   return (
     <div className="App">
-      <Router basename={process.env.PUBLIC_URL} >
+      <Router basename={process.env.PUBLIC_URL}>
         <Header search={setSearchData} />
         <Routes>
           <Route path="/" element={<MainPage data={searchData} />} />
