@@ -4,22 +4,22 @@ import com.ikujo.stackoverflow.domain.comment.entity.Comment;
 import com.ikujo.stackoverflow.domain.comment.entity.CommentRecommend;
 
 public record CommentRecommendResponse(Long id,
-                                       Long RecommendCount) {
+                                       Integer RecommendCount) {
 
     public static CommentRecommendResponse from(CommentRecommend commentRecommend) {
 
-        Long recommendCount = commentRecommend.getComment().getCommentRecommendList().stream()
-                .map(CommentRecommend::getFlag)
-                .count();
+        Integer recommendCount = commentRecommend.getComment().getCommentRecommendList().stream()
+                .mapToInt(CommentRecommend::getFlag)
+                .sum();
 
         return new CommentRecommendResponse(commentRecommend.getId(), recommendCount);
     }
 
     public static CommentRecommendResponse from(Comment comment) {
 
-        Long recommendCount = comment.getCommentRecommendList().stream()
-                .map(CommentRecommend::getFlag)
-                .count();
+        Integer recommendCount = comment.getCommentRecommendList().stream()
+                .mapToInt(CommentRecommend::getFlag)
+                .sum();
 
         return new CommentRecommendResponse(null, recommendCount);
     }

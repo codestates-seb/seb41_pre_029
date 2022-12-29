@@ -8,14 +8,14 @@ import java.time.LocalDateTime;
 
 public record CommentResponse(Long id,
                               String content,
-                              Long recommendCount,
+                              Integer recommendCount,
                               Boolean selection,
                               MemberIdentityDto member,
                               LocalDateTime createdAt,
                               LocalDateTime lastModifiedAt
 ) {
 
-    public static CommentResponse of(Long id, String content, Long recommendCount, Boolean selection,
+    public static CommentResponse of(Long id, String content, Integer recommendCount, Boolean selection,
                                      MemberIdentityDto member, LocalDateTime createdAt, LocalDateTime lastModifiedAt) {
         return new CommentResponse(
                 id, content, recommendCount, selection, member, createdAt, lastModifiedAt
@@ -29,9 +29,9 @@ public record CommentResponse(Long id,
                 comment.getMember().getNickname()
         );
 
-        Long recommendCount = comment.getCommentRecommendList().stream()
-                .map(CommentRecommend::getFlag)
-                .count();
+        Integer recommendCount = comment.getCommentRecommendList().stream()
+                .mapToInt(CommentRecommend::getFlag)
+                .sum();
 
         return new CommentResponse(
                 comment.getId(),

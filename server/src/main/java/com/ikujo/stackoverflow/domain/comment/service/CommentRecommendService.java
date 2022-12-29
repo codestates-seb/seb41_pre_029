@@ -1,7 +1,6 @@
 package com.ikujo.stackoverflow.domain.comment.service;
 
 import com.ikujo.stackoverflow.domain.comment.dto.CommentRecommendDto;
-import com.ikujo.stackoverflow.domain.comment.dto.request.CommentRecommendPost;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentRecommendResponse;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
 import com.ikujo.stackoverflow.domain.comment.entity.CommentRecommend;
@@ -29,7 +28,7 @@ public class CommentRecommendService {
 
     private final JwtTokenizer jwtTokenizer;
 
-    public CommentRecommendResponse Likes(Long commentId, String token, CommentRecommendPost commentRecommendPost) {
+    public CommentRecommendResponse Likes(Long commentId, String token) {
 
         Comment comment = findVerifiedComment(commentId);
         Long memberId = jwtTokenizer.tokenToMemberId(token);
@@ -52,7 +51,7 @@ public class CommentRecommendService {
         }
     }
 
-    public CommentRecommendResponse UnLikes(Long commentId, String token, CommentRecommendPost commentRecommendPost) {
+    public CommentRecommendResponse UnLikes(Long commentId, String token) {
 
         Comment comment = findVerifiedComment(commentId);
         Long memberId = jwtTokenizer.tokenToMemberId(token);
@@ -68,6 +67,7 @@ public class CommentRecommendService {
         } else if(commentRecommendDto.flag() == -1) {
             commentRecommendRepository.deleteById(commentRecommendDto.id());
             CommentRecommendResponse commentRecommendResponse = CommentRecommendResponse.from(comment);
+            // 이 시점에서는 comment의 CommentRecommendList에 들어있는 CommentRecommend들이 재설정되어 있을테니 comment를 넘겨줘서 계산
 
             return commentRecommendResponse;
         } else {

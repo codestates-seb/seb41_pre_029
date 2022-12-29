@@ -2,11 +2,9 @@ package com.ikujo.stackoverflow.domain.comment.controller;
 
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPatch;
 import com.ikujo.stackoverflow.domain.comment.dto.request.CommentPost;
-import com.ikujo.stackoverflow.domain.comment.dto.request.CommentRecommendPost;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentMultiResponseDto;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentRecommendResponse;
 import com.ikujo.stackoverflow.domain.comment.dto.response.CommentResponse;
-import com.ikujo.stackoverflow.domain.comment.entity.CommentRecommend;
 import com.ikujo.stackoverflow.domain.comment.service.CommentRecommendService;
 import com.ikujo.stackoverflow.domain.comment.service.CommentService;
 import com.ikujo.stackoverflow.global.dto.SingleResponseDto;
@@ -84,11 +82,10 @@ public class CommentController {
 
     @PostMapping("/{comment-id}/likes")
     public ResponseEntity postLikes(@PathVariable("comment-id") @Positive Long commentId,
-                                    @RequestHeader(name = "Authorization") String token,
-                                    @Valid @RequestBody CommentRecommendPost commentRecommendPost) {
+                                    @RequestHeader(name = "Authorization") String token) {
 
         CommentRecommendResponse commentRecommendResponse =
-                commentRecommendService.Likes(commentId, token, commentRecommendPost);
+                commentRecommendService.Likes(commentId, token);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(commentRecommendResponse), HttpStatus.OK);
@@ -96,11 +93,10 @@ public class CommentController {
 
     @PostMapping("/{comment-id}/unlikes")
     public ResponseEntity postUnlikes(@PathVariable("comment-id") @Positive Long commentId,
-                                      @RequestHeader(name = "Authorization") String token,
-                                      @Valid @RequestBody CommentRecommendPost commentRecommendPost) {
+                                      @RequestHeader(name = "Authorization") String token) {
 
         CommentRecommendResponse commentRecommendResponse =
-                commentRecommendService.UnLikes(commentId, token, commentRecommendPost);
+                commentRecommendService.UnLikes(commentId, token);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(commentRecommendResponse), HttpStatus.OK);
