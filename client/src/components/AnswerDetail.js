@@ -150,6 +150,7 @@ const AnswerSection = styled.section`
   }
 `;
 
+
 const AnswerDetail = ({ answer, isSelected }) => {
   useScrollTop();
 
@@ -212,8 +213,11 @@ const AnswerDetail = ({ answer, isSelected }) => {
 
   const handleSelection = () => {
     axios
-      .post(
-        `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selection`
+      .patch(
+        `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selections`,
+        {
+          selection : true
+        }
       )
       .then((res) => {
         setSelection(!selection);
@@ -235,9 +239,11 @@ const AnswerDetail = ({ answer, isSelected }) => {
           onClick={handleDisLike}
           className={disLike ? "dislike active" : "dislike"}
         />
-        <div onClick={handleSelection} className="select-wrapper">
-          {isSelected && selection && <Select className={"selected"} />}
-          {!isSelected && <Select className="not_selected" />}
+        <div
+          className="select-wrapper"
+        >
+          {(isSelected && selection) && <Select className={"selected"} />}
+          {!isSelected && <Select onClick={() => handleSelection} className="not_selected" />} 
         </div>
       </div>
 

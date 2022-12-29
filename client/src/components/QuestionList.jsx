@@ -9,6 +9,7 @@ import Pagination from "./Pagination";
 const QuestionList = ({ data, find }) => {
   const [questions, setQuestions] = useState([]);
   const [totalQuestions,setTotalQuestions] = useState(0);
+
   const [isActive, setIsActive] = useState("15");
 
   //페이지 당 게시물 수
@@ -20,7 +21,9 @@ const QuestionList = ({ data, find }) => {
   const location = useLocation();
 
    useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/questions`).then((res) => {
+    axios.get(`${process.env.REACT_APP_API_URL}/questions`,
+    { withCredentials: true }))
+    .then((res) => {
       setQuestions(res?.data.data);
     });
   }, []);

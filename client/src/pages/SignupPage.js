@@ -203,7 +203,7 @@ const SignupPage = () => {
       axios(
         {
           method: "post",
-          url: `/members/signup`,
+          url: `${process.env.REACT_APP_API_URL}/members/signup`,
           data: {
             email,
             password: pwd,

@@ -254,10 +254,10 @@ const QuestionPage = () => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`)
       .then((res) => {
-        res.data.data.map(el => el.section ? setIsSelected(true) : null)
-        if(isSelected === null){setIsSelected(false)}
+        res.data.data.map(el => el.selection ? setIsSelected(true) : null)
         setAnswers(res.data.data)
       })
+      // .then(() => {if(isSelected === null){setIsSelected(false)}})
   }, []);
 
   const submmitComment = () => {

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 
 const Nav = ({ location }) => {
   const [active, setActive] = useState(location.pathname);
@@ -12,6 +12,7 @@ const Nav = ({ location }) => {
 
   const params = useParams();
   const id = params.id;
+  const navigate = useNavigate()
 
   const userData = JSON.parse(localStorage.getItem("info"));
   const userId = userData?.id;
@@ -44,7 +45,7 @@ const Nav = ({ location }) => {
           }`}
           onClick={() => {
             handleClick(el.link);
-            navigator("/");
+            navigate("/");
           }}
         >
           <div>
