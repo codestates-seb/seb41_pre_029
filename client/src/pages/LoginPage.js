@@ -151,27 +151,21 @@ const Loginpage = () => {
     //   setPwdValid("valid");
     // } else {
     axios
-      .post(
-        "http://13.124.69.107/members/login",
-        {
-          usrename: email,
-          password: pwd,
-        }
-        // { withCredentials: true }
-      )
+      .post(`${process.env.REACT_APP_API_URL}/members/login`, {
+        email: email,
+        password: pwd,
+      })
       .then((res) => {
         console.log(res);
         const data = JSON.stringify({
-          id: res.data.usrename,
+          id: res.data.email,
           token: res.headers,
         });
         localStorage.setItem("info", data);
         navigate("/");
         window.location.reload();
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
     // }
   };
   return (
