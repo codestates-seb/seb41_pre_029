@@ -29,7 +29,7 @@ const Loginpage = () => {
   const emailValueCheck = emailRegex.test(email);
   const passwordValueCheck = passwordRegex.test(pwd);
 
-  const [setCookie] = useCookies(["ikuzo"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   //초기화기능
   // const clear = () => {
   //   setEmail("");
@@ -60,7 +60,6 @@ const Loginpage = () => {
         { withCredentials: true }
       )
       .then((res) => {
-        console.log(res);
         const data = JSON.stringify({
           id: res.data.id,
           token: res.headers.authorization,
@@ -68,9 +67,11 @@ const Loginpage = () => {
         console.log(data);
         setCookie("ikuzo", data);
         navigate("/");
-        // window.location.reload();
+        window.location.reload();
       })
-      .catch((error) => {});
+      .catch((error) => {
+        console.log("login error!!");
+      });
   };
 
   return (

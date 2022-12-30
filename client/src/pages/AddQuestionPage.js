@@ -1,6 +1,7 @@
 import axios from "axios";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
 
 import useStore from "../zustand/store";
@@ -11,9 +12,8 @@ import Button from "../components/Button";
 import CEditor from "../components/CKEditor";
 
 const AddQuestionPage = () => {
-  const { GetId, GetToken } = useStore((state) => state);
-  const userId = GetId();
-  const token = GetToken();
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+  const token = cookies.ikuzo.token;
 
   const [modal, setModal] = useState(false);
   const [tags, setTags] = useState([]);
@@ -54,10 +54,6 @@ const AddQuestionPage = () => {
       })
     );
   };
-
-  // const [cookies] = useCookies(["ikuzo"]);
-  // const token = cookies.ikuzo.token;
-  // console.log(token);
 
   const handleSubmit = () => {
     if (input.title.trim().length < 1) return;

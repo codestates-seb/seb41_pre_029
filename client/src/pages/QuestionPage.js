@@ -1,6 +1,7 @@
 import axios from "axios";
 import styled from "styled-components";
 import MDEditor from "@uiw/react-md-editor";
+import { useCookies } from "react-cookie";
 import { useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
@@ -21,9 +22,6 @@ import AnswerDetail from "../components/AnswerDetail";
 const QuestionPage = () => {
   useScrollTop();
   const navigate = useNavigate();
-  const { GetId, GetToken } = useStore((state) => state);
-  const userId = GetId();
-  const token = GetToken();
 
   const params = useParams();
   const location = useLocation();
@@ -32,12 +30,16 @@ const QuestionPage = () => {
   const [answers, setAnswers] = useState([]);
   const [comment, setComment] = useState("");
   const [isSelected, setIsSelected] = useState(null);
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+  const token = cookies.ikuzo.token;
+  const id = cookies.ikuzo.id;
+
+  const questionId = params.id;
 
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
         headers: {
-          Authorization: token,
           withCredentials: true,
         },
       })
@@ -50,7 +52,6 @@ const QuestionPage = () => {
         `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`,
         {
           headers: {
-            Authorization: token,
             withCredentials: true,
           },
         }
@@ -65,21 +66,18 @@ const QuestionPage = () => {
     if (comment.trim() === "") {
       return;
     } else {
-      axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`,
-          {
-            headers: {
-              Authorization: token,
-              withCredentials: true,
-            },
-          },
-          {
-            content: comment,
-            memberId: userId.id,
-          }
-        )
-        .then((res) => window.location.reload());
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+        data: {
+          content: comment,
+          memberId: id,
+        },
+      }).then((res) => window.location.reload());
       setComment("");
     }
   };
