@@ -16,8 +16,40 @@ import useScrollTop from "../util/useScrollTop";
 const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
   useScrollTop();
 
+  const params = useParams();
+  const questionId = Number(params.id);
+
+  const answerId = answer.id;
+  const navigate = useNavigate();
+  const navigateEditpage = (id) => {
+    navigate(`/editanswer/${questionId}/${id}`);
+  };
+
+  const [like, setLike] = useState(false);
+  const [disLike, setDisLike] = useState();
+  const [selection, setSelection] = useState(answer.selection);
+
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   const [token, setIsToken] = useState();
+  const [recommendCount, setRecommendCount] = useState(0);
+  console.log(like, disLike);
+  console.log(questionId, answerId);
+
+  useEffect(() => {
+    axios({
+      url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
+      method: "get",
+      headers: {
+        Authorization: token,
+        withCredentials: true,
+      },
+    })
+      // .then((res) => window.location.reload())
+      .then((res) => setRecommendCount(res.data.data.recommendCount))
+      .catch((err) => console.log(err));
+  }, [like, disLike]);
+
+  console.log("추천 수 : " + answer.recommendCount);
 
   useEffect(() => {
     if (cookies?.ikuzo) {
@@ -27,10 +59,9 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
   }, []);
 
   const handleDelete = () => {
-    console.log("삭제 요청 :" + token, answer.id);
     if (window.confirm("답글을 삭제하시겠습니까?")) {
       axios({
-        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answer.id}`,
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
         method: "delete",
         headers: {
           Authorization: token,
@@ -42,32 +73,8 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
     }
   };
 
-  const params = useParams();
-  const questionId = Number(params.id);
-
-  const answerId = answer.id;
-  const navigate = useNavigate();
-  const navigateEditpage = (id) => {
-    navigate(`/editanswer/${questionId}/${id}`);
-  };
-
-  const [like, setLike] = useState(false);
-  const [disLike, setDisLike] = useState(false);
-  const [selection, setSelection] = useState(answer.selection);
-
   const handleLike = () => {
-    if (!like && disLike) {
-      setDisLike(disLike);
-      axios({
-        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`, // 통신할 웹문서
-        method: "post", // 통신 방식
-        headers: {
-          Authorization: token,
-          withCredentials: true,
-        },
-      }).then((res) => setLike(!like));
-    } else {
-      setLike(!like);
+    if ((!like && !disLike) || (like && !disLike)) {
       axios({
         url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`, // 통신할 웹문서
         method: "post", // 통신 방식
@@ -75,23 +82,30 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
           Authorization: token,
           withCredentials: true,
         },
-      }).then((res) => setLike(!like));
+      }).then(() => {
+        setLike(!like);
+      });
+    } else if (!like && disLike) {
+      //[false && true] unlike 요청 && unlike(false)
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      })
+        .then(() => {
+          setDisLike(!disLike);
+        })
+        .catch(() => {
+          console.log("에러!");
+        });
     }
   };
 
   const handleDisLike = () => {
-    if (like && !disLike) {
-      setLike(!like);
-      axios({
-        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`, // 통신할 웹문서
-        method: "post", // 통신 방식
-        headers: {
-          Authorization: token,
-          withCredentials: true,
-        },
-      });
-    } else {
-      setDisLike(!disLike);
+    if ((!like && !disLike) || (!like && disLike)) {
       axios({
         url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`, // 통신할 웹문서
         method: "post", // 통신 방식
@@ -99,9 +113,23 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
           Authorization: token,
           withCredentials: true,
         },
+      }).then(() => {
+        setDisLike(!disLike);
+      });
+    } else if (like && !disLike) {
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      }).then(() => {
+        setLike(!like);
       });
     }
   };
+
   const handleSelection = () => {
     console.log(token)
     axios
@@ -114,12 +142,11 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
           headers: {
             Authorization: token,
             withCredentials: true,
-          }
+          },
         }
       )
       .then((res) => {
         setSelection(!selection);
-        window.location.reload();
       });
   };
 
@@ -131,7 +158,7 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
           onClick={handleLike}
           className={like ? "like active" : "like"}
         />
-        <span>{answer.recommendCount}</span>
+        <span>{recommendCount}</span>
         <RecommandB
           fill="#babfc4"
           onClick={handleDisLike}
@@ -151,7 +178,6 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
           source={answer.content}
           style={{ whiteSpace: "pre-wrap", backgroundColor: "white" }}
         />
-        {/* <div className="post--body">{answer.content}</div> */}
         <div className="post--footer">
           <div className="post--footer-button">
             <span className="button">Share</span>

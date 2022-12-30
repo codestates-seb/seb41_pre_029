@@ -38,7 +38,7 @@ const DeleteProfile = () => {
             headers: {
               Authorization: isToken,
               withCredentials: true,
-            }
+            },
           })
           .then(() => {
             removeCookie("ikuzo");
