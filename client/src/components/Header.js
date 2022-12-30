@@ -42,11 +42,9 @@ const Header = ({ search, find }) => {
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      console.log(data);
       axios
         .get(`${process.env.REACT_APP_API_URL}/questions?searchValue=${data}`)
         .then((res) => {
-          console.log(res);
           search(res?.data?.data);
           find("find");
           navigate("/");

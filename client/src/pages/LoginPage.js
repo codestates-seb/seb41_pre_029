@@ -64,7 +64,6 @@ const Loginpage = () => {
           id: res.data.id,
           token: res.headers.authorization,
         });
-        console.log(data);
         setCookie("ikuzo", data);
         navigate("/");
         window.location.reload();

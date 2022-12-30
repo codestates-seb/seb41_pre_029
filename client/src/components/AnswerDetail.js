@@ -33,8 +33,6 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
   const [token, setIsToken] = useState();
   const [recommendCount, setRecommendCount] = useState(0);
 
-  console.log(recommendCount);
-
   useEffect(() => {
     if (cookies?.ikuzo) {
       setIsToken(cookies?.ikuzo.token);
@@ -47,7 +45,6 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
         },
       })
         .then((res) => {
-          console.log(res);
           setLike(res.data.data.recommendCount === 1 ? true : false);
           setDisLike(res.data.data.recommendCount === -1 ? true : false);
         })
