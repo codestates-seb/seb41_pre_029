@@ -37,15 +37,6 @@ public class CommentControllerTest {
         gson = gsonBuilder.setPrettyPrinting().create();
     }
 
-    @DisplayName("좋아요 기능 테스트")
-    @Test
-    void postLikes() throws Exception{
 
-        //given
 
-        //when
-
-        //then
-
-    }
 }
