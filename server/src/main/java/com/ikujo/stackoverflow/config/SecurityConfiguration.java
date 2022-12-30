@@ -76,6 +76,14 @@ public class SecurityConfiguration {
 
     /**
      * CorsConfigurationSource Bean 생성(구체적인 CORS 정책 설정)
+     *
+     * setAllowCredentials(true) : 크리덴셜 관련한 정보 허용?
+     * Origins : 요청 호스트를 허용하는 역할
+     * Methods : HTTP 메서드 허용(GET, POST, ...)
+     * Headers : 볼 수 있다? 또는 어느 역할을 허용 한다 정도..?(정확하지 않음)
+     * addExposedHeader : 클라이언트에서 헤더 정보를 저장하고 활용할 수 있도록 허락한다.
+     * 메인 프로젝트 때에는 클라이언트에서 요구하는 정보가 더 있을 수 있다!
+     *
      */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
@@ -84,9 +92,9 @@ public class SecurityConfiguration {
 
         configuration.setAllowCredentials(true); // ??
 
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://localhost:3000", "https://localhost:8080", "http://localhost:8080")); // * 은 문제 발생
+        configuration.setAllowedOrigins(Arrays.asList("https://web.postman.co", "http://localhost:3000", "https://localhost:3000")); // * 은 문제 발생
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS")); // OPTIONS?
-        configuration.setAllowedHeaders(Arrays.asList("*")); // 문제발생
+        configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.addExposedHeader("Authorization");
         configuration.addExposedHeader("Refresh");
 
