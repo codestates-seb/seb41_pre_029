@@ -17,11 +17,11 @@ const AnswerDetail = ({ answer, isSelected }) => {
   useScrollTop();
 
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-  const [token, setToken] = useState();
+  const [token, setIsToken] = useState();
 
   useEffect(() => {
-    if (cookies.ikuzo) {
-      setToken(cookies.ikuzo.token);
+    if (cookies?.ikuzo) {
+      setIsToken(cookies?.ikuzo.token);
     }
   }, []);
 
@@ -53,16 +53,6 @@ const AnswerDetail = ({ answer, isSelected }) => {
   const [like, setLike] = useState(false);
   const [disLike, setDisLike] = useState(false);
   const [selection, setSelection] = useState(answer.selection);
-  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-  const [isToken, setIsToken] = useState();
-
-  useEffect(() => {
-    if (cookies?.ikuzo) {
-      setIsToken(cookies?.ikuzo.token);
-    }
-  }, []);
-  // console.log("like:" + like);
-  // console.log("disLike:" + disLike);
 
   const handleLike = () => {
     if (!like && disLike) {
@@ -117,12 +107,10 @@ const AnswerDetail = ({ answer, isSelected }) => {
         `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selections`,
         {
           selection: true,
-
         },
         {
           Authorization: token,
           withCredentials: true,
-
         }
       )
       .then((res) => {

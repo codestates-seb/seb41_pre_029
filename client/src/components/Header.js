@@ -10,8 +10,7 @@ const Header = ({ search, find }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   const [isToken, setIsToken] = useState();
 
-
-  const [memberID, setMemberId] = useState();
+  const [memberId, setMemberId] = useState();
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
@@ -33,9 +32,6 @@ const Header = ({ search, find }) => {
       });
   }, [memberId]);
 
-
-
-
   const [data, setData] = useState("");
   const navigate = useNavigate();
 
@@ -43,7 +39,7 @@ const Header = ({ search, find }) => {
     if (cookies.ikuzo) {
       setIsToken(cookies.ikuzo.token);
       setMemberId(cookies.ikuzo.id);
-      setIsLogin(true)
+      setIsLogin(true);
     }
   }, [cookies]);
 
@@ -56,7 +52,6 @@ const Header = ({ search, find }) => {
       axios
         .get(`${process.env.REACT_APP_API_URL}/questions/searchVaue=${data}`)
         .then((res) => {
-
           search(res?.data?.data);
 
           find("find");
@@ -66,21 +61,6 @@ const Header = ({ search, find }) => {
     }
     find("");
   };
-
-
-  const [profile, setProfile] = useState("");
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/members/${memberID}`, {
-        headers: { Authorization: isToken },
-      })
-      .then((res) => {
-        setProfile(res?.data.data.profile);
-
-      });
-  }, [memberID]);
-
-
 
   return (
     <HeaderSearch>
@@ -146,15 +126,7 @@ const Header = ({ search, find }) => {
           {isLogin ? (
             <>
               <IconUl>
-
-                <IconLi
-                  onClick={() =>
-                    navigate(
-                      `/mypage/${memberID}`
-                    )
-                  }
-                >
-
+                <IconLi onClick={() => navigate(`/mypage/${memberId}`)}>
                   <img alt="profile" src={`${profile?.image}`}></img>
                 </IconLi>
 
