@@ -10,9 +10,15 @@ const EditQuestionPage = () => {
   const params = useParams();
   const id = Number(params.id);
  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
- const token = cookies.ikuzo.token
 
+   const [token, setIsToken] = useState();
 
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+    }
+  }, []);
+ 
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/questions/${id}/edit`, {

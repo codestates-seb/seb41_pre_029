@@ -9,21 +9,29 @@ import { useNavigate, useParams } from "react-router-dom";
 import StyledButton from "./Button";
 import Input from "./Input";
 import axios from "axios";
-import useStore from "../zustand/store";
 
 const EditProfile = () => {
   const navigator = useNavigate();
   const params = useParams();
   const [info, setInfo] = useState({});
 
+  console.log(info)
+
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-  const token = cookies.ikuzo.token;
-  const id = cookies.ikuzo.id;
-  console.log(token);
+  const [isToken, setIsToken] = useState();
+  const [memberId, setMemberId] = useState();
+
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+      setMemberId(cookies.ikuzo.id);
+    }
+  }, []);
+
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/members/${id}`, {
-        Authorization: token,
+      .get(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
+        Authorization: isToken,
         withCredentials: true,
       })
       .then((res) => res.data.data)
@@ -56,7 +64,7 @@ const EditProfile = () => {
     };
 
     axios({
-      url: `${process.env.REACT_APP_API_URL}/members/${id}`,
+      url: `${process.env.REACT_APP_API_URL}/members/${memberId}`,
       method: "patch",
       data,
     }).then((res) => window.location.reload());
@@ -71,7 +79,7 @@ const EditProfile = () => {
           <Profile>
             <div>
               <Title className="profile">Profile image</Title>
-              <img alt="profile" src={info.profile?.image} />
+              <img alt="profile" src={info?.profile?.image} />
             </div>
           </Profile>
           <Input

@@ -1,8 +1,11 @@
 import axios from "axios";
 import styled from "styled-components";
 import MDEditor from "@uiw/react-md-editor";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 import { useNavigate, useParams } from "react-router-dom";
+import { useCookies } from "react-cookie";
+
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
 import { ReactComponent as Select } from "../assets/select.svg";
@@ -13,13 +16,28 @@ import useScrollTop from "../util/useScrollTop";
 const AnswerDetail = ({ answer, isSelected }) => {
   useScrollTop();
 
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+  const [token, setIsToken] = useState();
+
+  useEffect(() => {
+    if (cookies?.ikuzo) {
+      setIsToken(cookies?.ikuzo.token);
+    }
+  }, []);
+
   const handleDelete = () => {
-    if (window.confirm("정말 삭제하시겠습니까?")) {
-      axios
-        .delete(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answer.id}`
-        )
-        .then((res) => window.location.reload());
+    console.log("삭제 요청 :" + token, answer.id);
+    if (window.confirm("답글을 삭제하시겠습니까?")) {
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answer.id}`,
+        method: "delete",
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      })
+        .then((res) => window.location.reload())
+        .catch((err) => console.log(err));
     }
   };
 
@@ -35,47 +53,67 @@ const AnswerDetail = ({ answer, isSelected }) => {
   const [like, setLike] = useState(false);
   const [disLike, setDisLike] = useState(false);
   const [selection, setSelection] = useState(answer.selection);
-  // console.log("like:" + like);
-  // console.log("disLike:" + disLike);
 
   const handleLike = () => {
     if (!like && disLike) {
-      axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`
-        )
-        .then((res) => setLike(!like));
+      setDisLike(disLike);
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      }).then((res) => setLike(!like));
     } else {
-      axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`
-        )
-        .then((res) => setLike(!like));
+      setLike(!like);
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      }).then((res) => setLike(!like));
     }
   };
 
   const handleDisLike = () => {
     if (like && !disLike) {
-      axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`
-        )
-        .then((res) => setDisLike(!disLike));
+      setLike(!like);
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      });
     } else {
-      axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`
-        )
-        .then((res) => setDisLike(!disLike));
+      setDisLike(!disLike);
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      });
     }
   };
-
   const handleSelection = () => {
+    console.log(token)
     axios
       .patch(
         `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selections`,
         {
           selection: true,
+        },
+        {
+          headers: {
+            Authorization: token,
+            withCredentials: true,
+          }
         }
       )
       .then((res) => {
@@ -101,7 +139,7 @@ const AnswerDetail = ({ answer, isSelected }) => {
         <div className="select-wrapper">
           {isSelected && selection && <Select className={"selected"} />}
           {!isSelected && (
-            <Select onClick={() => handleSelection} className="not_selected" />
+            <Select onClick={handleSelection} className="not_selected" />
           )}
         </div>
       </div>

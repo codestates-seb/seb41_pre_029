@@ -8,45 +8,54 @@ import Button from "./Button";
 
 const Header = ({ search, find }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-  const isToken = cookies.ikuzo.token;
-  const memberID = cookies.ikuzo.id;
-  const [isLogin, setIsLogin] = useState((isToken && true) || false);
-  console.log(isLogin);
+  const [isToken, setIsToken] = useState();
 
+  const [memberId, setMemberId] = useState();
+  const [isLogin, setIsLogin] = useState(false);
   const [data, setData] = useState("");
-  const [list, setList] = useState("");
   const navigate = useNavigate();
+  const [profile, setProfile] = useState("");
+
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+      setMemberId(cookies.ikuzo.id);
+      setIsLogin(true);
+    }
+  }, []);
+
+  console.log(memberId);
+
+  useEffect(() => {
+    if (memberId) {
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
+          headers: { Authorization: isToken },
+        })
+        .then((res) => {
+          setProfile(res.data.data.profile);
+        });
+    }
+  }, [memberId]);
 
   const changeValue = (e) => {
     setData(e.target.value);
   };
+
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      axios.get(`${process.env.REACT_APP_API_URL}/questions`).then((res) => {
-        setList(res?.data.data);
-        const filtered = list?.filter(
-          (el) => el.content.includes(data) || el.title.includes(data)
-        );
-        find("find");
-        navigate("/");
-        search(filtered);
-        setData("");
-      });
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/questions/searchVaue=${data}`)
+        .then((res) => {
+          search(res?.data?.data);
+
+          find("find");
+          navigate("/");
+          setData("");
+        });
     }
     find("");
   };
-
-  const [profile, setProfile] = useState("");
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/members/${memberID}`, {
-        headers: { Authorization: isToken },
-      })
-
-      .then((res) => {
-        setProfile(res.data.data.profile);
-      });
-  }, []);
 
   return (
     <HeaderSearch>
@@ -112,19 +121,13 @@ const Header = ({ search, find }) => {
           {isLogin ? (
             <>
               <IconUl>
-                <IconLi
-                  onClick={() =>
-                    navigate(
-                      `${process.env.REACT_APP_API_URL}/mypage/${memberID}`
-                    )
-                  }
-                >
+                <IconLi onClick={() => navigate(`/mypage/${memberId}`)}>
                   <img alt="profile" src={`${profile?.image}`}></img>
                 </IconLi>
 
                 <IconLi>
                   <svg
-                    ariaHidden="true"
+                    aria-hidden="true"
                     className="svg-icon iconInbox"
                     width="20"
                     height="24"
@@ -135,7 +138,7 @@ const Header = ({ search, find }) => {
                 </IconLi>
                 <IconLi>
                   <svg
-                    ariaHidden="true"
+                    aria-hidden="true"
                     className="svg-icon iconAchievements"
                     width="18"
                     height="24"
@@ -146,7 +149,7 @@ const Header = ({ search, find }) => {
                 </IconLi>
                 <IconLi>
                   <svg
-                    ariaHidden="true"
+                    aria-hidden="true"
                     className="svg-icon iconHelp"
                     width="18"
                     height="24"
