@@ -9,6 +9,7 @@ import Button from "./Button";
 const Header = ({ search, find }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   const [isToken, setIsToken] = useState();
+
   const [memberID, setMemberId] = useState();
   const [isLogin, setIsLogin] = useState(false);
 
@@ -19,6 +20,19 @@ const Header = ({ search, find }) => {
       setIsLogin(true);
     }
   }, []);
+
+  const [profile, setProfile] = useState("");
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
+        headers: { Authorization: isToken },
+      })
+      .then((res) => {
+        setProfile(res?.data?.data?.profile);
+      });
+  }, [memberId]);
+
+
 
   const [data, setData] = useState("");
   const navigate = useNavigate();
@@ -32,7 +46,9 @@ const Header = ({ search, find }) => {
       axios
         .get(`${process.env.REACT_APP_API_URL}/questions/searchVaue=${data}`)
         .then((res) => {
-          search(res?.data.data);
+
+          search(res?.data?.data);
+
           find("find");
           navigate("/");
           setData("");
@@ -40,6 +56,7 @@ const Header = ({ search, find }) => {
     }
     find("");
   };
+
 
   const [profile, setProfile] = useState("");
   useEffect(() => {
@@ -51,6 +68,7 @@ const Header = ({ search, find }) => {
         setProfile(res?.data.data.profile);
       });
   }, [memberID]);
+
 
   return (
     <HeaderSearch>
@@ -116,7 +134,10 @@ const Header = ({ search, find }) => {
           {isLogin ? (
             <>
               <IconUl>
+
                 <IconLi onClick={() => navigate(`/mypage/${memberID}`)}>
+
+
                   <img alt="profile" src={`${profile?.image}`}></img>
                 </IconLi>
 

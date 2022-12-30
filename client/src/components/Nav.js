@@ -22,10 +22,22 @@ const Nav = ({ location }) => {
     }
   }, []);
 
+  const [isToken, setIsToken] = useState();
+  const [memberId, setMemberId] = useState();
+
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+      setMemberId(cookies.ikuzo.id);
+    }
+  }, []);
+
   const menu = [
     { name: "Questions", link: "/" },
     { name: "Tags", link: "/tags" },
-    { name: "Users", link: `/mypage/${isToken}` },
+
+    { name: "Users", link: `/mypage/${memberId}` },
+
     { name: "Companies", link: "/companies" },
   ];
 

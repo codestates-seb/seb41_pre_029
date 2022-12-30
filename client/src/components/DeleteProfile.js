@@ -37,10 +37,12 @@ const DeleteProfile = () => {
             withCredentials: true,
           })
           .then(() => {
+
             removeCookie("ikuzo");
             alert("그동안 이용해주셔서 감사합니다.");
             navigate("/");
             window.location.reload();
+
           })
           .catch((err) => console.log("error!!"));
       } else {

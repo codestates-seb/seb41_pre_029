@@ -11,6 +11,7 @@ import CEditor from "./CKEditor";
 
 const EditAnswer = ({ originData, questionId, answerId }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+
   const [isToken, setIsToken] = useState();
 
   useEffect(() => {
@@ -18,6 +19,7 @@ const EditAnswer = ({ originData, questionId, answerId }) => {
       setIsToken(cookies.ikuzo.token);
     }
   }, []);
+
   const location = { pathname: "/" };
   const [content, setContent] = useState(originData.content);
 
