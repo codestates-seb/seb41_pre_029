@@ -1,83 +1,10 @@
-import styled from "styled-components";
 import axios from "axios";
+import styled from "styled-components";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useStore from "../zustand/store";
 
 import Button from "./Button";
-
-const DeleteProfileContainer = styled.div`
-  height: 544px;
-  color: #0c0d0e;
-  overflow-wrap: break-word;
-  line-height: 20px;
-
-  & > :last-child {
-    margin: 5px 10px;
-    font-weight: bold;
-    font-size: 13px;
-  }
-
-  > div > .normal {
-    background-color: rgba(212, 104, 107, 0.8);
-    border: none;
-    border-radius: 3px;
-    height: 38px;
-  }
-
-  > div > .active {
-    border: none;
-    border-radius: 3.5px;
-    height: 38px;
-    border-color: transparent;
-
-    box-shadow: inset 0 1px 0 0 hsla(0, 0%, 100%, 0.4);
-
-    &:hover {
-      background-color: #c22e32;
-      box-shadow: inset 0 1px 0 0 hsla(0, 0%, 100%, 0.4);
-    }
-  }
-
-  > p {
-    font-size: 16.5px;
-    margin: 0 0 16.5px;
-    color: #232629;
-  }
-  > ul {
-    margin: 10px;
-
-    > li {
-      font-size: 15px;
-      color: #232629;
-
-      margin-top: 15px;
-      padding-bottom: 5px;
-    }
-  }
-`;
-
-const Heading = styled.h1`
-  font-size: 27px;
-
-  border-bottom: 1px solid #f1f2f3;
-  margin: 0 0 24px;
-  padding: 0 0 16px;
-`;
-
-const FlexItem = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  margin-top: 10px;
-  margin-bottom: 15px;
-  margin-left: 8px;
-
-  & > div :first-child {
-    margin-left: 5px;
-    margin-right: 5px;
-  }
-`;
 
 const DeleteProfile = () => {
  
@@ -167,3 +94,76 @@ const DeleteProfile = () => {
 };
 
 export default DeleteProfile;
+
+const DeleteProfileContainer = styled.div`
+  height: 544px;
+  color: #0c0d0e;
+  overflow-wrap: break-word;
+  line-height: 20px;
+
+  & > :last-child {
+    margin: 5px 10px;
+    font-weight: bold;
+    font-size: 13px;
+  }
+
+  > div > .normal {
+    background-color: rgba(212, 104, 107, 0.8);
+    border: none;
+    border-radius: 3px;
+    height: 38px;
+  }
+
+  > div > .active {
+    border: none;
+    border-radius: 3.5px;
+    height: 38px;
+    border-color: transparent;
+
+    box-shadow: inset 0 1px 0 0 hsla(0, 0%, 100%, 0.4);
+
+    &:hover {
+      background-color: #c22e32;
+      box-shadow: inset 0 1px 0 0 hsla(0, 0%, 100%, 0.4);
+    }
+  }
+
+  > p {
+    font-size: 16.5px;
+    margin: 0 0 16.5px;
+    color: #232629;
+  }
+  > ul {
+    margin: 10px;
+
+    > li {
+      font-size: 15px;
+      color: #232629;
+
+      margin-top: 15px;
+      padding-bottom: 5px;
+    }
+  }
+`;
+
+const Heading = styled.h1`
+  font-size: 27px;
+
+  border-bottom: 1px solid #f1f2f3;
+  margin: 0 0 24px;
+  padding: 0 0 16px;
+`;
+
+const FlexItem = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  margin-top: 10px;
+  margin-bottom: 15px;
+  margin-left: 8px;
+
+  & > div :first-child {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+`;

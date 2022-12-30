@@ -1,13 +1,12 @@
+import axios from "axios";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import Nav from "./Nav";
+import Button from "./Button";
 import Footer from "./Footer";
 import CEditor from "./CKEditor";
-import Parser from "./Parser";
-import Button from "./Button";
-import axios from "axios";
 
 const EditQuestion = ({ originData }) => {
   const location = { pathname: "/" };
@@ -130,7 +129,6 @@ const EditQuestion = ({ originData }) => {
           <InputBox>
             <div className="title">Body</div>
             <CEditor onChange={setContent} data={content} />
-            {/* <Parser html={content} /> */}
           </InputBox>
           <InputBox className="tag_box">
             <div className="title">Tags</div>

@@ -187,7 +187,7 @@ const SignupPage = () => {
   const emailValueCheck = emailRegex.test(email);
   const passwordValueCheck = passwordRegex.test(pwd);
 
-  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+  const [setCookie] = useCookies(["ikuzo"]);
 
   //폼 제출시 서버통신
   const submitHandler = (e) => {
@@ -227,6 +227,7 @@ const SignupPage = () => {
               id: res.data.id,
               token: res.headers.authorization,
             });
+            console.log(data);
             setCookie("ikuzo", data);
             pathNavigate("/");
             window.location.reload();

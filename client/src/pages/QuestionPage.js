@@ -1,234 +1,23 @@
 import axios from "axios";
 import styled from "styled-components";
+import MDEditor from "@uiw/react-md-editor";
 import { useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
-import MDEditor from "@uiw/react-md-editor";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
+
 import useStore from "../zustand/store";
-import Footer from "../components/Footer";
-import CEditor from "../components/CKEditor";
-import useScrollTop from "../util/useScrollTop";
+
 import Nav from "../components/Nav";
-import AnswerDetail from "../components/AnswerDetail";
+import Footer from "../components/Footer";
 import Button from "../components/Button";
-import displayedAt from "../util/displayedAt";
-import YellowBox from "../components/YellowBox";
 import GreyBox from "../components/GreyBox";
+import CEditor from "../components/CKEditor";
+import displayedAt from "../util/displayedAt";
+import useScrollTop from "../util/useScrollTop";
+import YellowBox from "../components/YellowBox";
+import AnswerDetail from "../components/AnswerDetail";
 
-const QuestionPageWrapper = styled.div`
-  display: flex;
-  margin: 0 160px 0 160px;
-`;
-
-const PageWrapper = styled.div`
-  height: auto;
-  padding: 0 24px 0 24px;
-
-  > .bodyWrapper {
-    display: flex;
-    > .sidebar {
-      > * {
-        margin-bottom: 15px;
-      }
-    }
-  }
-`;
-
-const TitleBar = styled.div`
-  padding: 24px 0 24px 0;
-  > .head {
-    height: auto;
-
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    > h1 {
-      margin-right: 12px;
-      margin-bottom: 12px;
-
-      font-size: 27px;
-      line-height: 35px;
-      text-align: left;
-      letter-spacing: normal;
-      overflow-wrap: normal;
-      max-width: 930px;
-    }
-    > Button {
-    }
-  }
-  > .infoWrapper {
-    display: flex;
-    border-bottom: 1px solid hsl(210deg 8% 90%);
-    padding-bottom: 8px;
-    margin-bottom: 16px;
-    > div {
-      white-space: nowrap;
-      margin: 0 16px 8px 0;
-      font-size: 13px;
-      color: #232629;
-      line-height: 17px;
-    }
-  }
-`;
-const BodyArticle = styled.article`
-  height: auto;
-`;
-const QuestionSection = styled.section`
-  display: flex;
-  > .recommand {
-    width: 62px;
-    display: flex;
-    flex-direction: column;
-    padding-right: 16px;
-    align-items: center;
-    > svg {
-      :hover {
-        fill: #8a8a8a;
-        cursor: pointer;
-      }
-      &.active {
-        fill: #f48225;
-      }
-    }
-    > span {
-      margin: 2px;
-      font-size: 21px;
-      padding: 4px 0 4px 0;
-    }
-  }
-  > .post-layout {
-    width: 750px;
-    > .post--body {
-      padding-right: 16px;
-      width: 100%;
-      word-break: keep-all;
-      word-wrap: normal;
-      line-height: 22.5px;
-      background-color: white;
-      color: black;
-    }
-    > .post--tags {
-      margin: 24px 0 12px 0;
-      > .summary_meta_tags {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-
-        > .summary_meta_tag {
-          background: #e1ecf4;
-          margin-right: 4px;
-          padding: 3px 6px;
-          border-width: 1px;
-          border-style: solid;
-          border-radius: 3px;
-          border-color: #e1ecf4;
-          font-size: 12px;
-          color: #39739d;
-        }
-      }
-    }
-    > .post--footer {
-      margin-top: 32px;
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-
-      > .post--footer-button {
-        flex: 1 1 auto;
-        > .button {
-          margin: 4px;
-          color: #838c95;
-          font-size: 13px;
-          font-weight: 400;
-          :hover {
-            cursor: pointer;
-          }
-        }
-      }
-      > .post--footer-profile {
-        flex: 1 1 auto;
-        width: 173px;
-        max-width: 173px;
-        padding-right: 46px;
-        display: flex;
-        align-items: center;
-        justify-content: left;
-        background-color: #d9eaf7;
-        padding: 8px;
-        > .imgwrapper {
-          > img {
-            width: 32px;
-            height: 32px;
-          }
-        }
-        > .profile-wrapper {
-          font-size: 12px;
-          color: #6a737c;
-          font-weight: 500;
-          padding-left: 8px;
-          > .profile-time {
-            margin-bottom: 4px;
-          }
-          > .profile-user {
-            display: flex;
-            > .userName {
-              color: #0a95ff;
-              padding-right: 8px;
-            }
-            > .user-follower {
-              color: #6a737c;
-              font-weight: 700;
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-const AnswerSection = styled.article`
-  padding-right: 16px;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  > h2 {
-    font-size: 19px;
-    color: #232629;
-    font-weight: bold;
-    padding: 8px 0 8px 0;
-    margin-bottom: 12px;
-    margin-top: 32px;
-  }
-`;
-const Editor = styled.div`
-  height: auto;
-  width: 100%;
-  > h2 {
-    padding: 20px;
-    font-size: 1.5rem;
-  }
-`;
-const Tag = styled.div`
-  font-size: 17px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  padding: 20px 0px;
-  .summary_meta_tag {
-    background: #e1ecf4;
-    margin-right: 4px;
-    padding: 3px 6px;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 3px;
-    border-color: #e1ecf4;
-    font-size: 15px;
-    color: #39739d;
-  }
-`;
-const AnswerBtn = styled(Button)`
-  margin-top: 50px;
-`;
 const QuestionPage = () => {
   useScrollTop();
   const navigate = useNavigate();
@@ -237,7 +26,6 @@ const QuestionPage = () => {
   const token = GetToken();
 
   const params = useParams();
-  const questionId = Number(params.id);
   const location = useLocation();
 
   const [question, setQuestion] = useState();
@@ -271,7 +59,6 @@ const QuestionPage = () => {
         res.data.data.map((el) => (el.selection ? setIsSelected(true) : null));
         setAnswers(res.data.data);
       });
-    // .then(() => {if(isSelected === null){setIsSelected(false)}})
   }, []);
 
   const submmitComment = () => {
@@ -514,3 +301,217 @@ const QuestionPage = () => {
 };
 
 export default QuestionPage;
+
+const QuestionPageWrapper = styled.div`
+  display: flex;
+  margin: 0 160px 0 160px;
+`;
+
+const PageWrapper = styled.div`
+  height: auto;
+  padding: 0 24px 0 24px;
+
+  > .bodyWrapper {
+    display: flex;
+    > .sidebar {
+      > * {
+        margin-bottom: 15px;
+      }
+    }
+  }
+`;
+
+const TitleBar = styled.div`
+  padding: 24px 0 24px 0;
+  > .head {
+    height: auto;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    > h1 {
+      margin-right: 12px;
+      margin-bottom: 12px;
+
+      font-size: 27px;
+      line-height: 35px;
+      text-align: left;
+      letter-spacing: normal;
+      overflow-wrap: normal;
+      max-width: 930px;
+    }
+    > Button {
+    }
+  }
+  > .infoWrapper {
+    display: flex;
+    border-bottom: 1px solid hsl(210deg 8% 90%);
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    > div {
+      white-space: nowrap;
+      margin: 0 16px 8px 0;
+      font-size: 13px;
+      color: #232629;
+      line-height: 17px;
+    }
+  }
+`;
+const BodyArticle = styled.article`
+  height: auto;
+`;
+const QuestionSection = styled.section`
+  display: flex;
+  > .recommand {
+    width: 62px;
+    display: flex;
+    flex-direction: column;
+    padding-right: 16px;
+    align-items: center;
+    > svg {
+      :hover {
+        fill: #8a8a8a;
+        cursor: pointer;
+      }
+      &.active {
+        fill: #f48225;
+      }
+    }
+    > span {
+      margin: 2px;
+      font-size: 21px;
+      padding: 4px 0 4px 0;
+    }
+  }
+  > .post-layout {
+    width: 750px;
+    > .post--body {
+      padding-right: 16px;
+      width: 100%;
+      word-break: keep-all;
+      word-wrap: normal;
+      line-height: 22.5px;
+      background-color: white;
+      color: black;
+    }
+    > .post--tags {
+      margin: 24px 0 12px 0;
+      > .summary_meta_tags {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        > .summary_meta_tag {
+          background: #e1ecf4;
+          margin-right: 4px;
+          padding: 3px 6px;
+          border-width: 1px;
+          border-style: solid;
+          border-radius: 3px;
+          border-color: #e1ecf4;
+          font-size: 12px;
+          color: #39739d;
+        }
+      }
+    }
+    > .post--footer {
+      margin-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      > .post--footer-button {
+        flex: 1 1 auto;
+        > .button {
+          margin: 4px;
+          color: #838c95;
+          font-size: 13px;
+          font-weight: 400;
+          :hover {
+            cursor: pointer;
+          }
+        }
+      }
+      > .post--footer-profile {
+        flex: 1 1 auto;
+        width: 173px;
+        max-width: 173px;
+        padding-right: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        background-color: #d9eaf7;
+        padding: 8px;
+        > .imgwrapper {
+          > img {
+            width: 32px;
+            height: 32px;
+          }
+        }
+        > .profile-wrapper {
+          font-size: 12px;
+          color: #6a737c;
+          font-weight: 500;
+          padding-left: 8px;
+          > .profile-time {
+            margin-bottom: 4px;
+          }
+          > .profile-user {
+            display: flex;
+            > .userName {
+              color: #0a95ff;
+              padding-right: 8px;
+            }
+            > .user-follower {
+              color: #6a737c;
+              font-weight: 700;
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+const AnswerSection = styled.article`
+  padding-right: 16px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  > h2 {
+    font-size: 19px;
+    color: #232629;
+    font-weight: bold;
+    padding: 8px 0 8px 0;
+    margin-bottom: 12px;
+    margin-top: 32px;
+  }
+`;
+const Editor = styled.div`
+  height: auto;
+  width: 100%;
+  > h2 {
+    padding: 20px;
+    font-size: 1.5rem;
+  }
+`;
+const Tag = styled.div`
+  font-size: 17px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 20px 0px;
+  .summary_meta_tag {
+    background: #e1ecf4;
+    margin-right: 4px;
+    padding: 3px 6px;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 3px;
+    border-color: #e1ecf4;
+    font-size: 15px;
+    color: #39739d;
+  }
+`;
+const AnswerBtn = styled(Button)`
+  margin-top: 50px;
+`;

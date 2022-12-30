@@ -1,13 +1,13 @@
-import styled from "styled-components";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import useStore from "../zustand/store";
 
+import Modal from "../components/Modal";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
-import Modal from "../components/Modal";
 import CEditor from "../components/CKEditor";
 
 const AddQuestionPage = () => {
