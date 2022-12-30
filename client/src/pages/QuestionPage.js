@@ -120,7 +120,6 @@ const QuestionPage = () => {
     })
       // .then((res) => window.location.reload())
       .then((res) => {
-        console.log(res.data.data)
         setRecommendCount(res.data.data.articleLikeInfo.totalLike)
       }
       )
