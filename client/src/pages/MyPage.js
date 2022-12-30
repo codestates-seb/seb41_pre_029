@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-
+import useStore from "../zustand/store";
 import Theme from "../components/Theme";
 import EditProfile from "../components/EditProfile";
 import DeleteProfile from "../components/DeleteProfile";
@@ -146,10 +146,17 @@ const MyPage = () => {
   const params = useParams();
   const id = params.id;
   const pathLocation = { pathname: `/mypage/${id}` };
-
+  const { GetId, GetToken } = useStore((state) => state);
+  const userId = GetId();
+  const token = GetToken();
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/members/${id}`)
+      .get(`${process.env.REACT_APP_API_URL}/members/${userId}`, {
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      })
       .then((res) => setUserInfo(res.data.data));
   }, []);
 

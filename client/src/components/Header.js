@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Button from "./Button";
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import useStore from "../zustand/store";
 import axios from "axios";
 
 import useStore from "../zustand/store";
@@ -107,9 +108,10 @@ const IconLi = styled.li`
   }
 `;
 const Header = ({ search, find }) => {
-  const [isLogin, setIsLogin] = useState(
-    (localStorage.getItem("info") && true) || false
-  );
+  const isToken = useStore((state) => state.GetToken);
+  const memberID = useStore((state) => state.GetId);
+  const [isLogin, setIsLogin] = useState((isToken && true) || false);
+
   const [data, setData] = useState("");
   const [list, setList] = useState("");
   const navigate = useNavigate();
@@ -140,7 +142,10 @@ const Header = ({ search, find }) => {
   const [profile, setProfile] = useState("");
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/members/${userId}`)
+      .get(`${process.env.REACT_APP_API_URL}/members/${memberID}`, {
+        headers: { Authorization: isToken },
+      })
+
       .then((res) => {
         setProfile(res.data.data.profile);
       });
@@ -210,7 +215,13 @@ const Header = ({ search, find }) => {
           {isLogin ? (
             <>
               <IconUl>
-                <IconLi onClick={() => navigate(`/mypage/${token.id}`)}>
+                <IconLi
+                  onClick={() =>
+                    navigate(
+                      `${process.env.REACT_APP_API_URL}/mypage/${memberID}`
+                    )
+                  }
+                >
                   <img alt="profile" src={`${profile?.image}`}></img>
                 </IconLi>
 
