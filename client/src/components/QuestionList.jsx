@@ -20,14 +20,12 @@ const QuestionList = ({ data, find }) => {
 
   const location = useLocation();
 
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/questions`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setQuestions(res?.data.data);
-      });
+   useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/questions`,
+    { withCredentials: true })
+    .then((res) => {
+      setQuestions(res?.data.data);
+    });
   }, []);
 
   useEffect(() => {

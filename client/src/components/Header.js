@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import useStore from "../zustand/store";
 import axios from "axios";
+
+import useStore from "../zustand/store";
 const HeaderSearch = styled.header`
   height: 50px;
   box-sizing: border-box;
@@ -113,6 +115,11 @@ const Header = ({ search, find }) => {
   const [data, setData] = useState("");
   const [list, setList] = useState("");
   const navigate = useNavigate();
+
+  const { GetId, GetToken } = useStore((state) => state);
+  const userId = GetId();
+  const token = GetToken();
+
   const changeValue = (e) => {
     setData(e.target.value);
   };
@@ -138,6 +145,7 @@ const Header = ({ search, find }) => {
       .get(`${process.env.REACT_APP_API_URL}/members/${memberID}`, {
         headers: { Authorization: isToken },
       })
+
       .then((res) => {
         setProfile(res.data.data.profile);
       });
