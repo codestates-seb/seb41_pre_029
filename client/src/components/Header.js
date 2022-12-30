@@ -14,7 +14,6 @@ const Header = ({ search, find }) => {
   console.log(isLogin);
 
   const [data, setData] = useState("");
-  const [list, setList] = useState("");
   const navigate = useNavigate();
 
   const changeValue = (e) => {
@@ -22,14 +21,10 @@ const Header = ({ search, find }) => {
   };
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      axios.get(`${process.env.REACT_APP_API_URL}/questions`).then((res) => {
-        setList(res?.data.data);
-        const filtered = list?.filter(
-          (el) => el.content.includes(data) || el.title.includes(data)
-        );
+      axios.get(`${process.env.REACT_APP_API_URL}/questions/searchVaue=${data}`).then((res) => {
+        search(res?.data.data);
         find("find");
         navigate("/");
-        search(filtered);
         setData("");
       });
     }

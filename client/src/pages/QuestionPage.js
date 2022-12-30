@@ -57,7 +57,7 @@ const QuestionPage = () => {
         }
       )
       .then((res) => {
-        res.data.data.map((el) => (el.selection ? setIsSelected(true) : null));
+        res.data.data?.map((el) => (el.selection ? setIsSelected(true) : null));
         setAnswers(res.data.data);
       });
   }, []);
