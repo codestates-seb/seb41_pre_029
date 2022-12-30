@@ -8,13 +8,21 @@ import Button from "./Button";
 
 const Header = ({ search, find }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-  const isToken = cookies.ikuzo.token;
-  const memberID = cookies.ikuzo.id;
+  const [isToken, setIsToken] = useState();
+  const [memberID, setMemberId] = useState(cookies?.ikuzo.id);
   const [isLogin, setIsLogin] = useState((isToken && true) || false);
   console.log(isLogin);
 
   const [data, setData] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+      setMemberId(cookies.ikuzo.id);
+      setIsLogin(true)
+    }
+  }, [cookies]);
 
   const changeValue = (e) => {
     setData(e.target.value);
@@ -40,8 +48,8 @@ const Header = ({ search, find }) => {
       })
 
       .then((res) => {
-        setProfile(res.data.data.profile);
-      });
+        setProfile(res?.data.data.profile);
+      })
   }, []);
 
   return (
@@ -111,7 +119,7 @@ const Header = ({ search, find }) => {
                 <IconLi
                   onClick={() =>
                     navigate(
-                      `${process.env.REACT_APP_API_URL}/mypage/${memberID}`
+                      `/mypage/${memberID}`
                     )
                   }
                 >
@@ -120,7 +128,7 @@ const Header = ({ search, find }) => {
 
                 <IconLi>
                   <svg
-                    ariaHidden="true"
+                    aria-hidden="true"
                     className="svg-icon iconInbox"
                     width="20"
                     height="24"
@@ -131,7 +139,7 @@ const Header = ({ search, find }) => {
                 </IconLi>
                 <IconLi>
                   <svg
-                    ariaHidden="true"
+                    aria-hidden="true"
                     className="svg-icon iconAchievements"
                     width="18"
                     height="24"
@@ -142,7 +150,7 @@ const Header = ({ search, find }) => {
                 </IconLi>
                 <IconLi>
                   <svg
-                    ariaHidden="true"
+                    aria-hidden="true"
                     className="svg-icon iconHelp"
                     width="18"
                     height="24"

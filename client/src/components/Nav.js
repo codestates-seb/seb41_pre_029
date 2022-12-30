@@ -1,25 +1,33 @@
 import styled from "styled-components";
 
-import useStore from "../zustand/store";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
 const Nav = ({ location }) => {
   const [active, setActive] = useState(location.pathname);
+  const [isToken, setIsToken] = useState();
+  const [memberId, setMemberId] = useState();
+
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+      setMemberId(cookies.ikuzo.id);
+    }
+  }, []);
 
   const handleClick = (link) => {
     setActive(link);
   };
   const navigate = useNavigate();
-
+  
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
 
   const menu = [
     { name: "Questions", link: "/" },
     { name: "Tags", link: "/tags" },
-    { name: "Users", link: `/mypage/${cookies.ikuzo.token}` },
+    { name: "Users", link: `/mypage/${memberId}` },
     { name: "Companies", link: "/companies" },
   ];
 
