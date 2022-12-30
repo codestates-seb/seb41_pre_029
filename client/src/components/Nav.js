@@ -4,6 +4,7 @@ import useStore from "../zustand/store";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const Nav = ({ location }) => {
   const [active, setActive] = useState(location.pathname);
@@ -13,13 +14,12 @@ const Nav = ({ location }) => {
   };
   const navigate = useNavigate();
 
-  const { GetId } = useStore((state) => state);
-  const userId = GetId();
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
 
   const menu = [
     { name: "Questions", link: "/" },
     { name: "Tags", link: "/tags" },
-    { name: "Users", link: `/mypage/${userId}` },
+    { name: "Users", link: `/mypage/${cookies.ikuzo.token}` },
     { name: "Companies", link: "/companies" },
   ];
 

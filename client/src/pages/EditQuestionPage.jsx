@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import { useState, useEffect } from "react";
 import useStore from "../zustand/store";
 import EditQuestion from "../components/EditQuestion";
@@ -8,8 +9,10 @@ const EditQuestionPage = () => {
   const [originData, setOriginData] = useState();
   const params = useParams();
   const id = Number(params.id);
-  const { GetToken } = useStore((state) => state);
-  const token = GetToken();
+ const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+ const token = cookies.ikuzo.token
+
+
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/questions/${id}/edit`, {

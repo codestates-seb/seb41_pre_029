@@ -6,14 +6,15 @@ import { useNavigate } from "react-router-dom";
 import useCookies from "../zustand/store";
 
 const LogoutPage = () => {
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   const navigate = useNavigate();
 
   function logoutHandler() {
-    localStorage.clear();
+    removeCookie(["ikuzo"]);
     navigate("/");
     window.location.reload();
   }
-  
+
   return (
     <Container>
       <LogoutTitle>
@@ -93,8 +94,6 @@ const LogoutPage = () => {
   );
 };
 export default LogoutPage;
-
-
 
 const Container = styled.div`
   display: flex;
@@ -207,4 +206,3 @@ const Explanation = styled.h2`
   color: #6a737c;
   font-size: 0.8rem;
 `;
-

@@ -22,6 +22,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -33,8 +35,9 @@ public class ArticleController {
     private final JwtTokenizer jwtTokenizer;
 
     @GetMapping
-    public ResponseEntity getQuestions(@PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable) {
-        Page<ArticleResponse> articleResponsePage = articleService.findArticles(pageable);
+    public ResponseEntity getQuestions(@RequestParam(required = false) String searchValue,
+                                       @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<ArticleResponse> articleResponsePage = articleService.searchArticles(searchValue, pageable);
 
         return new ResponseEntity<>(
                 new MultiResponseDto(articleResponsePage.getContent(), articleResponsePage),
@@ -42,11 +45,9 @@ public class ArticleController {
     }
 
     @GetMapping("{article-id}")
-    public ResponseEntity getQuestion(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity getQuestion(@RequestHeader(name = "Authorization", required = false) String token,
                                       @Positive @PathVariable("article-id") Long articleId) {
-        Long memberId = jwtTokenizer.tokenToMemberId(token);
-        log.info("GET: getQuestion 요청이 들어왔습니다. 현재 로그인 memberId : {} 입니다.", memberId);
-        ArticleDetailResponse articleDetailDto = articleService.findArticle(articleId, memberId);
+        ArticleDetailResponse articleDetailDto = articleService.findArticle(articleId, token);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(articleDetailDto),

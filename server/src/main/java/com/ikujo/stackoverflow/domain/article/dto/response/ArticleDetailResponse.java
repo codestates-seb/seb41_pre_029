@@ -15,7 +15,6 @@ public record ArticleDetailResponse(
         String title,
         String content,
         List<String> tags,
-        Integer recommendCount,
         Long hits,
         BaseTimeDto baseTime,
         ArticleLikeInfo articleLikeInfo
@@ -23,7 +22,7 @@ public record ArticleDetailResponse(
 ) {
 
     public static ArticleDetailResponse of(MemberIdentityDto member, Long id, String title, String content,
-                                           String tag, Integer recommendCount, Long hits, BaseTimeDto baseTime, ArticleLikeInfo articleLikeInfo) {
+                                           String tag, Long hits, BaseTimeDto baseTime, ArticleLikeInfo articleLikeInfo) {
         List<String> tags = tagSplit(tag);
 
         return new ArticleDetailResponse(
@@ -32,7 +31,6 @@ public record ArticleDetailResponse(
                 title,
                 content,
                 tags,
-                recommendCount,
                 hits,
                 baseTime,
                 articleLikeInfo
@@ -69,7 +67,6 @@ public record ArticleDetailResponse(
                 article.getTitle(),
                 article.getContent(),
                 tags,
-                article.getArticleRecommendList().size(),
                 article.getHits(),
                 baseTimeDto,
                 articleLikeInfo
@@ -91,7 +88,6 @@ public record ArticleDetailResponse(
                 article.getTitle(),
                 article.getContent(),
                 tags,
-                article.getArticleRecommendList().size(),
                 article.getHits(),
                 baseTimeDto,
                 articleLikeInfo

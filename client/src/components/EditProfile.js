@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
 import { ReactComponent as SvgTwitter } from "../assets/twitter.svg";
 import { ReactComponent as SvgGit } from "../assets/git.svg";
@@ -15,13 +16,16 @@ const EditProfile = () => {
   const params = useParams();
   const [info, setInfo] = useState({});
 
-  const { GetId, GetToken } = useStore((state) => state);
-  const id = GetId();
-  const token = GetToken();
-
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+  const token = cookies.ikuzo.token;
+  const id = cookies.ikuzo.id;
+  console.log(token);
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/members/${id}`)
+      .get(`${process.env.REACT_APP_API_URL}/members/${id}`, {
+        Authorization: token,
+        withCredentials: true,
+      })
       .then((res) => res.data.data)
       .then((res) => {
         setInfo(res);
