@@ -249,7 +249,7 @@ const QuestionPage = () => {
               <AnswerSection>
                 <h2 className="answerAmount">{answers?.length} Answers</h2>
                 {answers?.map((el, idx) => (
-                  <AnswerDetail key={idx} answer={el} isSelected={isSelected} />
+                  <AnswerDetail key={idx} answer={el} isSelected={isSelected} memberInfo={question?.member}/>
                 ))}
                 <Editor>
                   <h2>Your Answer</h2>

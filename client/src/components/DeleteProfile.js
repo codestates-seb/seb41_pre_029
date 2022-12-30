@@ -9,13 +9,15 @@ import Button from "./Button";
 const DeleteProfile = () => {
   const { params } = useParams();
   const navigate = useNavigate();
-
+  
   const [active, setActive] = useState(false);
-
+  
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   const [isToken, setIsToken] = useState();
   const [memberID, setMemberId] = useState();
-
+  
+  console.log(isToken)
+  console.log(memberID)
   useEffect(() => {
     if (cookies.ikuzo) {
       setIsToken(cookies.ikuzo.token);
