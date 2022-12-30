@@ -148,8 +148,16 @@ const MyPage = () => {
   const id = params.id;
   const pathLocation = { pathname: `/mypage/${id}` };
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-  const token = cookies.ikuzo.token;
-  const userId = cookies.ikuzo.id;
+  const [token, setIsToken] = useState();
+  const [userId, setMemberId] = useState();
+
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+      setMemberId(cookies.ikuzo.id);
+    }
+  }, []);
+
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/members/${userId}`, {

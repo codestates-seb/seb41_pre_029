@@ -7,8 +7,6 @@ import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
 
-import useStore from "../zustand/store";
-
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -30,9 +28,19 @@ const QuestionPage = () => {
   const [answers, setAnswers] = useState([]);
   const [comment, setComment] = useState("");
   const [isSelected, setIsSelected] = useState(null);
+
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-  const token = cookies.ikuzo.token;
-  const id = cookies.ikuzo.id;
+  const [token, setToken] = useState();
+  const [id, setId] = useState();
+
+  console.log(question?.articleLikeInfo.totalLike);
+
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setToken(cookies.ikuzo.token);
+      setId(cookies.ikuzo.id);
+    }
+  }, []);
 
   const questionId = params.id;
 
@@ -63,12 +71,6 @@ const QuestionPage = () => {
   }, []);
 
   const submmitComment = () => {
-    console.log("답글 내용 : " + comment);
-    console.log("token : " + token);
-    console.log("id : " + id);
-    console.log("게시글 번호 : " + questionId);
-    console.log("게시글 번호 : " + questionId);
-
     if (comment.trim() === "") {
       return;
     } else {
@@ -94,83 +96,67 @@ const QuestionPage = () => {
 
   const handleDelete = () => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
-      axios
-        .delete(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
-          headers: {
-            Authorization: token,
-            withCredentials: true,
-          },
-        })
-        .then((res) => navigate("/"));
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}`,
+        method: "delete",
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      })
+        .then((res) => navigate("/"))
+        .catch((err) => console.log(err));
     }
   };
-
-  /**
-   * 1. false, false 일때 추천 누르면 like가 true, 비추천 누르면 dislike가 true가 된다.
-   * 2. true, false 일때 어떤 버튼을 누르든 like가 false가 된다.
-   * 3. false, true 일 때 어떤 버튼을 누르든 dislike가 false가 된다.
-   *
-   * 추천 버튼을 눌렀을 때 false/true이면 dislike 요청, false/false 이면 like 요청, true/false이면 like 요청
-   * 비추천 버튼을 눌렀을 때 true/false이면 like 요청 false/false 이면 dislike 요청, false/true이면 dislike 요청,
-   *
-   * */
 
   const [like, setLike] = useState(false);
   const [disLike, setDisLike] = useState(false);
 
   const handleLike = () => {
     if (!like && disLike) {
-      axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`,
-          {
-            headers: {
-              Authorization: token,
-              withCredentials: true,
-            },
-          }
-        )
-        .then((res) => setLike(!like));
+      setDisLike(disLike);
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      }).then((res) => setLike(!like));
     } else {
-      axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`,
-          {
-            headers: {
-              Authorization: token,
-              withCredentials: true,
-            },
-          }
-        )
-        .then((res) => setLike(!like));
+      setLike(!like);
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      }).then((res) => setLike(!like));
     }
   };
 
   const handleDisLike = () => {
     if (like && !disLike) {
-      axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`,
-          {
-            headers: {
-              Authorization: token,
-              withCredentials: true,
-            },
-          }
-        )
-        .then((res) => setDisLike(!disLike));
+      setLike(!like);
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      });
     } else {
-      axios
-        .post(
-          `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`,
-          {
-            headers: {
-              Authorization: token,
-              withCredentials: true,
-            },
-          }
-        )
-        .then((res) => setDisLike(!disLike));
+      setDisLike(!disLike);
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      });
     }
   };
 
