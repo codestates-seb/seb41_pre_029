@@ -2,7 +2,7 @@ import "./App.css";
 import { useState } from "react";
 import { CookiesProvider } from "react-cookie";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
+//const Header = React.lazy(() => import("./components/Header"));
 import Header from "./components/Header";
 import MainPage from "./pages/MainPage";
 import AddQuestionPage from "./pages/AddQuestionPage";

@@ -27,6 +27,7 @@ const EditProfile = () => {
   }, []);
 
   useEffect(() => {
+
     if(memberId !== null) {
       axios
       .get(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
@@ -41,6 +42,7 @@ const EditProfile = () => {
       });
     }
   }, [memberId]);
+
 
   const { link, nickname, profile } = info;
 
@@ -65,6 +67,8 @@ const EditProfile = () => {
       twitter: link.twitter,
     };
 
+
+
     axios.patch(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
        ...data
     }, {
@@ -76,6 +80,7 @@ const EditProfile = () => {
       window.scrollTo(0, 0)
       window.location.reload()
     })
+
   };
 
   return (
