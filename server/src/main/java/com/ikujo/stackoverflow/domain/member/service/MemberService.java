@@ -18,10 +18,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
 
@@ -34,6 +35,7 @@ public class MemberService {
     /**
      * 회원 가입
      */
+    @Transactional
     public MemberResponse createMember(MemberSignupPost memberSignupPost) {
         verifyExistsEmail(memberSignupPost.email());
 
@@ -93,8 +95,9 @@ public class MemberService {
     /**
      * 회원 삭제
      */
-    public void deleteMember(String token) {
-        Member findMember = findVerifiedMember(jwtTokenizer.tokenToMemberId(token));
+    @Transactional
+    public void deleteMember(Long id) {
+        Member findMember = findVerifiedMember(id);
 
         memberRepository.delete(findMember);
     }
@@ -102,6 +105,7 @@ public class MemberService {
     /**
      * 이메일 확인 실패시 회원 삭제
      */
+    @Transactional
     public void emailVerifyFailed(Long id) {
         Member verifiedMember = findVerifiedMember(id);
 
@@ -120,7 +124,7 @@ public class MemberService {
     /**
      * 이메일 중복 검증
      */
-    private void verifyExistsEmail(String email) {
+    public void verifyExistsEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent())
             throw new BusinessLogicException(ExceptionCode.EMAIL_EXISTS);
@@ -129,12 +133,20 @@ public class MemberService {
     /**
      * 회원 조회 검증
      */
-    @Transactional(readOnly = true)
     public Member findVerifiedMember(Long id) {
         Member findMember = memberRepository.findById(id).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         return findMember;
+    }
+
+    /**
+     * 회원 id와 token의 유저 정보(id)가 일치하는 지 검증
+     */
+    public void verifyId(Long id, String token) {
+        if (!Objects.equals(id, jwtTokenizer.tokenToMemberId(token))) {
+            throw new BusinessLogicException(ExceptionCode.VALIDATION_ERROR);
+        }
     }
 
 }

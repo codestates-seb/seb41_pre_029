@@ -92,7 +92,12 @@ public class SecurityConfiguration {
 
         configuration.setAllowCredentials(true); // ??
 
-        configuration.setAllowedOrigins(Arrays.asList("https://web.postman.co", "http://localhost:3000", "https://localhost:3000")); // * 은 문제 발생
+        configuration.setAllowedOrigins(Arrays.asList("https://ikuzo.s3-website.ap-northeast-2.amazonaws.com",
+                "http://ikuzo.s3-website.ap-northeast-2.amazonaws.com",
+                "https://web.postman.co",
+                "http://localhost:3000",
+                "https://localhost:3000")); // * 은 문제 발생
+
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS")); // OPTIONS?
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.addExposedHeader("Authorization");
