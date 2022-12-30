@@ -4,8 +4,6 @@ import { useCookies } from "react-cookie";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-import useStore from "../zustand/store";
-
 import Nav from "../components/Nav";
 import Theme from "../components/Theme";
 import Footer from "../components/Footer";
@@ -148,13 +146,23 @@ const MyPage = () => {
   const id = params.id;
   const pathLocation = { pathname: `/mypage/${id}` };
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-  const token = cookies.ikuzo.token;
-  const userId = cookies.ikuzo.id;
+
+  const [isToken, setIsToken] = useState();
+  const [memberId, setMemberId] = useState();
+
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+      setMemberId(cookies.ikuzo.id);
+    }
+  }, []);
+
+
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/members/${userId}`, {
+      .get(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
         headers: {
-          Authorization: token,
+          Authorization: isToken,
           withCredentials: true,
         },
       })

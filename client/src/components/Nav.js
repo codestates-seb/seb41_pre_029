@@ -7,6 +7,7 @@ import { useCookies } from "react-cookie";
 
 const Nav = ({ location }) => {
   const [active, setActive] = useState(location.pathname);
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"])
   const [isToken, setIsToken] = useState();
   const [memberId, setMemberId] = useState();
 
@@ -17,17 +18,22 @@ const Nav = ({ location }) => {
     }
   }, []);
 
+
   const handleClick = (link) => {
     setActive(link);
   };
   const navigate = useNavigate();
-  
-  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+
+
+
 
   const menu = [
     { name: "Questions", link: "/" },
     { name: "Tags", link: "/tags" },
+
     { name: "Users", link: `/mypage/${memberId}` },
+
+
     { name: "Companies", link: "/companies" },
   ];
 

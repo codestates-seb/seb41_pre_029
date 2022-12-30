@@ -18,13 +18,20 @@ const EditProfile = () => {
   console.log(info)
 
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-  const token = cookies.ikuzo.token;
-  const id = cookies.ikuzo.id;
-  console.log(token);
+  const [isToken, setIsToken] = useState();
+  const [memberId, setMemberId] = useState();
+
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+      setMemberId(cookies.ikuzo.id);
+    }
+  }, []);
+
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/members/${id}`, {
-        Authorization: token,
+      .get(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
+        Authorization: isToken,
         withCredentials: true,
       })
       .then((res) => res.data.data)
@@ -57,7 +64,7 @@ const EditProfile = () => {
     };
 
     axios({
-      url: `${process.env.REACT_APP_API_URL}/members/${id}`,
+      url: `${process.env.REACT_APP_API_URL}/members/${memberId}`,
       method: "patch",
       data,
     }).then((res) => window.location.reload());

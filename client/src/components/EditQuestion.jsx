@@ -35,7 +35,13 @@ const EditQuestion = ({ originData }) => {
   );
 
    const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
- const token = cookies.ikuzo.token;
+  const [token, setIsToken] = useState();
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+
+    }
+  }, []);
 
   useEffect(() => {
     setInput({
