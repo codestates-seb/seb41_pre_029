@@ -13,7 +13,7 @@ import { ReactComponent as Select } from "../assets/select.svg";
 import displayedAt from "../util/displayedAt";
 import useScrollTop from "../util/useScrollTop";
 
-const AnswerDetail = ({ answer, isSelected }) => {
+const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
   useScrollTop();
 
   const params = useParams();
@@ -54,6 +54,7 @@ const AnswerDetail = ({ answer, isSelected }) => {
   useEffect(() => {
     if (cookies?.ikuzo) {
       setIsToken(cookies?.ikuzo.token);
+      console.log(cookies?.ikuzo.id)
     }
   }, []);
 
@@ -130,6 +131,7 @@ const AnswerDetail = ({ answer, isSelected }) => {
   };
 
   const handleSelection = () => {
+    console.log(token)
     axios
       .patch(
         `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selections`,
@@ -164,9 +166,9 @@ const AnswerDetail = ({ answer, isSelected }) => {
         />
         <div className="select-wrapper">
           {isSelected && selection && <Select className={"selected"} />}
-          {!isSelected && (
-            <Select onClick={handleSelection} className="not_selected" />
-          )}
+          {!isSelected && cookies?.ikuzo.id === memberInfo.id 
+            ? (<Select onClick={handleSelection} className="not_selected" />)
+            : null}
         </div>
       </div>
 

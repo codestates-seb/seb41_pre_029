@@ -42,9 +42,10 @@ public class CommentController {
 
     @PatchMapping("/{comment-id}")
     public ResponseEntity patchComment(@PathVariable("comment-id") @Positive Long commentId,
+                                       @RequestHeader(name = "Authorization") String token,
                                        @Valid @RequestBody CommentPatch commentPatch) {
 
-        commentService.updateComment(commentId, commentPatch);
+        commentService.updateComment(commentId, token, commentPatch);
 
         return new ResponseEntity<>(HttpStatus.RESET_CONTENT);
 
@@ -74,9 +75,10 @@ public class CommentController {
     }
 
     @DeleteMapping("/{comment-id}")
-    public ResponseEntity deleteComment(@PathVariable("comment-id") @Positive Long commentId) {
+    public ResponseEntity deleteComment(@PathVariable("comment-id") @Positive Long commentId,
+                                        @RequestHeader(name = "Authorization") String token) {
 
-        commentService.deleteComment(commentId);
+        commentService.deleteComment(commentId, token);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -105,9 +107,10 @@ public class CommentController {
 
     @PatchMapping("/{comment-id}/selections")
     public ResponseEntity patchSelection(@PathVariable("comment-id") @Positive Long commentId,
+                                         @RequestHeader(name = "Authorization") String token,
                                          @RequestBody CommentSelection commentSelection) {
 
-        commentService.updateSelection(commentId ,commentSelection);
+        commentService.updateSelection(commentId, token, commentSelection);
 
         return new ResponseEntity<>(HttpStatus.RESET_CONTENT);
     }

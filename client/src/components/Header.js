@@ -23,7 +23,7 @@ const Header = ({ search, find }) => {
       setIsLogin(true);
     }
   }, []);
-
+  
   useEffect(() => {
     if (memberId) {
       axios
