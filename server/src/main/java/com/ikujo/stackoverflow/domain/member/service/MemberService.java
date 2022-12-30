@@ -49,8 +49,8 @@ public class MemberService {
 
         Member savedMember = memberRepository.save(member);
 
-        // 이메일 인증 로직 필요
-        publisher.publishEvent(new MemberRegistrationApplicationEvent(this, savedMember));
+        // 회원가입 시 이메일 발송(계정 경로에 한글이 있는 경우 사용 불가능)
+//        publisher.publishEvent(new MemberRegistrationApplicationEvent(this, savedMember));
 
         return MemberResponse.from(savedMember);
     }

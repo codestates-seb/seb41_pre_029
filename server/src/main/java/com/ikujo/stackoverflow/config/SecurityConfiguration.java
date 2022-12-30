@@ -63,6 +63,7 @@ public class SecurityConfiguration {
                 );
 
         return http.build();
+
     }
 
     /**
@@ -83,9 +84,11 @@ public class SecurityConfiguration {
 
         configuration.setAllowCredentials(true); // ??
 
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://13.124.69.107", "https://localhost:3000", "https://13.124.69.107")); // * 은 문제 발생
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://localhost:3000", "https://localhost:8080", "http://localhost:8080")); // * 은 문제 발생
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS")); // OPTIONS?
         configuration.setAllowedHeaders(Arrays.asList("*")); // 문제발생
+        configuration.addExposedHeader("Authorization");
+        configuration.addExposedHeader("Refresh");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource(); // UrlBasedCorsConfigurationSource 생성
         source.registerCorsConfiguration("/**", configuration); // 모든 URL에 앞에서 구성한 CORS 정책 적용
@@ -124,6 +127,7 @@ public class SecurityConfiguration {
             // Spring Security Filter Chain 추가
             builder.addFilter(jwtAuthenticationFilter)
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
+
         }
     }
 

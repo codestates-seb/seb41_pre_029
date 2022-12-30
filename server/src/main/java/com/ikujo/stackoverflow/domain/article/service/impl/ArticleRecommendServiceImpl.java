@@ -10,7 +10,6 @@ import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.repository.MemberRepository;
 import com.ikujo.stackoverflow.global.exception.BusinessLogicException;
 import com.ikujo.stackoverflow.global.exception.ExceptionCode;
-import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -34,9 +34,11 @@ public class MemberRegistrationEventListener {
         try {
 
             String[] to = new String[]{event.getMember().getEmail()};
-            String message = event.getMember().getNickname() + "님, 회원 가입이 성공적으로 완료되었습니다.";
+            String message = event.getMember().getNickname() + "님, 회원 가입이 성공적으로 완료되었습니다.\n\n" +
+                    "\n FE 개발자 : 김현우, 김현정, 김소라" +
+                    "\n BE 개발자 : 배용현, 박성호, 조대희" +
+                    "\n 이쿠조 빠이팅~!~!";
             emailService.sendEmail(to, subject, message, templateName);
-
 
         } catch (MailSendException e) {
 
