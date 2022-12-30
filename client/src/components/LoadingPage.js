@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import SyncLoader from "react-spinners/SyncLoader";
+import FadeLoader from "react-spinners/FadeLoader";
 
 const LoadingPage = () => {
   return (
     <Div>
-      <SyncLoader color="#e59537" size={20} speedMultiplier={0.6} margin={15} />
+      <FadeLoader color="rgba(242, 165, 74, 1)" height={45} margin={50} />
     </Div>
   );
 };
