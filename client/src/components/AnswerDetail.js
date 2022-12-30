@@ -26,15 +26,38 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
   };
 
   const [like, setLike] = useState(false);
-  const [disLike, setDisLike] = useState();
+  const [disLike, setDisLike] = useState(false);
   const [selection, setSelection] = useState(answer.selection);
 
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   const [token, setIsToken] = useState();
   const [recommendCount, setRecommendCount] = useState(0);
-  console.log(like, disLike);
-  console.log(questionId, answerId);
+  // console.log(like, disLike);
+  // console.log(questionId, answerId);
 
+  // console.log("추천 수 : " + answer.recommendCount);
+
+  useEffect(() => {
+    if (cookies?.ikuzo) {
+      setIsToken(cookies?.ikuzo.token);
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
+        method: "get",
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      })
+        // .then((res) => window.location.reload())
+        .then((res) => {
+          setLike(res.data.data.recommendCount === 1 ? true : false);
+          setDisLike(res.data.data.recommendCount === -1 ? true : false);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
+
+  //추천 수 요청
   useEffect(() => {
     axios({
       url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
@@ -48,15 +71,6 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
       .then((res) => setRecommendCount(res.data.data.recommendCount))
       .catch((err) => console.log(err));
   }, [like, disLike]);
-
-  console.log("추천 수 : " + answer.recommendCount);
-
-  useEffect(() => {
-    if (cookies?.ikuzo) {
-      setIsToken(cookies?.ikuzo.token);
-      console.log(cookies?.ikuzo.id)
-    }
-  }, []);
 
   const handleDelete = () => {
     if (window.confirm("답글을 삭제하시겠습니까?")) {
@@ -131,7 +145,7 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
   };
 
   const handleSelection = () => {
-    console.log(token)
+    console.log(token);
     axios
       .patch(
         `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selections`,

@@ -8,9 +8,11 @@ import Footer from "../components/Footer";
 import Button from "../components/Button";
 import GreyBox from "../components/GreyBox";
 import YellowBox from "../components/YellowBox";
+import useScrollTop from "../util/useScrollTop";
 import QuestionList from "../components/QuestionList";
 
 const MainPage = ({ data, find }) => {
+  useScrollTop();
   const location = useLocation();
   const [questionAmount, setQuestionAmount] = useState();
 
