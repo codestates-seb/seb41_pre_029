@@ -163,6 +163,8 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
         setSelection(!selection);
       });
   };
+  console.log(cookies?.ikuzo.id)
+  console.log(memberInfo?.id)
 
   return (
     <AnswerSection>
@@ -180,9 +182,9 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
         />
         <div className="select-wrapper">
           {isSelected && selection && <Select className={"selected"} />}
-          {!isSelected && cookies?.ikuzo?.id === memberInfo?.id ? (
-            <Select onClick={handleSelection} className="not_selected" />
-          ) : null}
+          {!isSelected && cookies?.ikuzo.id === memberInfo?.id 
+            ? (<Select onClick={handleSelection} className="not_selected" />)
+            : null}
         </div>
       </div>
 
