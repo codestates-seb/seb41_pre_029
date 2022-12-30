@@ -5,10 +5,10 @@ import { ReactComponent as SvgTwitter } from "../assets/twitter.svg";
 import { ReactComponent as SvgGit } from "../assets/git.svg";
 import { ReactComponent as Web } from "../assets/web.svg";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 import StyledButton from "./Button";
 import Input from "./Input";
-import axios from "axios";
 
 const EditProfile = () => {
   const navigator = useNavigate();
@@ -17,7 +17,7 @@ const EditProfile = () => {
 
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   const [isToken, setIsToken] = useState();
-  const [memberId, setMemberId] = useState();
+  const [memberId, setMemberId] = useState(null);
 
   useEffect(() => {
     if (cookies.ikuzo) {
@@ -27,16 +27,22 @@ const EditProfile = () => {
   }, []);
 
   useEffect(() => {
-    if (cookies.ikuzo) {
+
+    if(memberId !== null) {
       axios
-        .get(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
+      .get(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
+        headers: {
           Authorization: isToken,
           withCredentials: true,
-        })
-        .then((res) => setInfo(res))
-        .catch((err) => console.log("error!!"));
+        }
+      })
+      .then((res) => res.data.data)
+      .then((res) => {
+        setInfo(res);
+      });
     }
-  }, []);
+  }, [memberId]);
+
 
   const { link, nickname, profile } = info;
 
@@ -61,11 +67,20 @@ const EditProfile = () => {
       twitter: link.twitter,
     };
 
-    axios
-      .patch(`${process.env.REACT_APP_API_URL}/members/${memberId}`, data, {
-        headers: { Authorization: isToken, withCredentials: true },
-      })
-      .then((res) => window.location.reload());
+
+
+    axios.patch(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
+       ...data
+    }, {
+      headers: {
+        Authorization: isToken,
+      }
+    }
+    ).then((res) => {
+      window.scrollTo(0, 0)
+      window.location.reload()
+    })
+
   };
 
   return (

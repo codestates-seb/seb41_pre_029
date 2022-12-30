@@ -31,6 +31,7 @@ const QuestionPage = () => {
 
   const [token, setIsToken] = useState();
   const [memberID, setMemberId] = useState();
+  const [recommendCount, setRecommendCount] = useState(0);
 
   useEffect(() => {
     if (cookies.ikuzo) {
@@ -48,7 +49,13 @@ const QuestionPage = () => {
           withCredentials: true,
         },
       })
-      .then((res) => setQuestion(res.data.data));
+      .then((res) => {
+        setQuestion(res.data.data);
+        setLike(res.data.data.articleLikeInfo.totalLike === 1 ? true : false);
+        setDisLike(
+          res.data.data.articleLikeInfo.totalLike === -1 ? true : false
+        );
+      });
   }, []);
 
   useEffect(() => {
@@ -107,19 +114,22 @@ const QuestionPage = () => {
   const [like, setLike] = useState(false);
   const [disLike, setDisLike] = useState(false);
 
+  useEffect(() => {
+    axios({
+      url: `${process.env.REACT_APP_API_URL}/questions/${questionId}`,
+      method: "get",
+      headers: {
+        Authorization: token,
+        withCredentials: true,
+      },
+    })
+      // .then((res) => window.location.reload())
+      .then((res) => setRecommendCount(res.data.data.articleLikeInfo.totalLike))
+      .catch((err) => console.log(err));
+  }, [like, disLike]);
+
   const handleLike = () => {
-    if (!like && disLike) {
-      setDisLike(disLike);
-      axios({
-        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`, // 통신할 웹문서
-        method: "post", // 통신 방식
-        headers: {
-          Authorization: token,
-          withCredentials: true,
-        },
-      }).then((res) => setLike(!like));
-    } else {
-      setLike(!like);
+    if ((!like && !disLike) || (like && !disLike)) {
       axios({
         url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`, // 통신할 웹문서
         method: "post", // 통신 방식
@@ -127,23 +137,30 @@ const QuestionPage = () => {
           Authorization: token,
           withCredentials: true,
         },
-      }).then((res) => setLike(!like));
+      }).then(() => {
+        setLike(!like);
+      });
+    } else if (!like && disLike) {
+      //[false && true] unlike 요청 && unlike(false)
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      })
+        .then(() => {
+          setDisLike(!disLike);
+        })
+        .catch(() => {
+          console.log("에러!");
+        });
     }
   };
 
   const handleDisLike = () => {
-    if (like && !disLike) {
-      setLike(!like);
-      axios({
-        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`, // 통신할 웹문서
-        method: "post", // 통신 방식
-        headers: {
-          Authorization: token,
-          withCredentials: true,
-        },
-      });
-    } else {
-      setDisLike(!disLike);
+    if ((!like && !disLike) || (!like && disLike)) {
       axios({
         url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`, // 통신할 웹문서
         method: "post", // 통신 방식
@@ -151,6 +168,19 @@ const QuestionPage = () => {
           Authorization: token,
           withCredentials: true,
         },
+      }).then(() => {
+        setDisLike(!disLike);
+      });
+    } else if (like && !disLike) {
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      }).then(() => {
+        setLike(!like);
       });
     }
   };
@@ -185,7 +215,7 @@ const QuestionPage = () => {
                     onClick={handleLike}
                     className={like ? "like active" : "like"}
                   />
-                  <span>{question?.recommendCount}</span>
+                  <span>{recommendCount}</span>
                   <RecommandB
                     fill="#babfc4"
                     onClick={handleDisLike}
@@ -249,7 +279,12 @@ const QuestionPage = () => {
               <AnswerSection>
                 <h2 className="answerAmount">{answers?.length} Answers</h2>
                 {answers?.map((el, idx) => (
-                  <AnswerDetail key={idx} answer={el} isSelected={isSelected} />
+                  <AnswerDetail
+                    key={idx}
+                    answer={el}
+                    isSelected={isSelected}
+                    memberInfo={question?.member}
+                  />
                 ))}
                 <Editor>
                   <h2>Your Answer</h2>

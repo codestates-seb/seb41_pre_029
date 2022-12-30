@@ -148,6 +148,11 @@ const MyPage = () => {
   const pathLocation = { pathname: `/mypage/${id}` };
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
 
+
+  const [isToken, setIsToken] = useState();
+  const [memberId, setMemberId] = useState(null);
+
+
   useEffect(() => {
     if (cookies.ikuzo) {
       setIsToken(cookies.ikuzo.token);
@@ -155,15 +160,17 @@ const MyPage = () => {
     }
   }, []);
 
-  if (cookies.ikuzo) {
-    axios
+
+
+  useEffect(() => {
+    if(memberId !== null) {
+      axios
       .get(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
         headers: { Authorization: isToken },
       })
-      .then((res) => {
-        setUserInfo(res.data.data);
-      });
-  }
+      .then((res) => setUserInfo(res.data.data));
+    }
+    }, [memberId]);
 
   const handleClickEdit = () => {
     if (!activeEdit) {
