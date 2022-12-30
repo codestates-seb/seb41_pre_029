@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
 
-import useStore from "../zustand/store";
-
 import Modal from "../components/Modal";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -13,7 +11,13 @@ import CEditor from "../components/CKEditor";
 
 const AddQuestionPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-  const token = cookies.ikuzo.token;
+  const [token, setIsToken] = useState();
+
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+    }
+  }, []);
 
   const [modal, setModal] = useState(false);
   const [tags, setTags] = useState([]);

@@ -11,8 +11,14 @@ const EditAnswerPage = () => {
   const questionId = params.questionid;
   const answerId = params.answerid;
 
-   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-   const token = cookies.ikuzo.token
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+  const [token, setIsToken] = useState();
+
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+    }
+  }, []);
 
 
   useEffect(() => {
