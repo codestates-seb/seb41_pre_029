@@ -15,7 +15,6 @@ import useScrollTop from "../util/useScrollTop";
 
 const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
   useScrollTop();
-  console.log(answer)
 
   const params = useParams();
   const questionId = Number(params.id);
@@ -144,7 +143,6 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
   };
 
   const handleSelection = () => {
-    console.log(token);
     axios
       .patch(
         `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selections`,
@@ -215,9 +213,7 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
                 asked {displayedAt(answer.createdAt)}
               </div>
               <div className="profile-user">
-                <div className="userName">
-                  {answer?.member?.nickname}
-                </div>
+                <div className="userName">{answer?.member?.nickname}</div>
                 <div className="user-follower">
                   <span className="follower">1,120</span>
                 </div>
