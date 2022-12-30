@@ -141,12 +141,13 @@ const MyPage = () => {
   const [activeDel, setActiveDel] = useState(false);
   const [page, setPage] = useState("theme");
   const [userInfo, setUserInfo] = useState({});
-  const [isToken, setIsToken] = useState();
-  const [memberId, setMemberId] = useState();
+
   const params = useParams();
   const id = params.id;
   const pathLocation = { pathname: `/mypage/${id}` };
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+  const [isToken, setIsToken] = useState();
+  const [memberId, setMemberId] = useState(null);
 
   useEffect(() => {
     if (cookies.ikuzo) {
