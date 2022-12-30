@@ -24,8 +24,6 @@ const Header = ({ search, find }) => {
     }
   }, []);
 
-  console.log(memberId);
-
   useEffect(() => {
     if (memberId) {
       axios
