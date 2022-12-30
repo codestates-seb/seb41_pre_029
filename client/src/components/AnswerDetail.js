@@ -2,8 +2,10 @@ import axios from "axios";
 import styled from "styled-components";
 import MDEditor from "@uiw/react-md-editor";
 import { useState, useEffect } from "react";
-import { useCookies } from "react-cookie";
+
 import { useNavigate, useParams } from "react-router-dom";
+import { useCookies } from "react-cookie";
+
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
 import { ReactComponent as Select } from "../assets/select.svg";
@@ -51,6 +53,14 @@ const AnswerDetail = ({ answer, isSelected }) => {
   const [like, setLike] = useState(false);
   const [disLike, setDisLike] = useState(false);
   const [selection, setSelection] = useState(answer.selection);
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+  const [isToken, setIsToken] = useState();
+
+  useEffect(() => {
+    if (cookies?.ikuzo) {
+      setIsToken(cookies?.ikuzo.token);
+    }
+  }, []);
   // console.log("like:" + like);
   // console.log("disLike:" + disLike);
 
@@ -107,10 +117,12 @@ const AnswerDetail = ({ answer, isSelected }) => {
         `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selections`,
         {
           selection: true,
+
         },
         {
           Authorization: token,
           withCredentials: true,
+
         }
       )
       .then((res) => {
@@ -136,7 +148,7 @@ const AnswerDetail = ({ answer, isSelected }) => {
         <div className="select-wrapper">
           {isSelected && selection && <Select className={"selected"} />}
           {!isSelected && (
-            <Select onClick={() => handleSelection} className="not_selected" />
+            <Select onClick={handleSelection} className="not_selected" />
           )}
         </div>
       </div>

@@ -10,6 +10,7 @@ const Header = ({ search, find }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   const [isToken, setIsToken] = useState();
 
+
   const [memberID, setMemberId] = useState();
   const [isLogin, setIsLogin] = useState(false);
 
@@ -34,8 +35,17 @@ const Header = ({ search, find }) => {
 
 
 
+
   const [data, setData] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+      setMemberId(cookies.ikuzo.id);
+      setIsLogin(true)
+    }
+  }, [cookies]);
 
   const changeValue = (e) => {
     setData(e.target.value);
@@ -66,8 +76,10 @@ const Header = ({ search, find }) => {
       })
       .then((res) => {
         setProfile(res?.data.data.profile);
+
       });
   }, [memberID]);
+
 
 
   return (
@@ -135,15 +147,20 @@ const Header = ({ search, find }) => {
             <>
               <IconUl>
 
-                <IconLi onClick={() => navigate(`/mypage/${memberID}`)}>
-
+                <IconLi
+                  onClick={() =>
+                    navigate(
+                      `/mypage/${memberID}`
+                    )
+                  }
+                >
 
                   <img alt="profile" src={`${profile?.image}`}></img>
                 </IconLi>
 
                 <IconLi>
                   <svg
-                    ariaHidden="true"
+                    aria-hidden="true"
                     className="svg-icon iconInbox"
                     width="20"
                     height="24"
@@ -154,7 +171,7 @@ const Header = ({ search, find }) => {
                 </IconLi>
                 <IconLi>
                   <svg
-                    ariaHidden="true"
+                    aria-hidden="true"
                     className="svg-icon iconAchievements"
                     width="18"
                     height="24"
@@ -165,7 +182,7 @@ const Header = ({ search, find }) => {
                 </IconLi>
                 <IconLi>
                   <svg
-                    ariaHidden="true"
+                    aria-hidden="true"
                     className="svg-icon iconHelp"
                     width="18"
                     height="24"

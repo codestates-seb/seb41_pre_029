@@ -9,12 +9,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import StyledButton from "./Button";
 import Input from "./Input";
 import axios from "axios";
-import useStore from "../zustand/store";
 
 const EditProfile = () => {
   const navigator = useNavigate();
   const params = useParams();
   const [info, setInfo] = useState({});
+
+  console.log(info)
 
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   const [isToken, setIsToken] = useState();
@@ -78,7 +79,7 @@ const EditProfile = () => {
           <Profile>
             <div>
               <Title className="profile">Profile image</Title>
-              <img alt="profile" src={info.profile?.image} />
+              <img alt="profile" src={info?.profile?.image} />
             </div>
           </Profile>
           <Input
