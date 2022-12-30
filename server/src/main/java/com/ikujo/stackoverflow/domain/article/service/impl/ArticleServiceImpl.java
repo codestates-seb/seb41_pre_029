@@ -10,6 +10,7 @@ import com.ikujo.stackoverflow.domain.article.repository.ArticleRepository;
 import com.ikujo.stackoverflow.domain.article.service.ArticleService;
 import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.domain.member.repository.MemberRepository;
+import com.ikujo.stackoverflow.global.auth.jwt.JwtTokenizer;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,21 +29,27 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
+    private final JwtTokenizer jwtTokenizer;
 
     @Transactional(readOnly = true)
     @Override
-    public Page<ArticleResponse> findArticles(Pageable pageable) {
-        return articleRepository.findAll(pageable)
+    public Page<ArticleResponse> searchArticles(String searchValue, Pageable pageable) {
+        if (Objects.isNull(searchValue) || searchValue.isBlank()) {
+            return articleRepository.findAll(pageable).map(ArticleResponse::from);
+        }
+
+        return articleRepository.findAllSearch(searchValue, pageable)
                 .map(ArticleResponse::from);
     }
 
     @Override
-    public ArticleDetailResponse findArticle(Long articleId, Long memberId) {
+    public ArticleDetailResponse findArticle(Long articleId, String token) {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 게시글 입니다. articleId : " + articleId));
         article.visitCount();
 
-        if(Objects.nonNull(memberId)) {
+        if (Objects.nonNull(token)) {
+            Long memberId = jwtTokenizer.tokenToMemberId(token);
             return ArticleDetailResponse.from(article, memberId);
         }
 
