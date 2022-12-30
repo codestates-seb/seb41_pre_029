@@ -36,7 +36,6 @@ const QuestionPage = () => {
     if (cookies.ikuzo) {
       setIsToken(cookies.ikuzo.token);
       setMemberId(cookies.ikuzo.id);
-
     }
   }, []);
 
@@ -69,7 +68,6 @@ const QuestionPage = () => {
   }, []);
 
   const submmitComment = () => {
-
     if (comment.trim() === "") {
       return;
     } else {
@@ -77,7 +75,7 @@ const QuestionPage = () => {
         url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`, // 통신할 웹문서
         method: "post", // 통신 방식
         headers: {
-          Authorization: isToken,
+          Authorization: token,
           withCredentials: true,
         },
         data: {
@@ -95,7 +93,6 @@ const QuestionPage = () => {
 
   const handleDelete = () => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
-
       axios
         .delete(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
           headers: {
@@ -104,7 +101,6 @@ const QuestionPage = () => {
           },
         })
         .then((res) => navigate("/"));
-
     }
   };
 
@@ -113,7 +109,6 @@ const QuestionPage = () => {
 
   const handleLike = () => {
     if (!like && disLike) {
-
       setDisLike(disLike);
       axios({
         url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`, // 통신할 웹문서
@@ -133,13 +128,11 @@ const QuestionPage = () => {
           withCredentials: true,
         },
       }).then((res) => setLike(!like));
-
     }
   };
 
   const handleDisLike = () => {
     if (like && !disLike) {
-
       setLike(!like);
       axios({
         url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`, // 통신할 웹문서
@@ -159,7 +152,6 @@ const QuestionPage = () => {
           withCredentials: true,
         },
       });
-
     }
   };
 
