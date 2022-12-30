@@ -63,6 +63,12 @@ const QuestionPage = () => {
   }, []);
 
   const submmitComment = () => {
+    console.log("답글 내용 : " + comment);
+    console.log("token : " + token);
+    console.log("id : " + id);
+    console.log("게시글 번호 : " + questionId);
+    console.log("게시글 번호 : " + questionId);
+
     if (comment.trim() === "") {
       return;
     } else {

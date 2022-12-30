@@ -20,6 +20,7 @@ const Header = ({ search, find }) => {
   const changeValue = (e) => {
     setData(e.target.value);
   };
+
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       axios.get(`${process.env.REACT_APP_API_URL}/questions`).then((res) => {
