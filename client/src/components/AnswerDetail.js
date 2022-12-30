@@ -102,6 +102,7 @@ const AnswerDetail = ({ answer, isSelected }) => {
     }
   };
   const handleSelection = () => {
+    console.log(token)
     axios
       .patch(
         `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selections`,
@@ -109,8 +110,10 @@ const AnswerDetail = ({ answer, isSelected }) => {
           selection: true,
         },
         {
-          Authorization: token,
-          withCredentials: true,
+          headers: {
+            Authorization: token,
+            withCredentials: true,
+          }
         }
       )
       .then((res) => {
