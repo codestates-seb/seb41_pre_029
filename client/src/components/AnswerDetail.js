@@ -13,7 +13,7 @@ import { ReactComponent as Select } from "../assets/select.svg";
 import displayedAt from "../util/displayedAt";
 import useScrollTop from "../util/useScrollTop";
 
-const AnswerDetail = ({ answer, isSelected }) => {
+const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
   useScrollTop();
 
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
@@ -22,6 +22,8 @@ const AnswerDetail = ({ answer, isSelected }) => {
   useEffect(() => {
     if (cookies?.ikuzo) {
       setIsToken(cookies?.ikuzo.token);
+      console.log(cookies?.ikuzo.id)
+      console.log(memberInfo.id)
     }
   }, []);
 
@@ -138,9 +140,9 @@ const AnswerDetail = ({ answer, isSelected }) => {
         />
         <div className="select-wrapper">
           {isSelected && selection && <Select className={"selected"} />}
-          {!isSelected && (
-            <Select onClick={handleSelection} className="not_selected" />
-          )}
+          {!isSelected && cookies?.ikuzo.id === memberInfo.id 
+            ? (<Select onClick={handleSelection} className="not_selected" />)
+            : null}
         </div>
       </div>
 
