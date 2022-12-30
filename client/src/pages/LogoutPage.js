@@ -3,14 +3,15 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-import useCookies from "../zustand/store";
+import { useCookies } from "react-cookie";
 
 const LogoutPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+
   const navigate = useNavigate();
 
   function logoutHandler() {
-    removeCookie(["ikuzo"]);
+    removeCookie("ikuzo");
     navigate("/");
     window.location.reload();
   }

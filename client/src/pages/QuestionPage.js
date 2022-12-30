@@ -22,7 +22,7 @@ import AnswerDetail from "../components/AnswerDetail";
 const QuestionPage = () => {
   useScrollTop();
   const navigate = useNavigate();
-
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   const params = useParams();
   const location = useLocation();
 
@@ -30,9 +30,15 @@ const QuestionPage = () => {
   const [answers, setAnswers] = useState([]);
   const [comment, setComment] = useState("");
   const [isSelected, setIsSelected] = useState(null);
-  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-  const token = cookies.ikuzo.token;
-  const id = cookies.ikuzo.id;
+  const [isToken, setIsToken] = useState();
+  const [memberID, setMemberId] = useState();
+
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+      setMemberId(cookies.ikuzo.id);
+    }
+  }, []);
 
   const questionId = params.id;
 
@@ -64,8 +70,8 @@ const QuestionPage = () => {
 
   const submmitComment = () => {
     console.log("답글 내용 : " + comment);
-    console.log("token : " + token);
-    console.log("id : " + id);
+    console.log("token : " + isToken);
+    console.log("id : " + memberID);
     console.log("게시글 번호 : " + questionId);
     console.log("게시글 번호 : " + questionId);
 
@@ -76,12 +82,12 @@ const QuestionPage = () => {
         url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`, // 통신할 웹문서
         method: "post", // 통신 방식
         headers: {
-          Authorization: token,
+          Authorization: isToken,
           withCredentials: true,
         },
         data: {
           content: comment,
-          memberId: id,
+          memberId: memberID,
         },
       }).then((res) => window.location.reload());
       setComment("");
@@ -97,7 +103,7 @@ const QuestionPage = () => {
       axios
         .delete(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
           headers: {
-            Authorization: token,
+            Authorization: isToken,
             withCredentials: true,
           },
         })
@@ -125,7 +131,7 @@ const QuestionPage = () => {
           `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`,
           {
             headers: {
-              Authorization: token,
+              Authorization: isToken,
               withCredentials: true,
             },
           }
@@ -137,7 +143,7 @@ const QuestionPage = () => {
           `${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`,
           {
             headers: {
-              Authorization: token,
+              Authorization: isToken,
               withCredentials: true,
             },
           }
@@ -153,7 +159,7 @@ const QuestionPage = () => {
           `${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`,
           {
             headers: {
-              Authorization: token,
+              Authorization: isToken,
               withCredentials: true,
             },
           }
@@ -165,7 +171,7 @@ const QuestionPage = () => {
           `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`,
           {
             headers: {
-              Authorization: token,
+              Authorization: isToken,
               withCredentials: true,
             },
           }

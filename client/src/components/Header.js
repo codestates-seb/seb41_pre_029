@@ -8,10 +8,17 @@ import Button from "./Button";
 
 const Header = ({ search, find }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-  const isToken = cookies.ikuzo.token;
-  const memberID = cookies.ikuzo.id;
-  const [isLogin, setIsLogin] = useState((isToken && true) || false);
-  console.log(isLogin);
+  const [isToken, setIsToken] = useState();
+  const [memberID, setMemberId] = useState();
+  const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+      setMemberId(cookies.ikuzo.id);
+      setIsLogin(true);
+    }
+  }, []);
 
   const [data, setData] = useState("");
   const navigate = useNavigate();
@@ -22,12 +29,14 @@ const Header = ({ search, find }) => {
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      axios.get(`${process.env.REACT_APP_API_URL}/questions/searchVaue=${data}`).then((res) => {
-        search(res?.data.data);
-        find("find");
-        navigate("/");
-        setData("");
-      });
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/questions/searchVaue=${data}`)
+        .then((res) => {
+          search(res?.data.data);
+          find("find");
+          navigate("/");
+          setData("");
+        });
     }
     find("");
   };
@@ -38,11 +47,10 @@ const Header = ({ search, find }) => {
       .get(`${process.env.REACT_APP_API_URL}/members/${memberID}`, {
         headers: { Authorization: isToken },
       })
-
       .then((res) => {
-        setProfile(res.data.data.profile);
+        setProfile(res?.data.data.profile);
       });
-  }, []);
+  }, [memberID]);
 
   return (
     <HeaderSearch>
@@ -108,13 +116,7 @@ const Header = ({ search, find }) => {
           {isLogin ? (
             <>
               <IconUl>
-                <IconLi
-                  onClick={() =>
-                    navigate(
-                      `${process.env.REACT_APP_API_URL}/mypage/${memberID}`
-                    )
-                  }
-                >
+                <IconLi onClick={() => navigate(`/mypage/${memberID}`)}>
                   <img alt="profile" src={`${profile?.image}`}></img>
                 </IconLi>
 

@@ -10,10 +10,14 @@ import Footer from "./Footer";
 import CEditor from "./CKEditor";
 
 const EditAnswer = ({ originData, questionId, answerId }) => {
-
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-  const token = cookies.ikuzo.token;
-  
+  const [isToken, setIsToken] = useState();
+
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+    }
+  }, []);
   const location = { pathname: "/" };
   const [content, setContent] = useState(originData.content);
 
@@ -41,17 +45,17 @@ const EditAnswer = ({ originData, questionId, answerId }) => {
   };
 
   const handleClickEdit = () => {
-       axios({
-        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`, // 통신할 웹문서
-        method: "patch", // 통신 방식
-        headers: {
-          Authorization: token,
-          withCredentials: true,
-        },
-        data: {
-         content: input.content,
-        },
-      }) .then(() => navigate(`/questionpage/${questionId}`));
+    axios({
+      url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`, // 통신할 웹문서
+      method: "patch", // 통신 방식
+      headers: {
+        Authorization: isToken,
+        withCredentials: true,
+      },
+      data: {
+        content: input.content,
+      },
+    }).then(() => navigate(`/questionpage/${questionId}`));
   };
   return (
     <>

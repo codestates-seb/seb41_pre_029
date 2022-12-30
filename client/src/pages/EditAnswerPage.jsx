@@ -2,7 +2,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useState, useEffect } from "react";
-import useStore from "../zustand/store";
+
 import EditAnswer from "../components/EditAnswer.jsx";
 
 const EditAnswerPage = () => {
@@ -11,17 +11,24 @@ const EditAnswerPage = () => {
   const questionId = params.questionid;
   const answerId = params.answerid;
 
-   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-   const token = cookies.ikuzo.token
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+  const [isToken, setIsToken] = useState();
+  const [memberID, setMemberId] = useState();
 
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+      setMemberId(cookies.ikuzo.id);
+    }
+  }, []);
 
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
+        `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${memberID}`,
         {
           headers: {
-            Authorization: token,
+            Authorization: isToken,
             withCredentials: true,
           },
         }
