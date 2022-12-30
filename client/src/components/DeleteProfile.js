@@ -1,36 +1,37 @@
 import axios from "axios";
 import styled from "styled-components";
 import { useState } from "react";
+import { useCookies } from "react-cookie";
 import { useNavigate, useParams } from "react-router-dom";
-import useStore from "../zustand/store";
 
 import Button from "./Button";
 
 const DeleteProfile = () => {
- 
   const { params } = useParams();
   const navigate = useNavigate();
 
   const [active, setActive] = useState(false);
 
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+  const token = cookies.ikuzo.token;
+  const memberId = cookies.ikuzo.id;
+
   const handleActive = () => {
     setActive(!active);
   };
 
-  const { GetId, GetToken } = useStore((state) => state);
-  const memberId = GetId();
-  const token = GetToken();
-
   //회원 탈퇴 기능
-
   const handleDeleteProfile = () => {
     if (active) {
       if (window.confirm("정말 삭제하시겠습니까?")) {
         //상태 로그아웃으로 만들기
         axios
-          .delete(`${process.env.REACT_APP_API_URL}/members/${memberId}`)
+          .delete(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
+            Authorization: token,
+            withCredentials: true,
+          })
           .then(() => {
-            localStorage.removeItem("info");
+            removeCookie(["ikuzo"]);
             alert("그동안 이용해주셔서 감사합니다.");
           })
           .then(() => {
