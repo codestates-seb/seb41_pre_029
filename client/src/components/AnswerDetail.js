@@ -23,7 +23,6 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
     if (cookies?.ikuzo) {
       setIsToken(cookies?.ikuzo.token);
       console.log(cookies?.ikuzo.id)
-      console.log(memberInfo.id)
     }
   }, []);
 

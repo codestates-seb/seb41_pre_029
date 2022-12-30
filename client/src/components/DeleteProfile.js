@@ -35,16 +35,16 @@ const DeleteProfile = () => {
         //상태 로그아웃으로 만들기
         axios
           .delete(`${process.env.REACT_APP_API_URL}/members/${memberID}`, {
-            Authorization: isToken,
-            withCredentials: true,
+            headers: {
+              Authorization: isToken,
+              withCredentials: true,
+            }
           })
           .then(() => {
-
             removeCookie("ikuzo");
             alert("그동안 이용해주셔서 감사합니다.");
             navigate("/");
             window.location.reload();
-
           })
           .catch((err) => console.log("error!!"));
       } else {
