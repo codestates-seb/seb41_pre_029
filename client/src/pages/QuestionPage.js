@@ -34,6 +34,10 @@ const QuestionPage = () => {
   const [recommendCount, setRecommendCount] = useState(0);
   const questionId = params.id;
 
+  const [like, setLike] = useState(false);
+  const [disLike, setDisLike] = useState(false);
+
+
   useEffect(() => {
     if (cookies.ikuzo) {
       setIsToken(cookies.ikuzo.token);
@@ -47,11 +51,10 @@ const QuestionPage = () => {
       })
       .then((res) => {
         setQuestion(res.data.data);
-        setLike(
-          res.data.data.articleLikeInfo.currentState === "like" ? true : false
-        );
+        setLike(res.data.data.articleLikeInfo.currentState === 'like' ? true : false);
         setDisLike(
-          res.data.data.articleLikeInfo.currentState === "unlike" ? true : false
+          res.data.data.articleLikeInfo.currentState === 'unlike' ? true : false
+
         );
       });
     axios
@@ -106,9 +109,6 @@ const QuestionPage = () => {
     }
   };
 
-  const [like, setLike] = useState(false);
-  const [disLike, setDisLike] = useState(false);
-
   useEffect(() => {
     axios({
       url: `${process.env.REACT_APP_API_URL}/questions/${questionId}`,
@@ -119,7 +119,11 @@ const QuestionPage = () => {
       },
     })
       // .then((res) => window.location.reload())
-      .then((res) => setRecommendCount(res.data.data.articleLikeInfo.totalLike))
+      .then((res) => {
+        console.log(res.data.data)
+        setRecommendCount(res.data.data.articleLikeInfo.totalLike)
+      }
+      )
       .catch((err) => console.log(err));
   }, [like, disLike]);
 
@@ -243,9 +247,9 @@ const QuestionPage = () => {
                         Edit
                       </span>
                       <span className="button">Follow</span>
-                      <span className="button" onClick={handleDelete}>
+                      {(cookies?.ikuzo.id === question?.member.id) ? <span className="button" onClick={handleDelete}>
                         Delete
-                      </span>
+                      </span> : null}
                     </div>
                     <div className="post--footer-profile">
                       <div className="imgwrapper">
