@@ -109,6 +109,6 @@ public class CommentController {
 
         commentService.updateSelection(commentId ,commentSelection);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.RESET_CONTENT);
     }
 }
