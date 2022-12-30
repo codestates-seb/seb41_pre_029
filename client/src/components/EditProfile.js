@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
 import { ReactComponent as SvgTwitter } from "../assets/twitter.svg";
 import { ReactComponent as SvgGit } from "../assets/git.svg";
@@ -8,16 +9,23 @@ import { useNavigate, useParams } from "react-router-dom";
 import StyledButton from "./Button";
 import Input from "./Input";
 import axios from "axios";
+import useStore from "../zustand/store";
 
 const EditProfile = () => {
   const navigator = useNavigate();
   const params = useParams();
-  const id = params.id;
   const [info, setInfo] = useState({});
 
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+  const token = cookies.ikuzo.token;
+  const id = cookies.ikuzo.id;
+  console.log(token);
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/members/${id}`)
+      .get(`${process.env.REACT_APP_API_URL}/members/${id}`, {
+        Authorization: token,
+        withCredentials: true,
+      })
       .then((res) => res.data.data)
       .then((res) => {
         setInfo(res);

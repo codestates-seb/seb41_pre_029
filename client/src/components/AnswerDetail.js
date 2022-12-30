@@ -1,156 +1,16 @@
-import styled from "styled-components";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import styled from "styled-components";
 import MDEditor from "@uiw/react-md-editor";
 import { useState } from "react";
-
-import displayedAt from "../util/displayedAt";
-import useScrollTop from "../util/useScrollTop";
+import { useNavigate, useParams } from "react-router-dom";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
 import { ReactComponent as Select } from "../assets/select.svg";
 
-const AnswerSection = styled.section`
-  display: flex;
-  padding: 16px 0 16px 0;
-  border-bottom: 1px solid hsl(210deg 8% 90%);
-  max-width: 930px;
-  > .recommand {
-    width: 62px;
-    padding-right: 16px;
-    display: flex;
-    flex-direction: column;
-    padding-right: 16px;
-    align-items: center;
-    > svg {
-      :hover {
-        fill: #8a8a8a;
-        cursor: pointer;
-      }
-      &.active {
-        fill: #f48225;
-      }
-    }
-    > span {
-      margin: 2px;
-      font-size: 21px;
-      padding: 4px 0 4px 0;
-    }
-    > .select-wrapper {
-      > .selected {
-        fill: #2F800A;
-        width: 62px;
-        height: 62px;
-      }
-      > .not_selected {
-        :hover {
-          fill: #2F800A;
-          cursor: pointer;
-        }
-      }
-    }
-  }
-  > .post-layout {
-    > .post--body {
-      padding-right: 16px;
-      min-width: 718px;
-      max-width: 720px;
-      word-break: keep-all;
-      word-wrap: normal;
-      line-height: 22.5px;
-      background-color: white;
-      color: #000;
-    }
-    > .post--tags {
-      margin: 50px 0 12px 0;
-      > .summary_meta_tags {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
+import displayedAt from "../util/displayedAt";
+import useScrollTop from "../util/useScrollTop";
 
-        > .summary_meta_tag {
-          background: #e1ecf4;
-
-          margin-right: 4px;
-          padding: 3px 6px;
-
-          border-width: 1px;
-          border-style: solid;
-          border-radius: 3px;
-          border-color: #e1ecf4;
-
-          font-size: 12px;
-          color: #39739d;
-        }
-      }
-    }
-    > .post--footer {
-      margin-top: 32px;
-      display: flex;
-      justify-content: space-between;
-      max-width: 672px;
-
-      > .post--footer-button {
-        flex: 1 1 auto;
-        > .button {
-          margin: 4px;
-          color: #838c95;
-          font-size: 13px;
-          font-weight: 400;
-          cursor: pointer;
-
-          &:hover {
-            color: #000;
-          }
-        }
-        > .hoverE {
-          :hover {
-            cursor: pointer;
-          }
-        }
-      }
-      > .post--footer-profile {
-        flex: 1 1 auto;
-        width: 173px;
-        max-width: 173px;
-        padding-right: 46px;
-        display: flex;
-        align-items: center;
-        justify-content: left;
-        background-color: #d9eaf7;
-        padding: 8px;
-        > .imgwrapper {
-          > img {
-            width: 32px;
-            height: 32px;
-          }
-        }
-        > .profile-wrapper {
-          font-size: 12px;
-          color: #6a737c;
-          font-weight: 500;
-          padding-left: 8px;
-          > .profile-time {
-            margin-bottom: 4px;
-          }
-          > .profile-user {
-            display: flex;
-            > .userName {
-              color: #0a95ff;
-              padding-right: 8px;
-            }
-            > .user-follower {
-              color: #6a737c;
-              font-weight: 700;
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
-const AnswerDetail = ({answer, isSelected}) => {
+const AnswerDetail = ({ answer, isSelected }) => {
   useScrollTop();
 
   const handleDelete = () => {
@@ -212,13 +72,15 @@ const AnswerDetail = ({answer, isSelected}) => {
 
   const handleSelection = () => {
     axios
-      .post(
-        `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selection`
+      .patch(
+        `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selections`,
+        {
+          selection: true,
+        }
       )
-      .then(
-        (res) => { 
-          setSelection(!selection)
-          window.location.reload()
+      .then((res) => {
+        setSelection(!selection);
+        window.location.reload();
       });
   };
 
@@ -236,12 +98,11 @@ const AnswerDetail = ({answer, isSelected}) => {
           onClick={handleDisLike}
           className={disLike ? "dislike active" : "dislike"}
         />
-        <div
-          onClick={handleSelection}
-          className="select-wrapper"
-        >
-          {(isSelected && selection) && <Select className={"selected"} />}
-          {!isSelected && <Select className="not_selected" />} 
+        <div className="select-wrapper">
+          {isSelected && selection && <Select className={"selected"} />}
+          {!isSelected && (
+            <Select onClick={() => handleSelection} className="not_selected" />
+          )}
         </div>
       </div>
 
@@ -276,7 +137,7 @@ const AnswerDetail = ({answer, isSelected}) => {
               </div>
               <div className="profile-user">
                 <div className="userName">
-                  {answer.memberIdentityDto.nickname}
+                  {answer?.memberIdentityDto?.nickname}
                 </div>
                 <div className="user-follower">
                   <span className="follower">1,120</span>
@@ -291,3 +152,143 @@ const AnswerDetail = ({answer, isSelected}) => {
 };
 
 export default AnswerDetail;
+
+const AnswerSection = styled.section`
+  display: flex;
+  padding: 16px 0 16px 0;
+  border-bottom: 1px solid hsl(210deg 8% 90%);
+  max-width: 930px;
+  > .recommand {
+    width: 62px;
+    padding-right: 16px;
+    display: flex;
+    flex-direction: column;
+    padding-right: 16px;
+    align-items: center;
+    > svg {
+      :hover {
+        fill: #8a8a8a;
+        cursor: pointer;
+      }
+      &.active {
+        fill: #f48225;
+      }
+    }
+    > span {
+      margin: 2px;
+      font-size: 21px;
+      padding: 4px 0 4px 0;
+    }
+    > .select-wrapper {
+      > .selected {
+        fill: #2f800a;
+        width: 62px;
+        height: 62px;
+      }
+      > .not_selected {
+        :hover {
+          fill: #2f800a;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  > .post-layout {
+    width: 750px;
+    > .post--body {
+      padding-right: 16px;
+      width: 100%;
+      word-break: keep-all;
+      word-wrap: normal;
+      line-height: 22.5px;
+      background-color: white;
+      color: #000;
+    }
+    > .post--tags {
+      margin: 50px 0 12px 0;
+      > .summary_meta_tags {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        > .summary_meta_tag {
+          background: #e1ecf4;
+
+          margin-right: 4px;
+          padding: 3px 6px;
+
+          border-width: 1px;
+          border-style: solid;
+          border-radius: 3px;
+          border-color: #e1ecf4;
+
+          font-size: 12px;
+          color: #39739d;
+        }
+      }
+    }
+    > .post--footer {
+      width: 100%;
+      margin-top: 32px;
+      display: flex;
+      justify-content: space-between;
+
+      > .post--footer-button {
+        flex: 1 1 auto;
+        > .button {
+          margin: 4px;
+          color: #838c95;
+          font-size: 13px;
+          font-weight: 400;
+          cursor: pointer;
+
+          &:hover {
+            color: #000;
+          }
+        }
+        > .hoverE {
+          :hover {
+            cursor: pointer;
+          }
+        }
+      }
+      > .post--footer-profile {
+        flex: 1 1 auto;
+        width: 173px;
+        max-width: 173px;
+        padding-right: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        background-color: #d9eaf7;
+        padding: 8px;
+        > .imgwrapper {
+          > img {
+            width: 32px;
+            height: 32px;
+          }
+        }
+        > .profile-wrapper {
+          font-size: 12px;
+          color: #6a737c;
+          font-weight: 500;
+          padding-left: 8px;
+          > .profile-time {
+            margin-bottom: 4px;
+          }
+          > .profile-user {
+            display: flex;
+            > .userName {
+              color: #0a95ff;
+              padding-right: 8px;
+            }
+            > .user-follower {
+              color: #6a737c;
+              font-weight: 700;
+            }
+          }
+        }
+      }
+    }
+  }
+`;

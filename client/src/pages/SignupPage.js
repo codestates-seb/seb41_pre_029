@@ -1,13 +1,15 @@
+import axios from "axios";
 import styled from "styled-components";
+import { useState } from "react";
+import { useCookies } from "react-cookie";
+import { Link, useNavigate } from "react-router-dom";
+
+import Button from "../components/Button";
 import { ReactComponent as Question } from "../assets/question.svg";
 import { ReactComponent as SvgGit } from "../assets/gitHub.svg";
 import { ReactComponent as Google } from "../assets/google.svg";
 import { ReactComponent as Facebook } from "../assets/facebook.svg";
 import { ReactComponent as Screamer } from "../assets/screamer.svg";
-import Button from "../components/Button";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import axios from "axios";
 
 //스타일 감싸는 div
 const Flex = styled.div`
@@ -174,6 +176,7 @@ const SignupPage = () => {
   const [emailValid, setEmailValid] = useState("");
   const [pwdValid, setPwdValid] = useState("");
   const pathNavigate = useNavigate();
+
   //정규식 표현 '@' 포함여부와 대문자,소문자를 구분하지않게 표현식끝에 i 사용
   const emailRegex =
     /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
@@ -183,7 +186,8 @@ const SignupPage = () => {
   //test : 대응되는 문자열이 있는지 검사하는 메소드 true 나 false를 반환
   const emailValueCheck = emailRegex.test(email);
   const passwordValueCheck = passwordRegex.test(pwd);
-  //초기화기능
+
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
 
   //폼 제출시 서버통신
   const submitHandler = (e) => {
@@ -196,23 +200,38 @@ const SignupPage = () => {
       setEmailValid("");
       setPwdValid("valid");
     } else if (emailValueCheck && passwordValueCheck) {
-      axios({
-        method: "post",
-        url: `${process.env.REACT_APP_API_URL}/members/signup`,
-        data: {
-          email,
-          password: pwd,
-          nickname: displayName,
+      axios(
+        {
+          method: "post",
+          url: `${process.env.REACT_APP_API_URL}/members/signup`,
+          data: {
+            email,
+            password: pwd,
+            nickname: displayName,
+          },
         },
-      }).then((res) => {
-        console.log(res);
-        const data = JSON.stringify({
-          id: res.data.data.id,
-          token: res.headers,
-        });
-        localStorage.setItem("info", data);
-        pathNavigate("/");
-        window.location.reload();
+        { withCredentials: true }
+      ).then((res) => {
+        axios
+          .post(
+            `${process.env.REACT_APP_API_URL}/members/login`,
+            {
+              email: email,
+              password: pwd,
+            },
+            { withCredentials: true }
+          )
+          .then((res) => {
+            console.log(res);
+            const data = JSON.stringify({
+              id: res.data.id,
+              token: res.headers.authorization,
+            });
+            console.log(data);
+            setCookie("ikuzo", data);
+            pathNavigate("/");
+            window.location.reload();
+          });
       });
     }
   };

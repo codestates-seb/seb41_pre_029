@@ -10,9 +10,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface ArticleService {
 
-    Page<ArticleResponse> findArticles(Pageable pageable);
+    Page<ArticleResponse> searchArticles(String searchValue,Pageable pageable);
 
-    ArticleDetailResponse findArticle(Long articleId, Long memberId);
+    ArticleDetailResponse findArticle(Long articleId, String token);
 
     ArticleDto saveArticle(ArticleRequest articlePost, Long memberId);
 

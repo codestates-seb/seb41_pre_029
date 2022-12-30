@@ -1,71 +1,27 @@
+import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
 
-import styled from "styled-components";
 import Nav from "../components/Nav";
+import styled from "styled-components";
 import Footer from "../components/Footer";
-import QuestionList from "../components/QuestionList";
 import Button from "../components/Button";
 import GreyBox from "../components/GreyBox";
 import YellowBox from "../components/YellowBox";
-
-const MainPageContainer = styled.div`
-  display: flex;
-  margin: 0 320.5px 0 320.5px;
-`;
-
-const MainBar = styled.div`
-  padding: 24px;
-  & .head {
-    height: 38px;
-    margin-bottom: 24px;
-
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
-    > h1 {
-      margin-right: 12px;
-      margin-bottom: 12px;
-
-      font-size: 27px;
-      line-height: 35px;
-      text-align: left;
-      letter-spacing: normal;
-    }
-    > .go_add_question {
-      :hover {
-        background-color: #f5704a;
-      }
-    }
-  }
-
-  & .data_controller {
-    > .question_count {
-      height: 47px;
-      color: #232629;
-      font-size: 17px;
-    }
-  }
-`;
-
-const SideBar = styled.div`
-  margin-top: 20.2px;
-
-  > * {
-    margin-bottom: 15px;
-  }
-`;
+import QuestionList from "../components/QuestionList";
 
 const MainPage = ({ data, find }) => {
   const location = useLocation();
   const [questionAmount, setQuestionAmount] = useState();
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/questions`).then((res) => {
-      setQuestionAmount(res?.data.pageInfo.totalElements);
-    });
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/questions`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setQuestionAmount(res?.data.pageInfo.totalElements);
+      });
   }, []);
 
   return (
@@ -101,3 +57,51 @@ const MainPage = ({ data, find }) => {
 };
 
 export default MainPage;
+
+const MainPageContainer = styled.div`
+  display: flex;
+  margin: 0 320.5px 0 320.5px;
+`;
+
+const MainBar = styled.div`
+  padding: 24px;
+  & .head {
+    height: 38px;
+    margin-bottom: 24px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    > h1 {
+      margin-right: 12px;
+      margin-bottom: 12px;
+
+      font-size: 27px;
+      line-height: 35px;
+      text-align: left;
+      letter-spacing: normal;
+    }
+    > .go_add_question {
+      :hover {
+        background-color: #015366;
+      }
+    }
+  }
+
+  & .data_controller {
+    > .question_count {
+      height: 47px;
+      color: #232629;
+      font-size: 17px;
+    }
+  }
+`;
+
+const SideBar = styled.div`
+  margin-top: 20.2px;
+
+  > * {
+    margin-bottom: 15px;
+  }
+`;

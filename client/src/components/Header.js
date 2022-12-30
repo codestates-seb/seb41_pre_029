@@ -1,130 +1,44 @@
+import axios from "axios";
 import styled from "styled-components";
-import Button from "./Button";
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
-const HeaderSearch = styled.header`
-  height: 50px;
-  box-sizing: border-box;
-  border-top: 3px solid orange;
-  background-color: #f8f9f9;
-  box-shadow: 0 4px 4px -4px rgb(178, 178, 178);
+import { useCookies } from "react-cookie";
 
-  z-index: 1;
-`;
-const Container = styled.div`
-  max-width: 1950px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0px 10px;
-`;
+import Button from "./Button";
 
-//플랙스를 주기 위한 div
-const Flex = styled.div`
-  display: flex;
-  align-items: center;
-`;
-//플랙스 주기위한 디브
-const SvgDiv = styled.div`
-  width: ${(props) => props.width};
-  text-align: center;
-  justify-content: center;
-  margin: 0px 1px; //
-`;
-const Div = styled.div`
-  display: flex;
-  align-items: center;
-`;
-//검색창 구현
-const Input = styled.input`
-  outline: none;
-  width: 100%;
-  height: 32px;
-  padding: 5px 5px 0px 32px;
-  background-position: 7px 0px;
-  box-sizing: border-box;
-  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg"  aria-hidden="true" class="s-input-icon s-input-icon__search svg-icon iconSearch" cx="15" cy="15" viewBox="0 -6 30 30" fill="rgb(150, 150, 150)"%3E%3Cpath d="m18 16.5-5.14-5.18h-.35a7 7 0 1 0-1.19 1.19v.35L16.5 18l1.5-1.5ZM12 7A5 5 0 1 1 2 7a5 5 0 0 1 10 0Z"%3E%3C/path%3E%3C/svg%3E');
-  background-repeat: no-repeat;
-  border: 1px solid hsl(210, 8%, 75%);
-  border-radius: 3px;
-
-  svg {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-  }
-`;
-const InputDiv = styled.div`
-  position: relative;
-  flex-grow: 1;
-`;
-const Ul = styled.ul`
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  padding: 2px 0px;
-  margin: 4px;
-`;
-const Li = styled.li`
-  box-sizing: border-box;
-  padding: 6px 12px;
-  margin: 6px 0px 0px 0px;
-  cursor: pointer;
-
-  font-size: 13px;
-  &:hover {
-    border-radius: 1000px;
-    background-color: rgb(255, 219, 137, 0.3);
-    user-select: auto;
-  }
-`;
-const IconUl = styled.ul`
-  display: flex;
-`;
-const IconLi = styled.li`
-  align-items: center;
-  text-decoration: none;
-  white-space: nowrap;
-  position: relative;
-  padding: 0px 4px;
-  width: 24px;
-  height: 24px;
-  img {
-    width: 24px;
-    height: 24px;
-  }
-`;
 const Header = ({ search, find }) => {
-  const [isLogin, setIsLogin] = useState(
-    (localStorage.getItem("info") && true) || false
-  );
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+  const isToken = cookies.ikuzo.token;
+  const memberID = cookies.ikuzo.id;
+  const [isLogin, setIsLogin] = useState((isToken && true) || false);
+  console.log(isLogin);
+
   const [data, setData] = useState("");
-  const [list, setList] = useState("");
   const navigate = useNavigate();
+
   const changeValue = (e) => {
     setData(e.target.value);
   };
+
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      axios.get(`${process.env.REACT_APP_API_URL}/questions`).then((res) => {
-        setList(res?.data.data);
-        const filtered = list?.filter(
-          (el) => el.content.includes(data) || el.title.includes(data)
-        );
+      axios.get(`${process.env.REACT_APP_API_URL}/questions/searchVaue=${data}`).then((res) => {
+        search(res?.data.data);
         find("find");
         navigate("/");
-        search(filtered);
         setData("");
       });
     }
     find("");
   };
 
-  const token = JSON.parse(localStorage.getItem("info"));
   const [profile, setProfile] = useState("");
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/members/${token?.id}`)
+      .get(`${process.env.REACT_APP_API_URL}/members/${memberID}`, {
+        headers: { Authorization: isToken },
+      })
+
       .then((res) => {
         setProfile(res.data.data.profile);
       });
@@ -194,7 +108,13 @@ const Header = ({ search, find }) => {
           {isLogin ? (
             <>
               <IconUl>
-                <IconLi onClick={() => navigate(`/mypage/${token.id}`)}>
+                <IconLi
+                  onClick={() =>
+                    navigate(
+                      `${process.env.REACT_APP_API_URL}/mypage/${memberID}`
+                    )
+                  }
+                >
                   <img alt="profile" src={`${profile?.image}`}></img>
                 </IconLi>
 
@@ -254,3 +174,105 @@ const Header = ({ search, find }) => {
 };
 
 export default Header;
+
+const HeaderSearch = styled.header`
+  height: 50px;
+  box-sizing: border-box;
+  border-top: 3px solid orange;
+  background-color: #f8f9f9;
+  box-shadow: 0 4px 4px -4px rgb(178, 178, 178);
+
+  z-index: 1;
+`;
+const Container = styled.div`
+  max-width: 1950px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0px 10px;
+`;
+
+//플랙스를 주기 위한 div
+const Flex = styled.div`
+  display: flex;
+  align-items: center;
+`;
+//플랙스 주기위한 디브
+const SvgDiv = styled.div`
+  width: ${(props) => props.width};
+  text-align: center;
+  justify-content: center;
+  margin: 0px 1px; //
+`;
+const Div = styled.div`
+  display: flex;
+  align-items: center;
+  > :first-child {
+    :hover {
+      background-color: #e0f4f5;
+    }
+  }
+  > :last-child {
+    :hover {
+      background-color: #015366;
+    }
+  }
+`;
+//검색창 구현
+const Input = styled.input`
+  outline: none;
+  width: 100%;
+  height: 32px;
+  padding: 5px 5px 0px 32px;
+  background-position: 7px 0px;
+  box-sizing: border-box;
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg"  aria-hidden="true" class="s-input-icon s-input-icon__search svg-icon iconSearch" cx="15" cy="15" viewBox="0 -6 30 30" fill="rgb(150, 150, 150)"%3E%3Cpath d="m18 16.5-5.14-5.18h-.35a7 7 0 1 0-1.19 1.19v.35L16.5 18l1.5-1.5ZM12 7A5 5 0 1 1 2 7a5 5 0 0 1 10 0Z"%3E%3C/path%3E%3C/svg%3E');
+  background-repeat: no-repeat;
+  border: 1px solid hsl(210, 8%, 75%);
+  border-radius: 3px;
+
+  svg {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+`;
+const InputDiv = styled.div`
+  position: relative;
+  flex-grow: 1;
+`;
+const Ul = styled.ul`
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding: 2px 0px;
+  margin: 4px;
+`;
+const Li = styled.li`
+  box-sizing: border-box;
+  padding: 6px 12px;
+  margin: 6px 0px 0px 0px;
+  cursor: pointer;
+
+  font-size: 13px;
+  &:hover {
+    border-radius: 1000px;
+    background-color: rgb(255, 219, 137, 0.3);
+    user-select: auto;
+  }
+`;
+const IconUl = styled.ul`
+  display: flex;
+`;
+const IconLi = styled.li`
+  align-items: center;
+  text-decoration: none;
+  white-space: nowrap;
+  position: relative;
+  padding: 0px 4px;
+  width: 24px;
+  height: 24px;
+  img {
+    width: 24px;
+    height: 24px;
+  }
+`;

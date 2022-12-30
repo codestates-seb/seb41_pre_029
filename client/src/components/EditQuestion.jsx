@@ -1,13 +1,13 @@
+import axios from "axios";
 import styled from "styled-components";
+import { useCookies } from "react-cookie";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import Nav from "./Nav";
+import Button from "./Button";
 import Footer from "./Footer";
 import CEditor from "./CKEditor";
-import Parser from "./Parser";
-import Button from "./Button";
-import axios from "axios";
 
 const EditQuestion = ({ originData }) => {
   const location = { pathname: "/" };
@@ -33,6 +33,9 @@ const EditQuestion = ({ originData }) => {
       .map((el) => el.replaceAll("#", "").replaceAll("-", " "))
       .filter((el) => el !== "")
   );
+
+   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+ const token = cookies.ikuzo.token;
 
   useEffect(() => {
     setInput({
@@ -79,6 +82,7 @@ const EditQuestion = ({ originData }) => {
 
   const params = useParams();
   const id = Number(params.id);
+
   const navigate = useNavigate();
 
   const cancleEdit = () => {
@@ -86,14 +90,21 @@ const EditQuestion = ({ originData }) => {
   };
 
   const handleClickEdit = () => {
-    axios
-      .patch(`${process.env.REACT_APP_API_URL}/questions/${id}`, {
-        title: input.title,
-        content: input.content,
-        tag: input.submitTags,
-      })
-      .then(() => navigate(`/questionpage/${id}`));
+         axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${id}`, // 통신할 웹문서
+        method: "patch", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+        data: {
+          title: input.title,
+          content: input.content,
+          tag: input.submitTags,
+        }})
+      .then(() => navigate(`/questionpage/${id}`))
   };
+
 
   useEffect(() => {
     setViewTags(
@@ -130,7 +141,6 @@ const EditQuestion = ({ originData }) => {
           <InputBox>
             <div className="title">Body</div>
             <CEditor onChange={setContent} data={content} />
-            {/* <Parser html={content} /> */}
           </InputBox>
           <InputBox className="tag_box">
             <div className="title">Tags</div>

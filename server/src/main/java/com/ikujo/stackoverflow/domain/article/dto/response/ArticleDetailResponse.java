@@ -22,7 +22,7 @@ public record ArticleDetailResponse(
 ) {
 
     public static ArticleDetailResponse of(MemberIdentityDto member, Long id, String title, String content,
-                                           String tag, Integer recommendCount, Long hits, BaseTimeDto baseTime, ArticleLikeInfo articleLikeInfo) {
+                                           String tag, Long hits, BaseTimeDto baseTime, ArticleLikeInfo articleLikeInfo) {
         List<String> tags = tagSplit(tag);
 
         return new ArticleDetailResponse(
