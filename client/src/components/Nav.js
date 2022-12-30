@@ -8,13 +8,19 @@ import { useCookies } from "react-cookie";
 
 const Nav = ({ location }) => {
   const [active, setActive] = useState(location.pathname);
-
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+  const [isToken, setIsToken] = useState();
+  const [memberID, setMemberId] = useState();
   const handleClick = (link) => {
     setActive(link);
   };
   const navigate = useNavigate();
-
-  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+      setMemberId(cookies.ikuzo.id);
+    }
+  }, []);
 
   const [isToken, setIsToken] = useState();
   const [memberId, setMemberId] = useState();
@@ -29,7 +35,9 @@ const Nav = ({ location }) => {
   const menu = [
     { name: "Questions", link: "/" },
     { name: "Tags", link: "/tags" },
+
     { name: "Users", link: `/mypage/${memberId}` },
+
     { name: "Companies", link: "/companies" },
   ];
 

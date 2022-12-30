@@ -20,7 +20,7 @@ import AnswerDetail from "../components/AnswerDetail";
 const QuestionPage = () => {
   useScrollTop();
   const navigate = useNavigate();
-
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   const params = useParams();
   const location = useLocation();
 
@@ -29,16 +29,14 @@ const QuestionPage = () => {
   const [comment, setComment] = useState("");
   const [isSelected, setIsSelected] = useState(null);
 
-  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-  const [token, setToken] = useState();
-  const [id, setId] = useState();
-
-  console.log(question?.articleLikeInfo.totalLike);
+  const [token, setIsToken] = useState();
+  const [memberID, setMemberId] = useState();
 
   useEffect(() => {
     if (cookies.ikuzo) {
-      setToken(cookies.ikuzo.token);
-      setId(cookies.ikuzo.id);
+      setIsToken(cookies.ikuzo.token);
+      setMemberId(cookies.ikuzo.id);
+
     }
   }, []);
 
@@ -71,6 +69,7 @@ const QuestionPage = () => {
   }, []);
 
   const submmitComment = () => {
+
     if (comment.trim() === "") {
       return;
     } else {
@@ -78,12 +77,12 @@ const QuestionPage = () => {
         url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`, // 통신할 웹문서
         method: "post", // 통신 방식
         headers: {
-          Authorization: token,
+          Authorization: isToken,
           withCredentials: true,
         },
         data: {
           content: comment,
-          memberId: id,
+          memberId: memberID,
         },
       }).then((res) => window.location.reload());
       setComment("");
@@ -96,16 +95,16 @@ const QuestionPage = () => {
 
   const handleDelete = () => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
-      axios({
-        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}`,
-        method: "delete",
-        headers: {
-          Authorization: token,
-          withCredentials: true,
-        },
-      })
-        .then((res) => navigate("/"))
-        .catch((err) => console.log(err));
+
+      axios
+        .delete(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
+          headers: {
+            Authorization: token,
+            withCredentials: true,
+          },
+        })
+        .then((res) => navigate("/"));
+
     }
   };
 
@@ -114,6 +113,7 @@ const QuestionPage = () => {
 
   const handleLike = () => {
     if (!like && disLike) {
+
       setDisLike(disLike);
       axios({
         url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`, // 통신할 웹문서
@@ -133,11 +133,13 @@ const QuestionPage = () => {
           withCredentials: true,
         },
       }).then((res) => setLike(!like));
+
     }
   };
 
   const handleDisLike = () => {
     if (like && !disLike) {
+
       setLike(!like);
       axios({
         url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`, // 통신할 웹문서
@@ -157,6 +159,7 @@ const QuestionPage = () => {
           withCredentials: true,
         },
       });
+
     }
   };
 

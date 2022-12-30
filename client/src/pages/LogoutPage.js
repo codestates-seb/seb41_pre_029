@@ -7,6 +7,7 @@ import { useCookies } from "react-cookie";
 
 const LogoutPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+
   const navigate = useNavigate();
 
   function logoutHandler() {
