@@ -1,14 +1,20 @@
-import styled from "styled-components";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
+import useStore from "../zustand/store";
+
+import Modal from "../components/Modal";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
-import Modal from "../components/Modal";
 import CEditor from "../components/CKEditor";
 
 const AddQuestionPage = () => {
+  const { GetId, GetToken } = useStore((state) => state);
+  const userId = GetId();
+  const token = GetToken();
+
   const [modal, setModal] = useState(false);
   const [tags, setTags] = useState([]);
   const [content, setContent] = useState("");
@@ -49,12 +55,20 @@ const AddQuestionPage = () => {
     );
   };
 
+  // const [cookies] = useCookies(["ikuzo"]);
+  // const token = cookies.ikuzo.token;
+  // console.log(token);
+
   const handleSubmit = () => {
     if (input.title.trim().length < 1) return;
     if (window.confirm("Are you sure you want to submit this Question?")) {
       axios({
         url: `${process.env.REACT_APP_API_URL}/questions`, // 통신할 웹문서
         method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
         data: {
           title: input.title,
           content: input.content,

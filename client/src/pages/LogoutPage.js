@@ -3,6 +3,99 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
+import useCookies from "../zustand/store";
+
+const LogoutPage = () => {
+  const navigate = useNavigate();
+
+  function logoutHandler() {
+    localStorage.clear();
+    navigate("/");
+    window.location.reload();
+  }
+  
+  return (
+    <Container>
+      <LogoutTitle>
+        Clicking “Log out” will log you out of the following
+        <br /> domains on this device:
+      </LogoutTitle>
+      <Content>
+        <LogoutBox>
+          <LinkBox>
+            <Li>
+              <img
+                src="https://cdn.sstatic.net/Sites/askubuntu/Img/apple-touch-icon@2.png?v=c492c9229955"
+                alt="askubuntu.com"
+              />
+              <Link>askubuntu.com</Link>
+            </Li>
+            <Li>
+              <img
+                src="https://cdn.sstatic.net/Sites/mathoverflow/Img/apple-touch-icon@2.png?v=f1c9606b77ffe"
+                alt="mathoverflow.net"
+              />
+              <Link>mathoverflow.net</Link>
+            </Li>
+            <Li>
+              <img
+                src="https://cdn.sstatic.net/Sites/serverfault/Img/apple-touch-icon@2.png?v=9b1f48ae296b"
+                alt="serverfault.com"
+              />
+              <Link>serverfault.com</Link>
+            </Li>
+            <Li>
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/2702/2702949.png"
+                alt="stackapps.com"
+              />
+              <Link>stackapps.com</Link>
+            </Li>
+            <Li>
+              <img
+                src="https://www.svgrepo.com/show/349513/stackexchange.svg"
+                alt="stackexchange.com"
+              />
+              <Link>stackexchange.com</Link>
+            </Li>
+            <Li>
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Stack_Overflow_icon.svg/1024px-Stack_Overflow_icon.svg.png?20190716190036"
+                alt="stackoverflow.com"
+              />
+              <Link>stackoverflow.com</Link>
+            </Li>
+            <Li>
+              <img
+                src="https://cdn.sstatic.net/Sites/superuser/Img/apple-touch-icon@2.png?v=e869e4459439"
+                alt="superuser.com"
+              />
+              <Link>superuser.com</Link>
+            </Li>
+          </LinkBox>
+          <DeviceLogout>
+            <input type="checkbox" />
+            <span>Log out on all devices</span>
+          </DeviceLogout>
+          <LoginChoice>
+            <LogoutButton onClick={() => logoutHandler()}>Log out</LogoutButton>
+            <Link to={"/"}>
+              <CancelButton>Cancel</CancelButton>
+            </Link>
+          </LoginChoice>
+          <Explanation>
+            If you’re on a shared computer, remember to log out of your Open ID
+            provider (Facebook, Google, Stack Exchange, etc.) as well.
+          </Explanation>
+        </LogoutBox>
+      </Content>
+    </Container>
+  );
+};
+export default LogoutPage;
+
+
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -115,90 +208,3 @@ const Explanation = styled.h2`
   font-size: 0.8rem;
 `;
 
-const LogoutPage = () => {
-  const navigate = useNavigate();
-
-  function logoutHandler() {
-    localStorage.clear();
-    navigate("/");
-    window.location.reload();
-  }
-  return (
-    <Container>
-      <LogoutTitle>
-        Clicking “Log out” will log you out of the following
-        <br /> domains on this device:
-      </LogoutTitle>
-      <Content>
-        <LogoutBox>
-          <LinkBox>
-            <Li>
-              <img
-                src="https://cdn.sstatic.net/Sites/askubuntu/Img/apple-touch-icon@2.png?v=c492c9229955"
-                alt="askubuntu.com"
-              />
-              <Link>askubuntu.com</Link>
-            </Li>
-            <Li>
-              <img
-                src="https://cdn.sstatic.net/Sites/mathoverflow/Img/apple-touch-icon@2.png?v=f1c9606b77ffe"
-                alt="mathoverflow.net"
-              />
-              <Link>mathoverflow.net</Link>
-            </Li>
-            <Li>
-              <img
-                src="https://cdn.sstatic.net/Sites/serverfault/Img/apple-touch-icon@2.png?v=9b1f48ae296b"
-                alt="serverfault.com"
-              />
-              <Link>serverfault.com</Link>
-            </Li>
-            <Li>
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/2702/2702949.png"
-                alt="stackapps.com"
-              />
-              <Link>stackapps.com</Link>
-            </Li>
-            <Li>
-              <img
-                src="https://www.svgrepo.com/show/349513/stackexchange.svg"
-                alt="stackexchange.com"
-              />
-              <Link>stackexchange.com</Link>
-            </Li>
-            <Li>
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Stack_Overflow_icon.svg/1024px-Stack_Overflow_icon.svg.png?20190716190036"
-                alt="stackoverflow.com"
-              />
-              <Link>stackoverflow.com</Link>
-            </Li>
-            <Li>
-              <img
-                src="https://cdn.sstatic.net/Sites/superuser/Img/apple-touch-icon@2.png?v=e869e4459439"
-                alt="superuser.com"
-              />
-              <Link>superuser.com</Link>
-            </Li>
-          </LinkBox>
-          <DeviceLogout>
-            <input type="checkbox" />
-            <span>Log out on all devices</span>
-          </DeviceLogout>
-          <LoginChoice>
-            <LogoutButton onClick={() => logoutHandler()}>Log out</LogoutButton>
-            <Link to={"/"}>
-              <CancelButton>Cancel</CancelButton>
-            </Link>
-          </LoginChoice>
-          <Explanation>
-            If you’re on a shared computer, remember to log out of your Open ID
-            provider (Facebook, Google, Stack Exchange, etc.) as well.
-          </Explanation>
-        </LogoutBox>
-      </Content>
-    </Container>
-  );
-};
-export default LogoutPage;

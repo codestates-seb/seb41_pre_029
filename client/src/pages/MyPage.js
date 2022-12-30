@@ -1,15 +1,16 @@
-// about 내용, 아이콘 날짜 정보 받아와야 함
-import styled from "styled-components";
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import axios from "axios";
+import styled from "styled-components";
+import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 
-import Theme from "../components/Theme";
-import EditProfile from "../components/EditProfile";
-import DeleteProfile from "../components/DeleteProfile";
+import useStore from "../zustand/store";
+
 import Nav from "../components/Nav";
+import Theme from "../components/Theme";
 import Footer from "../components/Footer";
 import displayedAt from "../util/displayedAt";
+import EditProfile from "../components/EditProfile";
+import DeleteProfile from "../components/DeleteProfile";
 
 const PageWrapper = styled.div`
   display: flex;
@@ -140,16 +141,22 @@ const MyPage = () => {
   const [activeEdit, setActiveEdit] = useState(false);
   const [activeDel, setActiveDel] = useState(false);
   const [page, setPage] = useState("theme");
-
   const [userInfo, setUserInfo] = useState({});
 
   const params = useParams();
   const id = params.id;
   const pathLocation = { pathname: `/mypage/${id}` };
-
+  const { GetId, GetToken } = useStore((state) => state);
+  const userId = GetId();
+  const token = GetToken();
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/members/${id}`)
+      .get(`${process.env.REACT_APP_API_URL}/members/${userId}`, {
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      })
       .then((res) => setUserInfo(res.data.data));
   }, []);
 

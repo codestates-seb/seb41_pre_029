@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import displayedAt from "../util/displayedAt";
 
 const QuestionSummary = ({props}) => {
+  
   const navigate = useNavigate();
   const navigateDetailPage = (id) => {
     navigate(`/questionpage/${id}`)

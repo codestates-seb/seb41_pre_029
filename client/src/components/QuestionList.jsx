@@ -1,23 +1,15 @@
 import axios from "axios";
 import styled from "styled-components";
+import { useLocation } from 'react-router-dom'
 import { useEffect, useState } from "react";
-import  {useLocation} from 'react-router-dom'
 
 import NoSearch from "./noSearch";
-import QuestionSummary from "./QuestionSummary";
 import Pagination from "./Pagination";
+import QuestionSummary from "./QuestionSummary";
 
 const QuestionList = ({ data, find }) => {
   const [questions, setQuestions] = useState([]);
-
-  const [totalQuestions,setTotalQuestions] = useState(0);
-
-  useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/questions`).then((res) => {
-      setQuestions(res?.data.data);
-    });
-  }, []);
-
+  const [totalQuestions, setTotalQuestions] = useState(0);
 
   const [isActive, setIsActive] = useState("15");
 
@@ -27,18 +19,23 @@ const QuestionList = ({ data, find }) => {
   //현재 페이지
   const [page, setPage] = useState(1);
 
-  //첫 게시물의 위치
-  const offset = (page - 1) * limit;
   const location = useLocation();
 
-  console.log(offset)
+   useEffect(() => {
+    axios.get(`${process.env.REACT_APP_API_URL}/questions`,
+    { withCredentials: true })
+    .then((res) => {
+      setQuestions(res?.data.data);
+    });
+  }, []);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/questions${location.search}`).then((res) => {
-      console.log(res.data.data)
-      setQuestions(res.data.data)
-      setTotalQuestions(res.data?.pageInfo.totalElements)
-    })
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/questions${location.search}`)
+      .then((res) => {
+        setQuestions(res.data.data);
+        setTotalQuestions(res.data?.pageInfo.totalElements);
+      });
   }, [location]);
 
   const handleActive = (e) => {
@@ -47,23 +44,20 @@ const QuestionList = ({ data, find }) => {
     });
     setLimit(Number(e.target.value));
   };
-  console.log(data);
   return (
     <>
       {find && data.length === 0 && <NoSearch></NoSearch>}
       <QuestionListContainer>
         {data
-          ? data
-              .map((question) => (
-                <QuestionSummary key={question.id} props={question} />
-              ))
-          : questions
-              .map((question) => (
-                <QuestionSummary key={question.id} props={question} />
-              ))}
+          ? data.map((question) => (
+              <QuestionSummary key={question.id} props={question} />
+            ))
+          : questions.map((question) => (
+              <QuestionSummary key={question.id} props={question} />
+            ))}
         <PageContainer>
           <Pagination
-            total={questions.length}
+            total={totalQuestions}
             limit={limit}
             page={page}
             setPage={setPage}
@@ -105,7 +99,6 @@ const QuestionList = ({ data, find }) => {
 };
 
 export default QuestionList;
-
 
 const QuestionListContainer = styled.div`
   border-top: solid 1px #d6d9dc;

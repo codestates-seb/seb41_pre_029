@@ -1,13 +1,152 @@
+import axios from "axios";
 import styled from "styled-components";
+import { useState } from "react";
+import { useCookies } from "react-cookie";
+import { Link, useNavigate } from "react-router-dom";
 import { ReactComponent as Logo } from "../assets/subLogo.svg";
 import { ReactComponent as SvgGit } from "../assets/gitHub.svg";
 import { ReactComponent as Google } from "../assets/google.svg";
 import { ReactComponent as Facebook } from "../assets/facebook.svg";
 import { ReactComponent as Screamer } from "../assets/screamer.svg";
+
 import Button from "../components/Button";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import axios from "axios";
+
+const Loginpage = () => {
+  const [email, setEmail] = useState("");
+  const [pwd, setPwd] = useState("");
+  const [isvalid, setIsValid] = useState("");
+  const [emailValid, setEmailValid] = useState("");
+  const [pwdValid, setPwdValid] = useState("");
+
+  const navigate = useNavigate();
+  //정규식 표현 '@' 포함여부와 대문자,소문자를 구분하지않게 표현식끝에 i 사용
+  const emailRegex =
+    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+  //최소 8자, 하나의 이상의 대소문자 및 하나의 숫자, 하나의 특수문자
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&#]{8,}$/i;
+  //test : 대응되는 문자열이 있는지 검사하는 메소드 true 나 false를 반환
+  const emailValueCheck = emailRegex.test(email);
+  const passwordValueCheck = passwordRegex.test(pwd);
+
+  const [setCookie] = useCookies(["ikuzo"]);
+  //초기화기능
+  // const clear = () => {
+  //   setEmail("");
+  //   setPwd("");
+  //   setIsValid("");
+  //   setPwd("");
+  //   setPwdValid("");
+  // };
+  //폼 제출시 서버통신
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    // if (!emailValueCheck || email.trim() === "") {
+    //   setIsValid("The email is not a valid email address.");
+    //   setEmailValid("valid");
+    // } else if (!passwordValueCheck || pwd.trim() === "") {
+    //   setIsValid(" The password is not a valid .");
+    //   setEmailValid("");
+    //   setPwdValid("valid");
+    // } else {
+    axios
+      .post(
+        `${process.env.REACT_APP_API_URL}/members/login`,
+        {
+          email: email,
+          password: pwd,
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        console.log(res);
+        const data = JSON.stringify({
+          id: res.data.id,
+          token: res.headers.authorization,
+        });
+        console.log(data);
+        setCookie("ikuzo", data);
+        navigate("/");
+        // window.location.reload();
+      })
+      .catch((error) => {});
+  };
+
+  return (
+    <Flex>
+      <Wrap>
+        <Div>
+          <Span>
+            <Logo />
+          </Span>
+        </Div>
+        <Div className="logIn">
+          <BtnStyle color={"#232629"} background={"white"}>
+            <Span>
+              <Google />
+            </Span>
+            Log in with Google
+          </BtnStyle>
+          <BtnStyle color={"#ffffff"} background={"#2f3337"}>
+            <Span>
+              <SvgGit />
+            </Span>
+            Log in with GitHub
+          </BtnStyle>
+          <BtnStyle color={"#ffffff"} background={"#385499"}>
+            <Span>
+              <Facebook />
+            </Span>
+            Log in with Facebook
+          </BtnStyle>
+        </Div>
+        <Div className="form">
+          <Form>
+            <Label>Email</Label>
+            {emailValid && (
+              <Span>
+                <Screamer />
+              </Span>
+            )}
+            <LoginInput
+              type="text"
+              className={emailValid}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Label>Password</Label>
+            {pwdValid && (
+              <Span>
+                <Screamer />
+              </Span>
+            )}
+            <LoginInput
+              className={pwdValid}
+              type="password"
+              value={pwd}
+              onChange={(e) => setPwd(e.target.value)}
+            />
+            <span>{isvalid}</span>
+            <p onClick={submitHandler}>
+              <FormBtn buttonName={"Log in"}></FormBtn>
+            </p>
+          </Form>
+        </Div>
+        <Div>
+          <SinUpdiv>
+            Don’t have an account? <Link to={"/signuppage"}>Sign up</Link>
+          </SinUpdiv>
+          <SinUpdiv>
+            Are you an employer? <Link>Sign up on Talent</Link>
+          </SinUpdiv>
+        </Div>
+      </Wrap>
+    </Flex>
+  );
+};
+export default Loginpage;
+
 //스타일 감싸는 div
 const Flex = styled.div`
   display: flex;
@@ -114,131 +253,3 @@ const SinUpdiv = styled.div`
   margin-top: 12px;
   text-align: center;
 `;
-const Loginpage = () => {
-  const [email, setEmail] = useState("");
-  const [pwd, setPwd] = useState("");
-  const [isvalid, setIsValid] = useState("");
-  const [emailValid, setEmailValid] = useState("");
-  const [pwdValid, setPwdValid] = useState("");
-
-  const navigate = useNavigate();
-  //정규식 표현 '@' 포함여부와 대문자,소문자를 구분하지않게 표현식끝에 i 사용
-  const emailRegex =
-    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
-  //최소 8자, 하나의 이상의 대소문자 및 하나의 숫자, 하나의 특수문자
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&#]{8,}$/i;
-  //test : 대응되는 문자열이 있는지 검사하는 메소드 true 나 false를 반환
-  const emailValueCheck = emailRegex.test(email);
-  const passwordValueCheck = passwordRegex.test(pwd);
-  //초기화기능
-  // const clear = () => {
-  //   setEmail("");
-  //   setPwd("");
-  //   setIsValid("");
-  //   setPwd("");
-  //   setPwdValid("");
-  // };
-  //폼 제출시 서버통신
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-    // if (!emailValueCheck || email.trim() === "") {
-    //   setIsValid("The email is not a valid email address.");
-    //   setEmailValid("valid");
-    // } else if (!passwordValueCheck || pwd.trim() === "") {
-    //   setIsValid(" The password is not a valid .");
-    //   setEmailValid("");
-    //   setPwdValid("valid");
-    // } else {
-    axios
-      .post(`${process.env.REACT_APP_API_URL}/members/login`, {
-        email: email,
-        password: pwd,
-      })
-      .then((res) => {
-        console.log(res);
-        const data = JSON.stringify({
-          id: res.data.email,
-          token: res.headers,
-        });
-        localStorage.setItem("info", data);
-        navigate("/");
-        window.location.reload();
-      })
-      .catch((error) => {});
-    // }
-  };
-  return (
-    <Flex>
-      <Wrap>
-        <Div>
-          <Span>
-            <Logo />
-          </Span>
-        </Div>
-        <Div className="logIn">
-          <BtnStyle color={"#232629"} background={"white"}>
-            <Span>
-              <Google />
-            </Span>
-            Log in with Google
-          </BtnStyle>
-          <BtnStyle color={"#ffffff"} background={"#2f3337"}>
-            <Span>
-              <SvgGit />
-            </Span>
-            Log in with GitHub
-          </BtnStyle>
-          <BtnStyle color={"#ffffff"} background={"#385499"}>
-            <Span>
-              <Facebook />
-            </Span>
-            Log in with Facebook
-          </BtnStyle>
-        </Div>
-        <Div className="form">
-          <Form>
-            <Label>Email</Label>
-            {emailValid && (
-              <Span>
-                <Screamer />
-              </Span>
-            )}
-            <LoginInput
-              type="text"
-              className={emailValid}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Label>Password</Label>
-            {pwdValid && (
-              <Span>
-                <Screamer />
-              </Span>
-            )}
-            <LoginInput
-              className={pwdValid}
-              type="password"
-              value={pwd}
-              onChange={(e) => setPwd(e.target.value)}
-            />
-            <span>{isvalid}</span>
-            <p onClick={submitHandler}>
-              <FormBtn buttonName={"Log in"}></FormBtn>
-            </p>
-          </Form>
-        </Div>
-        <Div>
-          <SinUpdiv>
-            Don’t have an account? <Link to={"/signuppage"}>Sign up</Link>
-          </SinUpdiv>
-          <SinUpdiv>
-            Are you an employer? <Link>Sign up on Talent</Link>
-          </SinUpdiv>
-        </Div>
-      </Wrap>
-    </Flex>
-  );
-};
-export default Loginpage;
