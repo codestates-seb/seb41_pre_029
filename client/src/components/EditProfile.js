@@ -5,10 +5,10 @@ import { ReactComponent as SvgTwitter } from "../assets/twitter.svg";
 import { ReactComponent as SvgGit } from "../assets/git.svg";
 import { ReactComponent as Web } from "../assets/web.svg";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 import StyledButton from "./Button";
 import Input from "./Input";
-import axios from "axios";
 
 const EditProfile = () => {
   const navigator = useNavigate();
@@ -72,7 +72,10 @@ const EditProfile = () => {
         Authorization: isToken,
       }
     }
-    ).then((res) => window.location.reload());
+    ).then((res) => {
+      window.scrollTo(0, 0)
+      window.location.reload()
+    })
   };
 
   return (
