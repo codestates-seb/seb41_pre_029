@@ -44,9 +44,15 @@ public class CommentService {
 
     }
 
-    public void updateComment(Long commentId, CommentPatch commentPatch) {
+    public void updateComment(Long commentId, String token, CommentPatch commentPatch) {
 
+        Long memberId = jwtTokenizer.tokenToMemberId(token);
         Comment comment = findVerifiedComment(commentId);
+
+        if(memberId != comment.getMember().getId()) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
+        }
+
         CommentDto commentDto = CommentDto.of(comment, commentPatch);
 
         commentRepository.save(commentDto.toEntity());
@@ -71,16 +77,29 @@ public class CommentService {
 
     }
 
-    public void deleteComment(Long commentId) {
+    public void deleteComment(Long commentId, String token) {
 
+        Long memberId = jwtTokenizer.tokenToMemberId(token);
         Comment comment = findVerifiedComment(commentId);
+
+        if(memberId != comment.getMember().getId()) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
+        }
+
         commentRepository.delete(comment);
 
     }
 
-    public void updateSelection(Long commentId, CommentSelection commentSelection) {
+    public void updateSelection(Long commentId, String token, CommentSelection commentSelection) {
 
+        Long memberId = jwtTokenizer.tokenToMemberId(token);
         Comment comment = findVerifiedComment(commentId);
+        Article article = findVerifiedArticle(comment.getArticle().getId());
+
+        if(memberId != article.getMember().getId()) { // 답글 채택 버튼을 누른 사람이 게시글 작성자와 같지 않다면
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NO_PERMISSION);
+        }
+
         CommentDto commentDto = CommentDto.of(comment, commentSelection);
 
         commentRepository.save(commentDto.toEntity());
