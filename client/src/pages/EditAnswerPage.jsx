@@ -14,8 +14,6 @@ const EditAnswerPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
 
   const [isToken, setIsToken] = useState();
-  const [memberID, setMemberId] = useState();
-
 
   useEffect(() => {
     if (cookies.ikuzo) {
@@ -23,26 +21,18 @@ const EditAnswerPage = () => {
     }
   }, []);
 
-
   useEffect(() => {
-    if (cookies.ikuzo) {
-      setIsToken(cookies.ikuzo.token);
-      setMemberId(cookies.ikuzo.id);
-    }
-  }, []);
-
-  useEffect(() => {
-    axios
+      axios
       .get(
-        `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${memberID}`,
+        `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
         {
           headers: {
             Authorization: isToken,
             withCredentials: true,
           },
         }
-      )
-      .then((res) => setOriginData(res.data.data));
+        )
+        .then((res) => setOriginData(res.data.data));
   }, []);
 
   return (
