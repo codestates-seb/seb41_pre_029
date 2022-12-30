@@ -32,17 +32,13 @@ const QuestionPage = () => {
   const [token, setIsToken] = useState();
   const [memberID, setMemberId] = useState();
   const [recommendCount, setRecommendCount] = useState(0);
+  const questionId = params.id;
 
   useEffect(() => {
     if (cookies.ikuzo) {
       setIsToken(cookies.ikuzo.token);
       setMemberId(cookies.ikuzo.id);
     }
-  }, []);
-
-  const questionId = params.id;
-
-  useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
         headers: {
@@ -51,14 +47,13 @@ const QuestionPage = () => {
       })
       .then((res) => {
         setQuestion(res.data.data);
-        setLike(res.data.data.articleLikeInfo.totalLike === 1 ? true : false);
+        setLike(
+          res.data.data.articleLikeInfo.currentState === "like" ? true : false
+        );
         setDisLike(
-          res.data.data.articleLikeInfo.totalLike === -1 ? true : false
+          res.data.data.articleLikeInfo.currentState === "unlike" ? true : false
         );
       });
-  }, []);
-
-  useEffect(() => {
     axios
       .get(
         `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`,
