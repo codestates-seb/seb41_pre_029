@@ -15,6 +15,7 @@ import useScrollTop from "../util/useScrollTop";
 
 const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
   useScrollTop();
+  console.log(answer)
 
   const params = useParams();
   const questionId = Number(params.id);
@@ -161,10 +162,9 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
       )
       .then((res) => {
         setSelection(!selection);
+        window.location.reload();
       });
   };
-  console.log(cookies?.ikuzo.id)
-  console.log(memberInfo?.id)
 
   return (
     <AnswerSection>
@@ -210,7 +210,7 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
           </div>
           <div className="post--footer-profile">
             <div className="imgwrapper">
-              <img src="https://www.gravatar.com/avatar/580884d16248daa81e53e8a669f60361?s=64&d=identicon&r=PG&f=1"></img>
+              <img src={answer?.member?.image}></img>
             </div>
             <div className="profile-wrapper">
               <div className="profile-time">
@@ -218,7 +218,7 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
               </div>
               <div className="profile-user">
                 <div className="userName">
-                  {answer?.memberIdentityDto?.nickname}
+                  {answer?.member?.nickname}
                 </div>
                 <div className="user-follower">
                   <span className="follower">1,120</span>
