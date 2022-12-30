@@ -12,6 +12,9 @@ const Header = ({ search, find }) => {
 
   const [memberId, setMemberId] = useState();
   const [isLogin, setIsLogin] = useState(false);
+  const [data, setData] = useState("");
+  const navigate = useNavigate();
+  const [profile, setProfile] = useState("");
 
   useEffect(() => {
     if (cookies.ikuzo) {
@@ -21,27 +24,19 @@ const Header = ({ search, find }) => {
     }
   }, []);
 
-  const [profile, setProfile] = useState("");
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
-        headers: { Authorization: isToken },
-      })
-      .then((res) => {
-        setProfile(res?.data?.data?.profile);
-      });
-  }, [memberId]);
-
-  const [data, setData] = useState("");
-  const navigate = useNavigate();
+  console.log(memberId);
 
   useEffect(() => {
-    if (cookies.ikuzo) {
-      setIsToken(cookies.ikuzo.token);
-      setMemberId(cookies.ikuzo.id);
-      setIsLogin(true);
+    if (memberId) {
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
+          headers: { Authorization: isToken },
+        })
+        .then((res) => {
+          setProfile(res.data.data.profile);
+        });
     }
-  }, [cookies]);
+  }, [memberId]);
 
   const changeValue = (e) => {
     setData(e.target.value);
