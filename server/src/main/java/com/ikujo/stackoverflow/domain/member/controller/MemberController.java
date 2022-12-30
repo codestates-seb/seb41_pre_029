@@ -35,7 +35,7 @@ public class MemberController {
     @GetMapping("/{id}")
     public ResponseEntity getMemberProfile(@PathVariable("id") Long id,
                                            @RequestHeader(name = "Authorization") String token) {
-        Member findMember = memberService.findByToken(token);
+        Member findMember = memberService.findMemberByToken(token);
         MemberResponse response = MemberResponse.from(findMember);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);

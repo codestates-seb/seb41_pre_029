@@ -11,7 +11,6 @@ import com.ikujo.stackoverflow.global.auth.utils.CustomAuthorityUtils;
 import com.ikujo.stackoverflow.global.email.event.MemberRegistrationApplicationEvent;
 import com.ikujo.stackoverflow.global.exception.BusinessLogicException;
 import com.ikujo.stackoverflow.global.exception.ExceptionCode;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -60,7 +59,7 @@ public class MemberService {
      */
     @Transactional
     public Member updateMember(String token, MemberProfilePatch memberProfilePatch) {
-        Member findMember = findByToken(token);
+        Member findMember = findVerifiedMember(jwtTokenizer.tokenToMemberId(token));
 
         // 닉네임은 필수
         Optional.of(memberProfilePatch.nickname())
@@ -95,7 +94,7 @@ public class MemberService {
      * 회원 삭제
      */
     public void deleteMember(String token) {
-        Member findMember = findByToken(token);
+        Member findMember = findVerifiedMember(jwtTokenizer.tokenToMemberId(token));
 
         memberRepository.delete(findMember);
     }
@@ -112,14 +111,10 @@ public class MemberService {
     /**
      * 토큰으로 회원 조회
      */
-    public Member findByToken(String token) {
-        String key = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        String jws = token.replace("Bearer ", "");
-        Claims claims = jwtTokenizer.getClaims(jws, key).getBody();
+    public Member findMemberByToken(String token) {
+        Long tokenToMemberId = jwtTokenizer.tokenToMemberId(token);
 
-        Long id = claims.get("id", Long.class);
-
-        return findVerifiedMember(id);
+        return findVerifiedMember(tokenToMemberId);
     }
 
     /**
