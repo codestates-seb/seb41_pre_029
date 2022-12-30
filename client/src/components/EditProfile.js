@@ -15,8 +15,6 @@ const EditProfile = () => {
   const params = useParams();
   const [info, setInfo] = useState({});
 
-  console.log(info)
-
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   const [isToken, setIsToken] = useState();
   const [memberId, setMemberId] = useState();
@@ -29,15 +27,15 @@ const EditProfile = () => {
   }, []);
 
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
-        Authorization: isToken,
-        withCredentials: true,
-      })
-      .then((res) => res.data.data)
-      .then((res) => {
-        setInfo(res);
-      });
+    if (cookies.ikuzo) {
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
+          Authorization: isToken,
+          withCredentials: true,
+        })
+        .then((res) => setInfo(res))
+        .catch((err) => console.log("error!!"));
+    }
   }, []);
 
   const { link, nickname, profile } = info;
@@ -63,11 +61,11 @@ const EditProfile = () => {
       twitter: link.twitter,
     };
 
-    axios({
-      url: `${process.env.REACT_APP_API_URL}/members/${memberId}`,
-      method: "patch",
-      data,
-    }).then((res) => window.location.reload());
+    axios
+      .patch(`${process.env.REACT_APP_API_URL}/members/${memberId}`, data, {
+        headers: { Authorization: isToken, withCredentials: true },
+      })
+      .then((res) => window.location.reload());
   };
 
   return (
