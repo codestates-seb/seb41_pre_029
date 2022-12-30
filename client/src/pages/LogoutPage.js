@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
+import useCookies from "../zustand/store";
+
 const LogoutPage = () => {
   const navigate = useNavigate();
 
@@ -11,6 +13,7 @@ const LogoutPage = () => {
     navigate("/");
     window.location.reload();
   }
+  
   return (
     <Container>
       <LogoutTitle>
@@ -90,6 +93,8 @@ const LogoutPage = () => {
   );
 };
 export default LogoutPage;
+
+
 
 const Container = styled.div`
   display: flex;
@@ -202,3 +207,4 @@ const Explanation = styled.h2`
   color: #6a737c;
   font-size: 0.8rem;
 `;
+

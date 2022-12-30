@@ -2,10 +2,12 @@ import axios from "axios";
 import styled from "styled-components";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import useStore from "../zustand/store";
 
 import Button from "./Button";
 
 const DeleteProfile = () => {
+ 
   const { params } = useParams();
   const navigate = useNavigate();
 
@@ -15,8 +17,11 @@ const DeleteProfile = () => {
     setActive(!active);
   };
 
-  const data = JSON.parse(localStorage.getItem("info"));
-  const memberId = data.id;
+  const { GetId, GetToken } = useStore((state) => state);
+  const memberId = GetId();
+  const token = GetToken();
+
+  //회원 탈퇴 기능
 
   const handleDeleteProfile = () => {
     if (active) {

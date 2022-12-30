@@ -8,12 +8,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import StyledButton from "./Button";
 import Input from "./Input";
 import axios from "axios";
+import useStore from "../zustand/store";
 
 const EditProfile = () => {
   const navigator = useNavigate();
   const params = useParams();
-  const id = params.id;
   const [info, setInfo] = useState({});
+
+  const { GetId, GetToken } = useStore((state) => state);
+  const id = GetId();
+  const token = GetToken();
 
   useEffect(() => {
     axios

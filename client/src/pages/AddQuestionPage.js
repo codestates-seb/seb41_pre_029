@@ -11,7 +11,9 @@ import Button from "../components/Button";
 import CEditor from "../components/CKEditor";
 
 const AddQuestionPage = () => {
-  const { GetToken } = useStore((state) => state);
+  const { GetId, GetToken } = useStore((state) => state);
+  const userId = GetId();
+  const token = GetToken();
 
   const [modal, setModal] = useState(false);
   const [tags, setTags] = useState([]);
@@ -52,11 +54,10 @@ const AddQuestionPage = () => {
       })
     );
   };
+
   // const [cookies] = useCookies(["ikuzo"]);
   // const token = cookies.ikuzo.token;
   // console.log(token);
-
-  const token = GetToken();
 
   const handleSubmit = () => {
     if (input.title.trim().length < 1) return;

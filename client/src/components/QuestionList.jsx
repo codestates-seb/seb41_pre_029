@@ -9,7 +9,7 @@ import QuestionSummary from "./QuestionSummary";
 
 const QuestionList = ({ data, find }) => {
   const [questions, setQuestions] = useState([]);
-  const [totalQuestions,setTotalQuestions] = useState(0);
+  const [totalQuestions, setTotalQuestions] = useState(0);
 
   const [isActive, setIsActive] = useState("15");
 
@@ -30,10 +30,12 @@ const QuestionList = ({ data, find }) => {
   }, []);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/questions${location.search}`).then((res) => {
-      setQuestions(res.data.data)
-      setTotalQuestions(res.data?.pageInfo.totalElements)
-    })
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/questions${location.search}`)
+      .then((res) => {
+        setQuestions(res.data.data);
+        setTotalQuestions(res.data?.pageInfo.totalElements);
+      });
   }, [location]);
 
   const handleActive = (e) => {
@@ -47,14 +49,12 @@ const QuestionList = ({ data, find }) => {
       {find && data.length === 0 && <NoSearch></NoSearch>}
       <QuestionListContainer>
         {data
-          ? data
-              .map((question) => (
-                <QuestionSummary key={question.id} props={question} />
-              ))
-          : questions
-              .map((question) => (
-                <QuestionSummary key={question.id} props={question} />
-              ))}
+          ? data.map((question) => (
+              <QuestionSummary key={question.id} props={question} />
+            ))
+          : questions.map((question) => (
+              <QuestionSummary key={question.id} props={question} />
+            ))}
         <PageContainer>
           <Pagination
             total={totalQuestions}
@@ -99,7 +99,6 @@ const QuestionList = ({ data, find }) => {
 };
 
 export default QuestionList;
-
 
 const QuestionListContainer = styled.div`
   border-top: solid 1px #d6d9dc;
