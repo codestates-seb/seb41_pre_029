@@ -3,16 +3,25 @@ package com.ikujo.stackoverflow.domain.comment.dto.response;
 import com.ikujo.stackoverflow.domain.comment.entity.Comment;
 import com.ikujo.stackoverflow.domain.comment.entity.CommentRecommend;
 
-public record CommentRecommendResponse(Long id,
+public record CommentRecommendResponse(String currentState,
                                        Integer RecommendCount) {
 
-    public static CommentRecommendResponse from(CommentRecommend commentRecommend) {
+    public static CommentRecommendResponse fromLike(CommentRecommend commentRecommend) {
 
         Integer recommendCount = commentRecommend.getComment().getCommentRecommendList().stream()
                 .mapToInt(CommentRecommend::getFlag)
                 .sum();
 
-        return new CommentRecommendResponse(commentRecommend.getId(), recommendCount);
+        return new CommentRecommendResponse("like" ,recommendCount);
+    }
+
+    public static CommentRecommendResponse fromUnlike(CommentRecommend commentRecommend) {
+
+        Integer recommendCount = commentRecommend.getComment().getCommentRecommendList().stream()
+                .mapToInt(CommentRecommend::getFlag)
+                .sum();
+
+        return new CommentRecommendResponse("unlike", recommendCount);
     }
 
     public static CommentRecommendResponse from(Comment comment) {
@@ -21,7 +30,7 @@ public record CommentRecommendResponse(Long id,
                 .mapToInt(CommentRecommend::getFlag)
                 .sum();
 
-        return new CommentRecommendResponse(null, recommendCount);
+        return new CommentRecommendResponse("nothing" ,recommendCount);
     }
 
 }
