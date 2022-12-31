@@ -1,13 +1,16 @@
 import axios from "axios";
 import styled from "styled-components";
-import { useLocation } from 'react-router-dom'
+import { useLocation,useNavigate } from 'react-router-dom'
 import { useEffect, useState } from "react";
 
 import NoSearch from "./noSearch";
 import Pagination from "./Pagination";
+import useScrollTop from "../util/useScrollTop";
 import QuestionSummary from "./QuestionSummary";
 
 const QuestionList = ({ data, find }) => {
+    useScrollTop();
+  const navigate = useNavigate()
   const [questions, setQuestions] = useState([]);
   const [totalQuestions, setTotalQuestions] = useState(0);
 
@@ -44,6 +47,11 @@ const QuestionList = ({ data, find }) => {
     });
     setLimit(Number(e.target.value));
   };
+
+    useEffect(()=>{
+       navigate(`/?page=${0}&size=${limit}`)
+    },[limit]);
+
   return (
     <>
       {find && data.length === 0 && <NoSearch></NoSearch>}

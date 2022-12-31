@@ -35,7 +35,9 @@ public class MemberController {
     @GetMapping("/{id}")
     public ResponseEntity getMemberProfile(@PathVariable("id") Long id,
                                            @RequestHeader(name = "Authorization") String token) {
-        Member findMember = memberService.findByToken(token);
+
+        memberService.verifyId(id, token);
+        Member findMember = memberService.findMemberByToken(token);
         MemberResponse response = MemberResponse.from(findMember);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
@@ -48,7 +50,7 @@ public class MemberController {
     public ResponseEntity patchMemberProfile(@PathVariable("id") Long id,
                                              @Valid @RequestBody MemberProfilePatch profilePatchDto,
                                              @RequestHeader(name = "Authorization") String token) {
-
+        memberService.verifyId(id, token);
         Member updateMember = memberService.updateMember(token, profilePatchDto);
 
         MemberResponse response = MemberResponse.from(updateMember);
@@ -60,9 +62,8 @@ public class MemberController {
      * 회원 삭제
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteMember(@PathVariable("id") Long id,
-                                       @RequestHeader(name = "Authorization") String token) {
-        memberService.deleteMember(token);
+    public ResponseEntity deleteMember(@PathVariable("id") Long id) {
+        memberService.deleteMember(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

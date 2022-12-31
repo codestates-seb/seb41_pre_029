@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
-
+import moment from "moment";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -31,27 +31,32 @@ const QuestionPage = () => {
 
   const [token, setIsToken] = useState();
   const [memberID, setMemberId] = useState();
-
-  useEffect(() => {
-    if (cookies.ikuzo) {
-      setIsToken(cookies.ikuzo.token);
-      setMemberId(cookies.ikuzo.id);
-    }
-  }, []);
-
+  const [recommendCount, setRecommendCount] = useState(0);
   const questionId = params.id;
+
+  const [like, setLike] = useState(false);
+  const [disLike, setDisLike] = useState(false);
 
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
         headers: {
           withCredentials: true,
+          Authorization: token,
         },
       })
-      .then((res) => setQuestion(res.data.data));
-  }, []);
+      .then((res) => {
+        setQuestion(res.data.data);
+        setRecommendCount(res.data.data.articleLikeInfo.totalLike);
+      });
+  }, [like, disLike]);
 
   useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+      setMemberId(cookies.ikuzo.id);
+    }
+
     axios
       .get(
         `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`,
@@ -104,22 +109,8 @@ const QuestionPage = () => {
     }
   };
 
-  const [like, setLike] = useState(false);
-  const [disLike, setDisLike] = useState(false);
-
   const handleLike = () => {
-    if (!like && disLike) {
-      setDisLike(disLike);
-      axios({
-        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`, // 통신할 웹문서
-        method: "post", // 통신 방식
-        headers: {
-          Authorization: token,
-          withCredentials: true,
-        },
-      }).then((res) => setLike(!like));
-    } else {
-      setLike(!like);
+    if ((!like && !disLike) || (like && !disLike)) {
       axios({
         url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`, // 통신할 웹문서
         method: "post", // 통신 방식
@@ -127,23 +118,79 @@ const QuestionPage = () => {
           Authorization: token,
           withCredentials: true,
         },
-      }).then((res) => setLike(!like));
+      }).then(() => {
+        axios
+          .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
+            headers: {
+              withCredentials: true,
+              Authorization: token,
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            setLike(
+              res.data.data.articleLikeInfo.currentState === "like"
+                ? true
+                : false
+            );
+            setDisLike(
+              res.data.data.articleLikeInfo.currentState === "unlike"
+                ? true
+                : false
+            );
+          });
+      });
+    } else if (!like && disLike) {
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      })
+        .then(() => {
+          axios.get(
+            `${process.env.REACT_APP_API_URL}/questions/${questionId}`,
+            {
+              headers: {
+                withCredentials: true,
+                Authorization: token,
+              },
+            }
+          );
+        })
+        .then(() => {
+          axios
+            .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
+              headers: {
+                withCredentials: true,
+                Authorization: token,
+              },
+            })
+
+            .then((res) => {
+              console.log(res);
+              setLike(
+                res.data.data.articleLikeInfo.currentState === "like"
+                  ? true
+                  : false
+              );
+              setDisLike(
+                res.data.data.articleLikeInfo.currentState === "unlike"
+                  ? true
+                  : false
+              );
+            })
+            .catch(() => {
+              console.log("에러!");
+            });
+        });
     }
   };
 
   const handleDisLike = () => {
-    if (like && !disLike) {
-      setLike(!like);
-      axios({
-        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`, // 통신할 웹문서
-        method: "post", // 통신 방식
-        headers: {
-          Authorization: token,
-          withCredentials: true,
-        },
-      });
-    } else {
-      setDisLike(!disLike);
+    if ((!like && !disLike) || (!like && disLike)) {
       axios({
         url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`, // 통신할 웹문서
         method: "post", // 통신 방식
@@ -151,6 +198,57 @@ const QuestionPage = () => {
           Authorization: token,
           withCredentials: true,
         },
+      }).then(() => {
+        axios
+          .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
+            headers: {
+              withCredentials: true,
+              Authorization: token,
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            setLike(
+              res.data.data.articleLikeInfo.currentState === "like"
+                ? true
+                : false
+            );
+            setDisLike(
+              res.data.data.articleLikeInfo.currentState === "unlike"
+                ? true
+                : false
+            );
+          });
+      });
+    } else if (like && !disLike) {
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/likes`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      }).then((res) => {
+        axios
+          .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
+            headers: {
+              withCredentials: true,
+              Authorization: token,
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            setLike(
+              res.data.data.articleLikeInfo.currentState === "like"
+                ? true
+                : false
+            );
+            setDisLike(
+              res.data.data.articleLikeInfo.currentState === "unlike"
+                ? true
+                : false
+            );
+          });
       });
     }
   };
@@ -171,7 +269,7 @@ const QuestionPage = () => {
             </div>
             <div className="infoWrapper">
               <div className="createdAt">
-                asked {displayedAt(question?.baseTime.createdAt)}
+                asked {moment().format("YYYY-MM-DD HH:mm:ss")}???
               </div>
               <div className="viewed">viewed {question?.hits}</div>
             </div>
@@ -185,7 +283,7 @@ const QuestionPage = () => {
                     onClick={handleLike}
                     className={like ? "like active" : "like"}
                   />
-                  <span>{question?.recommendCount}</span>
+                  <span>{recommendCount}</span>
                   <RecommandB
                     fill="#babfc4"
                     onClick={handleDisLike}
@@ -218,14 +316,20 @@ const QuestionPage = () => {
                         Edit
                       </span>
                       <span className="button">Follow</span>
-                      <span className="button" onClick={handleDelete}>
-                        Delete
-                      </span>
+                      {cookies?.ikuzo?.id === undefined ? null : cookies?.ikuzo
+                          ?.id === question?.member?.id ? (
+                        <span
+                          className="button"
+                          onClick={() => handleDelete(questionId)}
+                        >
+                          Delete
+                        </span>
+                      ) : null}
                     </div>
                     <div className="post--footer-profile">
                       <div className="imgwrapper">
                         <img
-                          src="https://www.gravatar.com/avatar/580884d16248daa81e53e8a669f60361?s=64&d=identicon&r=PG&f=1"
+                          src={question?.member?.image}
                           alt="questionPage_image1"
                         ></img>
                       </div>
@@ -249,7 +353,12 @@ const QuestionPage = () => {
               <AnswerSection>
                 <h2 className="answerAmount">{answers?.length} Answers</h2>
                 {answers?.map((el, idx) => (
-                  <AnswerDetail key={idx} answer={el} isSelected={isSelected} />
+                  <AnswerDetail
+                    key={idx}
+                    answer={el}
+                    isSelected={isSelected}
+                    memberInfo={question?.member}
+                  />
                 ))}
                 <Editor>
                   <h2>Your Answer</h2>

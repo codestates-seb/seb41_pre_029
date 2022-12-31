@@ -11,7 +11,8 @@ public enum ExceptionCode {
     ARTICLE_NOT_FOUND(404, "Article not found"),
     ARTICLE_EXISTS(409, "Article exists"),
     COMMENT_NOT_FOUND(404, "Comment not found"),
-    FLAG_DUPLICATED(409, "Flag duplicated");
+    FLAG_DUPLICATED(409, "Flag duplicated"),
+    VALIDATION_ERROR(401, "Unauthorized");
 
     @Getter
     private int status;

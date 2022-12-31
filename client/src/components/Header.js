@@ -24,8 +24,6 @@ const Header = ({ search, find }) => {
     }
   }, []);
 
-  console.log(memberId);
-
   useEffect(() => {
     if (memberId) {
       axios
@@ -45,14 +43,14 @@ const Header = ({ search, find }) => {
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       axios
-        .get(`${process.env.REACT_APP_API_URL}/questions/searchVaue=${data}`)
+        .get(`${process.env.REACT_APP_API_URL}/questions?searchValue=${data}`)
         .then((res) => {
           search(res?.data?.data);
-
           find("find");
           navigate("/");
           setData("");
-        });
+        })
+        .catch(() => console.log("검색기능에서 ☠️"));
     }
     find("");
   };

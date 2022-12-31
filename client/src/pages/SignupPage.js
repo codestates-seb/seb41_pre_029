@@ -222,12 +222,10 @@ const SignupPage = () => {
             { withCredentials: true }
           )
           .then((res) => {
-            console.log(res);
             const data = JSON.stringify({
               id: res.data.id,
               token: res.headers.authorization,
             });
-            console.log(data);
             setCookie("ikuzo", data);
             pathNavigate("/");
             window.location.reload();

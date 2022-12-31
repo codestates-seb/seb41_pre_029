@@ -2,6 +2,7 @@ import axios from "axios";
 import styled from "styled-components";
 import MDEditor from "@uiw/react-md-editor";
 import { useState, useEffect } from "react";
+import moment from "moment";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
@@ -13,33 +14,8 @@ import { ReactComponent as Select } from "../assets/select.svg";
 import displayedAt from "../util/displayedAt";
 import useScrollTop from "../util/useScrollTop";
 
-const AnswerDetail = ({ answer, isSelected }) => {
+const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
   useScrollTop();
-
-  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-  const [token, setIsToken] = useState();
-
-  useEffect(() => {
-    if (cookies?.ikuzo) {
-      setIsToken(cookies?.ikuzo.token);
-    }
-  }, []);
-
-  const handleDelete = () => {
-    console.log("삭제 요청 :" + token, answer.id);
-    if (window.confirm("답글을 삭제하시겠습니까?")) {
-      axios({
-        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answer.id}`,
-        method: "delete",
-        headers: {
-          Authorization: token,
-          withCredentials: true,
-        },
-      })
-        .then((res) => window.location.reload())
-        .catch((err) => console.log(err));
-    }
-  };
 
   const params = useParams();
   const questionId = Number(params.id);
@@ -54,19 +30,62 @@ const AnswerDetail = ({ answer, isSelected }) => {
   const [disLike, setDisLike] = useState(false);
   const [selection, setSelection] = useState(answer.selection);
 
-  const handleLike = () => {
-    if (!like && disLike) {
-      setDisLike(disLike);
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
+  const [token, setIsToken] = useState();
+  const [recommendCount, setRecommendCount] = useState(0);
+
+  useEffect(() => {
+    if (cookies?.ikuzo) {
+      setIsToken(cookies?.ikuzo.token);
       axios({
-        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`, // 통신할 웹문서
-        method: "post", // 통신 방식
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
+        method: "get",
         headers: {
           Authorization: token,
           withCredentials: true,
         },
-      }).then((res) => setLike(!like));
-    } else {
-      setLike(!like);
+      })
+        .then((res) => {
+          console.log(res);
+          setLike(res.data.data.recommendCount === 1 ? true : false);
+          setDisLike(res.data.data.recommendCount === -1 ? true : false);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, []);
+
+  //추천 수 요청
+  useEffect(() => {
+    axios({
+      url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
+      method: "get",
+      headers: {
+        Authorization: token,
+        withCredentials: true,
+      },
+    })
+      // .then((res) => window.location.reload())
+      .then((res) => setRecommendCount(res.data.data.recommendCount))
+      .catch((err) => console.log(err));
+  }, [like, disLike]);
+
+  const handleDelete = () => {
+    if (window.confirm("답글을 삭제하시겠습니까?")) {
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
+        method: "delete",
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      })
+        .then((res) => window.location.reload())
+        .catch((err) => console.log("계정삭제 ☠️"));
+    }
+  };
+
+  const handleLike = () => {
+    if ((!like && !disLike) || (like && !disLike)) {
       axios({
         url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`, // 통신할 웹문서
         method: "post", // 통신 방식
@@ -74,23 +93,30 @@ const AnswerDetail = ({ answer, isSelected }) => {
           Authorization: token,
           withCredentials: true,
         },
-      }).then((res) => setLike(!like));
+      }).then(() => {
+        setLike(!like);
+      });
+    } else if (!like && disLike) {
+      //[false && true] unlike 요청 && unlike(false)
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      })
+        .then(() => {
+          setDisLike(!disLike);
+        })
+        .catch(() => {
+          console.log("에러!");
+        });
     }
   };
 
   const handleDisLike = () => {
-    if (like && !disLike) {
-      setLike(!like);
-      axios({
-        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`, // 통신할 웹문서
-        method: "post", // 통신 방식
-        headers: {
-          Authorization: token,
-          withCredentials: true,
-        },
-      });
-    } else {
-      setDisLike(!disLike);
+    if ((!like && !disLike) || (!like && disLike)) {
       axios({
         url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`, // 통신할 웹문서
         method: "post", // 통신 방식
@@ -98,11 +124,24 @@ const AnswerDetail = ({ answer, isSelected }) => {
           Authorization: token,
           withCredentials: true,
         },
+      }).then(() => {
+        setDisLike(!disLike);
+      });
+    } else if (like && !disLike) {
+      axios({
+        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`, // 통신할 웹문서
+        method: "post", // 통신 방식
+        headers: {
+          Authorization: token,
+          withCredentials: true,
+        },
+      }).then(() => {
+        setLike(!like);
       });
     }
   };
+
   const handleSelection = () => {
-    console.log(token)
     axios
       .patch(
         `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/selections`,
@@ -113,7 +152,7 @@ const AnswerDetail = ({ answer, isSelected }) => {
           headers: {
             Authorization: token,
             withCredentials: true,
-          }
+          },
         }
       )
       .then((res) => {
@@ -130,7 +169,7 @@ const AnswerDetail = ({ answer, isSelected }) => {
           onClick={handleLike}
           className={like ? "like active" : "like"}
         />
-        <span>{answer.recommendCount}</span>
+        <span>{recommendCount}</span>
         <RecommandB
           fill="#babfc4"
           onClick={handleDisLike}
@@ -138,9 +177,9 @@ const AnswerDetail = ({ answer, isSelected }) => {
         />
         <div className="select-wrapper">
           {isSelected && selection && <Select className={"selected"} />}
-          {!isSelected && (
+          {!isSelected && cookies?.ikuzo?.id === memberInfo?.id ? (
             <Select onClick={handleSelection} className="not_selected" />
-          )}
+          ) : null}
         </div>
       </div>
 
@@ -150,7 +189,6 @@ const AnswerDetail = ({ answer, isSelected }) => {
           source={answer.content}
           style={{ whiteSpace: "pre-wrap", backgroundColor: "white" }}
         />
-        {/* <div className="post--body">{answer.content}</div> */}
         <div className="post--footer">
           <div className="post--footer-button">
             <span className="button">Share</span>
@@ -161,22 +199,23 @@ const AnswerDetail = ({ answer, isSelected }) => {
               Edit
             </span>
             <span className="button">Follow</span>
-            <span className="button" onClick={() => handleDelete(questionId)}>
-              Delete
-            </span>
+            {cookies?.ikuzo?.id === undefined ? null : cookies?.ikuzo?.id ===
+              answer?.member?.id ? (
+              <span className="button" onClick={() => handleDelete(questionId)}>
+                Delete
+              </span>
+            ) : null}
           </div>
           <div className="post--footer-profile">
             <div className="imgwrapper">
-              <img src="https://www.gravatar.com/avatar/580884d16248daa81e53e8a669f60361?s=64&d=identicon&r=PG&f=1"></img>
+              <img src={answer?.member.image}></img>
             </div>
             <div className="profile-wrapper">
               <div className="profile-time">
                 asked {displayedAt(answer.createdAt)}
               </div>
               <div className="profile-user">
-                <div className="userName">
-                  {answer?.memberIdentityDto?.nickname}
-                </div>
+                <div className="userName">{answer?.member?.nickname}</div>
                 <div className="user-follower">
                   <span className="follower">1,120</span>
                 </div>

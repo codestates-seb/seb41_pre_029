@@ -7,14 +7,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import Button from "./Button";
 
 const DeleteProfile = () => {
-  const { params } = useParams();
   const navigate = useNavigate();
 
   const [active, setActive] = useState(false);
 
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   const [isToken, setIsToken] = useState();
-  const [memberID, setMemberId] = useState();
+  const [memberId, setMemberId] = useState();
+
 
   useEffect(() => {
     if (cookies.ikuzo) {
@@ -29,25 +29,24 @@ const DeleteProfile = () => {
   //회원 탈퇴 기능
   const handleDeleteProfile = () => {
     if (active) {
-      if (window.confirm("정말 삭제하시겠습니까?")) {
-        //상태 로그아웃으로 만들기
-        axios
-          .delete(`${process.env.REACT_APP_API_URL}/members/${memberID}`, {
+
+      window.confirm("정말 삭제하시겠습니까?");
+      //상태 로그아웃으로 만들기
+      axios
+        .delete(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
+          headers: {
             Authorization: isToken,
             withCredentials: true,
-          })
-          .then(() => {
+          },
+        })
+        .then((res) => {
+          removeCookie("ikuzo");
+          alert("그동안 이용해주셔서 감사합니다.");
+          navigate("/");
+          window.location.reload();
+        })
+        .catch((err) => console.log("로그아웃 ☠️"));
 
-            removeCookie("ikuzo");
-            alert("그동안 이용해주셔서 감사합니다.");
-            navigate("/");
-            window.location.reload();
-
-          })
-          .catch((err) => console.log("error!!"));
-      } else {
-        return;
-      }
     }
   };
 
@@ -89,7 +88,7 @@ const DeleteProfile = () => {
           </p>
         </div>
       </FlexItem>
-      <div onClick={() => handleDeleteProfile(params)}>
+      <div onClick={handleDeleteProfile}>
         <Button
           buttonName={"Delete profile"}
           width="104.03"
