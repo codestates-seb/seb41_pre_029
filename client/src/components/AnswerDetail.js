@@ -80,7 +80,7 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
         },
       })
         .then((res) => window.location.reload())
-        .catch((err) => console.log(err));
+        .catch((err) => console.log("계정삭제 ☠️"));
     }
   };
 
@@ -199,13 +199,12 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
               Edit
             </span>
             <span className="button">Follow</span>
-            {
-              cookies?.ikuzo?.id === undefined 
-              ? null
-              : ((cookies?.ikuzo?.id === answer?.member?.id) 
-                ? (<span className="button" onClick={() => handleDelete(questionId)}>Delete</span>)
-                : null)
-            }
+            {cookies?.ikuzo?.id === undefined ? null : cookies?.ikuzo?.id ===
+              answer?.member?.id ? (
+              <span className="button" onClick={() => handleDelete(questionId)}>
+                Delete
+              </span>
+            ) : null}
           </div>
           <div className="post--footer-profile">
             <div className="imgwrapper">
@@ -213,7 +212,7 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
             </div>
             <div className="profile-wrapper">
               <div className="profile-time">
-                asked {moment().format("YYYY-MM-DD HH:mm:ss")}
+                asked {displayedAt(answer.createdAt)}
               </div>
               <div className="profile-user">
                 <div className="userName">{answer?.member?.nickname}</div>
