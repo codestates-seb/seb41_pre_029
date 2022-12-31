@@ -38,10 +38,6 @@ const QuestionPage = () => {
   const [disLike, setDisLike] = useState(false);
 
   useEffect(() => {
-    if (cookies.ikuzo) {
-      setIsToken(cookies.ikuzo.token);
-      setMemberId(cookies.ikuzo.id);
-    }
     axios
       .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
         headers: {
@@ -57,6 +53,14 @@ const QuestionPage = () => {
           res.data.data.articleLikeInfo.currentState === "unlike" ? true : false
         );
       });
+  }, [like, disLike]);
+
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+      setMemberId(cookies.ikuzo.id);
+    }
+
     axios
       .get(
         `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`,
