@@ -199,9 +199,13 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
               Edit
             </span>
             <span className="button">Follow</span>
-            {(cookies?.ikuzo.id === answer?.member?.id) 
-              ? (<span className="button" onClick={() => handleDelete(questionId)}>Delete</span>)
-              : null}
+            {
+              cookies?.ikuzo?.id === undefined 
+              ? null
+              : ((cookies?.ikuzo?.id === answer?.member?.id) 
+                ? (<span className="button" onClick={() => handleDelete(questionId)}>Delete</span>)
+                : null)
+            }
           </div>
           <div className="post--footer-profile">
             <div className="imgwrapper">
