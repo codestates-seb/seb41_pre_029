@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import React, { useState } from "react";
 import { CookiesProvider } from "react-cookie";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 //const Header = React.lazy(() => import("./components/Header"));
@@ -14,6 +14,8 @@ import QuestionPage from "./pages/QuestionPage";
 import SignupPage from "./pages/SignupPage";
 import EditQuestionPage from "./pages/EditQuestionPage";
 import EditAnswerPage from "./pages/EditAnswerPage";
+
+/* dark mode */
 
 function App() {
   const [searchData, setSearchData] = useState("");

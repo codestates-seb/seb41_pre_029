@@ -7,33 +7,26 @@ import { useCookies } from "react-cookie";
 
 const Nav = ({ location }) => {
   const [active, setActive] = useState(location.pathname);
-  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"])
+  const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   const [isToken, setIsToken] = useState();
   const [memberId, setMemberId] = useState();
+  const [myPageLink, setMyPageLink] = useState("/loginpage");
 
   useEffect(() => {
     if (cookies.ikuzo) {
-      setIsToken(cookies.ikuzo.token);
       setMemberId(cookies.ikuzo.id);
+      setMyPageLink(`/mypage/${memberId}`);
     }
   }, []);
-
 
   const handleClick = (link) => {
     setActive(link);
   };
   const navigate = useNavigate();
-
-
-
-
   const menu = [
     { name: "Questions", link: "/" },
     { name: "Tags", link: "/tags" },
-
-    { name: "Users", link: `/mypage/${memberId}` },
-
-
+    { name: "Users", link: `${myPageLink}` },
     { name: "Companies", link: "/companies" },
   ];
 
