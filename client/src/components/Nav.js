@@ -8,7 +8,6 @@ import { useCookies } from "react-cookie";
 const Nav = ({ location }) => {
   const [active, setActive] = useState(location.pathname);
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-  const [isToken, setIsToken] = useState();
   const [memberId, setMemberId] = useState();
   const [myPageLink, setMyPageLink] = useState("/loginpage");
 
