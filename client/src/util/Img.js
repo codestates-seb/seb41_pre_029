@@ -1,6 +1,9 @@
 import LogoSrc from "../assets/signup.jpg";
 import styled from "styled-components";
-import confetti from "https://cdn.skypack.dev/canvas-confetti";
+import React, { useState } from "react";
+import JSConfetti from "js-confetti";
+const jsConfetti = new JSConfetti();
+
 const Div = styled.div`
   background-color: #d7d9db47;
   display: flex;
@@ -32,38 +35,11 @@ const Imgs = styled.img`
   width: 500px; ;
 `;
 const Img = () => {
-  const doItNow = (evt, hard) => {
-    lastX = evt.clientX;
-    const particleCount = hard ? r(10, 10) : r(2, 15);
-    confetti({
-      particleCount,
-      angle: r(500, 90 * 30),
-      spread: r(10, 100),
-      origin: {
-        x: evt.clientX / window.innerWidth,
-        y: evt.clientY / window.innerHeight,
-      },
-    });
-  };
-  const doIt = (evt) => {
-    doItNow(evt, false);
-  };
-
-  const doItHard = (evt) => {
-    doItNow(evt, true);
-  };
-
-  let lastX = 30;
-  const butt = document.querySelector("div");
-  const img = document.querySelector("div");
-  butt.addEventListener("mousemove", doIt);
-  butt.addEventListener("PlayStateChange ", doIt);
-  img.addEventListener("loadend ", doItHard);
-  img.addEventListener("load ", doItHard);
-
-  function r(mi, ma) {
-    return parseInt(Math.random() * (ma - mi) + mi);
-  }
+  jsConfetti.addConfetti({
+    emojis: ["🌈", "💥", "✨", "💫", "🌸", "🌟", "🌼"],
+    emojiSize: 60,
+    confettiNumber: 60,
+  });
 
   return (
     <Div className="con02_event">
