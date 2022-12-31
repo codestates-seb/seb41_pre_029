@@ -42,16 +42,12 @@ const QuestionPage = () => {
       .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
         headers: {
           withCredentials: true,
+          Authorization: token,
         },
       })
       .then((res) => {
         setQuestion(res.data.data);
-        setLike(
-          res.data.data.articleLikeInfo.currentState === "like" ? true : false
-        );
-        setDisLike(
-          res.data.data.articleLikeInfo.currentState === "unlike" ? true : false
-        );
+        setRecommendCount(res.data.data.articleLikeInfo.totalLike);
       });
   }, [like, disLike]);
 
@@ -113,22 +109,6 @@ const QuestionPage = () => {
     }
   };
 
-  useEffect(() => {
-    axios({
-      url: `${process.env.REACT_APP_API_URL}/questions/${questionId}`,
-      method: "get",
-      headers: {
-        Authorization: token,
-        withCredentials: true,
-      },
-    })
-      // .then((res) => window.location.reload())
-      .then((res) => {
-        setRecommendCount(res.data.data.articleLikeInfo.totalLike);
-      })
-      .catch((err) => console.log(err));
-  }, [like, disLike]);
-
   const handleLike = () => {
     if ((!like && !disLike) || (like && !disLike)) {
       axios({
@@ -139,10 +119,28 @@ const QuestionPage = () => {
           withCredentials: true,
         },
       }).then(() => {
-        setLike(!like);
+        axios
+          .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
+            headers: {
+              withCredentials: true,
+              Authorization: token,
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            setLike(
+              res.data.data.articleLikeInfo.currentState === "like"
+                ? true
+                : false
+            );
+            setDisLike(
+              res.data.data.articleLikeInfo.currentState === "unlike"
+                ? true
+                : false
+            );
+          });
       });
     } else if (!like && disLike) {
-      //[false && true] unlike 요청 && unlike(false)
       axios({
         url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/unlikes`, // 통신할 웹문서
         method: "post", // 통신 방식
@@ -152,10 +150,41 @@ const QuestionPage = () => {
         },
       })
         .then(() => {
-          setDisLike(!disLike);
+          axios.get(
+            `${process.env.REACT_APP_API_URL}/questions/${questionId}`,
+            {
+              headers: {
+                withCredentials: true,
+                Authorization: token,
+              },
+            }
+          );
         })
-        .catch(() => {
-          console.log("에러!");
+        .then(() => {
+          axios
+            .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
+              headers: {
+                withCredentials: true,
+                Authorization: token,
+              },
+            })
+
+            .then((res) => {
+              console.log(res);
+              setLike(
+                res.data.data.articleLikeInfo.currentState === "like"
+                  ? true
+                  : false
+              );
+              setDisLike(
+                res.data.data.articleLikeInfo.currentState === "unlike"
+                  ? true
+                  : false
+              );
+            })
+            .catch(() => {
+              console.log("에러!");
+            });
         });
     }
   };
@@ -170,7 +199,26 @@ const QuestionPage = () => {
           withCredentials: true,
         },
       }).then(() => {
-        setDisLike(!disLike);
+        axios
+          .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
+            headers: {
+              withCredentials: true,
+              Authorization: token,
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            setLike(
+              res.data.data.articleLikeInfo.currentState === "like"
+                ? true
+                : false
+            );
+            setDisLike(
+              res.data.data.articleLikeInfo.currentState === "unlike"
+                ? true
+                : false
+            );
+          });
       });
     } else if (like && !disLike) {
       axios({
@@ -180,8 +228,27 @@ const QuestionPage = () => {
           Authorization: token,
           withCredentials: true,
         },
-      }).then(() => {
-        setLike(!like);
+      }).then((res) => {
+        axios
+          .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
+            headers: {
+              withCredentials: true,
+              Authorization: token,
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            setLike(
+              res.data.data.articleLikeInfo.currentState === "like"
+                ? true
+                : false
+            );
+            setDisLike(
+              res.data.data.articleLikeInfo.currentState === "unlike"
+                ? true
+                : false
+            );
+          });
       });
     }
   };
@@ -249,13 +316,15 @@ const QuestionPage = () => {
                         Edit
                       </span>
                       <span className="button">Follow</span>
-                      {
-                        cookies?.ikuzo?.id === undefined 
-                        ? null
-                        : ((cookies?.ikuzo?.id === question?.member?.id) 
-                          ? (<span className="button" onClick={() => handleDelete(questionId)}>Delete</span>)
-                          : null)
-                      }
+                      {cookies?.ikuzo?.id === undefined ? null : cookies?.ikuzo
+                          ?.id === question?.member?.id ? (
+                        <span
+                          className="button"
+                          onClick={() => handleDelete(questionId)}
+                        >
+                          Delete
+                        </span>
+                      ) : null}
                     </div>
                     <div className="post--footer-profile">
                       <div className="imgwrapper">
