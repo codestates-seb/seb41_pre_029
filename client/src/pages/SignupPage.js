@@ -19,6 +19,7 @@ const Flex = styled.div`
   align-items: center;
   height: 100vh;
   background-color: #f1f2f3;
+  overflow: hidden;
 `;
 const Wrap = styled.div`
   display: flex;
@@ -201,7 +202,11 @@ const SignupPage = () => {
       setIsValid(" The password is not a valid .");
       setEmailValid("");
       setPwdValid("valid");
-    } else if (emailValueCheck && passwordValueCheck) {
+    } else if (
+      emailValueCheck &&
+      passwordValueCheck &&
+      displayName.trim() === ""
+    ) {
       axios(
         {
           method: "post",
@@ -224,6 +229,7 @@ const SignupPage = () => {
             { withCredentials: true }
           )
           .then((res) => {
+            console.log(res);
             const data = JSON.stringify({
               id: res.data.id,
               token: res.headers.authorization,
@@ -235,7 +241,8 @@ const SignupPage = () => {
               pathNavigate("/");
               window.location.reload();
             }, 4000);
-          });
+          })
+          .catch(() => console.log("signup ☠️"));
       });
     }
   };
