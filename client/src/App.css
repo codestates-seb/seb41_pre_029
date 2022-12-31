@@ -138,3 +138,19 @@ a {
 a:hover {
   color: #0a95ff;
 }
+
+
+/* @media(prefers-color-scheme:light) {
+  body {
+    background: white;
+    color: black;;
+  }
+}
+
+@media(prefers-color-scheme:dark) {
+  body {
+    background: #0F0E17;
+    color: white;
+    ;
+  }
+} */
