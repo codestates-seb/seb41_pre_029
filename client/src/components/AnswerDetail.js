@@ -45,6 +45,7 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
         },
       })
         .then((res) => {
+          console.log(res);
           setLike(res.data.data.recommendCount === 1 ? true : false);
           setDisLike(res.data.data.recommendCount === -1 ? true : false);
         })
@@ -175,7 +176,7 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
         />
         <div className="select-wrapper">
           {isSelected && selection && <Select className={"selected"} />}
-          {!isSelected && cookies?.ikuzo.id === memberInfo?.id ? (
+          {!isSelected && cookies?.ikuzo?.id === memberInfo?.id ? (
             <Select onClick={handleSelection} className="not_selected" />
           ) : null}
         </div>

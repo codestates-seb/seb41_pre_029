@@ -37,12 +37,9 @@ const QuestionPage = () => {
   const [like, setLike] = useState(false);
   const [disLike, setDisLike] = useState(false);
 
+  // console.log(question);
 
   useEffect(() => {
-    if (cookies.ikuzo) {
-      setIsToken(cookies.ikuzo.token);
-      setMemberId(cookies.ikuzo.id);
-    }
     axios
       .get(`${process.env.REACT_APP_API_URL}/questions/${questionId}`, {
         headers: {
@@ -50,13 +47,22 @@ const QuestionPage = () => {
         },
       })
       .then((res) => {
-        setQuestion(res.data.data);
-        setLike(res.data.data.articleLikeInfo.currentState === 'like' ? true : false);
+        setQuestion(res.data.data); //like // nothing // unlike
+        setLike(
+          res.data.data.articleLikeInfo.currentState === "like" ? true : false
+        );
         setDisLike(
-          res.data.data.articleLikeInfo.currentState === 'unlike' ? true : false
-
+          res.data.data.articleLikeInfo.currentState === "unlike" ? true : false
         );
       });
+  }, [like, disLike]);
+
+  useEffect(() => {
+    if (cookies.ikuzo) {
+      setIsToken(cookies.ikuzo.token);
+      setMemberId(cookies.ikuzo.id);
+    }
+
     axios
       .get(
         `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments`,
@@ -120,9 +126,8 @@ const QuestionPage = () => {
     })
       // .then((res) => window.location.reload())
       .then((res) => {
-        setRecommendCount(res.data.data.articleLikeInfo.totalLike)
-      }
-      )
+        setRecommendCount(res.data.data.articleLikeInfo.totalLike);
+      })
       .catch((err) => console.log(err));
   }, [like, disLike]);
 
@@ -246,9 +251,11 @@ const QuestionPage = () => {
                         Edit
                       </span>
                       <span className="button">Follow</span>
-                      {(cookies?.ikuzo.id === question?.member.id) ? <span className="button" onClick={handleDelete}>
-                        Delete
-                      </span> : null}
+                      {cookies?.ikuzo?.id === question?.member?.id ? (
+                        <span className="button" onClick={handleDelete}>
+                          Delete
+                        </span>
+                      ) : null}
                     </div>
                     <div className="post--footer-profile">
                       <div className="imgwrapper">
