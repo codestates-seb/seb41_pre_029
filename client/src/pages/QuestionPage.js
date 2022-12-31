@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { ReactComponent as RecommandT } from "../assets/recommand-top.svg";
 import { ReactComponent as RecommandB } from "../assets/recommand-bottom.svg";
-
+import moment from "moment";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -37,7 +37,6 @@ const QuestionPage = () => {
   const [like, setLike] = useState(false);
   const [disLike, setDisLike] = useState(false);
 
-
   useEffect(() => {
     if (cookies.ikuzo) {
       setIsToken(cookies.ikuzo.token);
@@ -51,10 +50,11 @@ const QuestionPage = () => {
       })
       .then((res) => {
         setQuestion(res.data.data);
-        setLike(res.data.data.articleLikeInfo.currentState === 'like' ? true : false);
+        setLike(
+          res.data.data.articleLikeInfo.currentState === "like" ? true : false
+        );
         setDisLike(
-          res.data.data.articleLikeInfo.currentState === 'unlike' ? true : false
-
+          res.data.data.articleLikeInfo.currentState === "unlike" ? true : false
         );
       });
     axios
@@ -120,9 +120,8 @@ const QuestionPage = () => {
     })
       // .then((res) => window.location.reload())
       .then((res) => {
-        setRecommendCount(res.data.data.articleLikeInfo.totalLike)
-      }
-      )
+        setRecommendCount(res.data.data.articleLikeInfo.totalLike);
+      })
       .catch((err) => console.log(err));
   }, [like, disLike]);
 
@@ -199,7 +198,7 @@ const QuestionPage = () => {
             </div>
             <div className="infoWrapper">
               <div className="createdAt">
-                asked {displayedAt(question?.baseTime.createdAt)}
+                asked {moment().format("YYYY-MM-DD HH:mm:ss")}???
               </div>
               <div className="viewed">viewed {question?.hits}</div>
             </div>
@@ -246,9 +245,11 @@ const QuestionPage = () => {
                         Edit
                       </span>
                       <span className="button">Follow</span>
-                      {(cookies?.ikuzo.id === question?.member.id) ? <span className="button" onClick={handleDelete}>
-                        Delete
-                      </span> : null}
+                      {cookies?.ikuzo?.id === question?.member?.id ? (
+                        <span className="button" onClick={handleDelete}>
+                          Delete
+                        </span>
+                      ) : null}
                     </div>
                     <div className="post--footer-profile">
                       <div className="imgwrapper">

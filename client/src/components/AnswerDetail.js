@@ -2,6 +2,7 @@ import axios from "axios";
 import styled from "styled-components";
 import MDEditor from "@uiw/react-md-editor";
 import { useState, useEffect } from "react";
+import moment from "moment";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
@@ -203,11 +204,11 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
           </div>
           <div className="post--footer-profile">
             <div className="imgwrapper">
-              <img src={answer?.member?.image}></img>
+              <img src={answer?.member.image}></img>
             </div>
             <div className="profile-wrapper">
               <div className="profile-time">
-                asked {displayedAt(answer.createdAt)}
+                asked {moment().format("YYYY-MM-DD HH:mm:ss")}
               </div>
               <div className="profile-user">
                 <div className="userName">{answer?.member?.nickname}</div>
