@@ -11,7 +11,7 @@ import YellowBox from "../components/YellowBox";
 import useScrollTop from "../util/useScrollTop";
 import QuestionList from "../components/QuestionList";
 
-const MainPage = ({ data, find }) => {
+const MainPage = ({ data, find, eventKey }) => {
   useScrollTop();
   const location = useLocation();
   const [questionAmount, setQuestionAmount] = useState();
@@ -43,7 +43,7 @@ const MainPage = ({ data, find }) => {
           <div className="data_controller">
             <div className="question_count">{`${questionAmount} questions`}</div>
           </div>
-          <QuestionList data={data} find={find} />
+          <QuestionList data={data} find={find} eventKey={eventKey} />
         </MainBar>
         <SideBar>
           <YellowBox />

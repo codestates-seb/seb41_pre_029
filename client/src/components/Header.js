@@ -7,7 +7,7 @@ import { ReactComponent as SubLogo } from "../assets/subLogo.svg";
 
 import Button from "./Button";
 
-const Header = ({ search, find }) => {
+const Header = ({ search, find, eventKey }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   const [isToken, setIsToken] = useState();
 
@@ -53,7 +53,7 @@ const Header = ({ search, find }) => {
         })
         .catch(() => console.log("검색기능에서 ☠️"));
     }
-    find("");
+    eventKey(e.key);
   };
 
   return (
