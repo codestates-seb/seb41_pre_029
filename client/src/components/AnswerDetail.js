@@ -16,10 +16,8 @@ import useScrollTop from "../util/useScrollTop";
 
 const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
   useScrollTop();
-
   const params = useParams();
   const questionId = Number(params.id);
-
   const answerId = answer.id;
   const navigate = useNavigate();
   const navigateEditpage = (id) => {
@@ -34,6 +32,8 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
   const [token, setIsToken] = useState();
   const [recommendCount, setRecommendCount] = useState(0);
 
+  const [reAnswer, setReAnswer] = useState(answer);
+
   useEffect(() => {
     if (cookies?.ikuzo) {
       setIsToken(cookies?.ikuzo.token);
@@ -46,25 +46,11 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
         },
       })
         .then((res) => {
-          console.log(res);
+          setRecommendCount(res.data.data.recommendCount);
         })
         .catch((err) => console.log(err));
     }
   }, []);
-
-  //추천 수 요청
-  useEffect(() => {
-    axios({
-      url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
-      method: "get",
-      headers: {
-        Authorization: token,
-        withCredentials: true,
-      },
-    })
-      .then((res) => setRecommendCount(res.data.data.recommendCount))
-      .catch((err) => console.log(err));
-  }, [like, disLike]);
 
   const handleDelete = () => {
     if (window.confirm("답글을 삭제하시겠습니까?")) {
@@ -82,103 +68,60 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
   };
 
   const handleLike = () => {
+    let axiosLike = "";
+
     if ((!like && !disLike) || (like && !disLike)) {
-      axios({
-        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`, // 통신할 웹문서
-        method: "post", // 통신 방식
-        headers: {
-          Authorization: token,
-          withCredentials: true,
-        },
-      }).then(() => {
-        axios({
-          url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
-          method: "get",
-          headers: {
-            Authorization: token,
-            withCredentials: true,
-          },
-        }).then((res) => {
-          console.log(res);
-          // setLike(res.data.data.currenState === 1 ? true : false);
-          // setDisLike(res.data.data.currenState === -1 ? true : false);
-        });
-      });
+      axiosLike = "likes";
     } else if (!like && disLike) {
-      axios({
-        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`, // 통신할 웹문서
-        method: "post", // 통신 방식
-        headers: {
-          Authorization: token,
-          withCredentials: true,
-        },
-      })
-        .then(() => {
-          axios({
-            url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
-            method: "get",
-            headers: {
-              Authorization: token,
-              withCredentials: true,
-            },
-          }).then((res) => {
-            console.log(res);
-            // setLike(res.data.data.currenState === 1 ? true : false);
-            // setDisLike(res.data.data.currenState === -1 ? true : false);
-          });
-        })
-        .catch(() => {
-          console.log("에러!");
-        });
+      axiosLike = "unlikes";
     }
+    axios({
+      url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/${axiosLike}`, // 통신할 웹문서
+      method: "post", // 통신 방식
+      headers: {
+        Authorization: token,
+        withCredentials: true,
+      },
+    }).then((res) => {
+      const handleLike = res.data.data.currentState;
+      if (handleLike === "like") {
+        setLike(true);
+      } else if (handleLike === "unlike") {
+        setDisLike(true);
+      } else if (handleLike === "nothing") {
+        setLike(false);
+        setDisLike(false);
+      }
+      setRecommendCount(res?.data?.data?.RecommendCount);
+    });
   };
 
   const handleDisLike = () => {
+    let axiosLike = "";
     if ((!like && !disLike) || (!like && disLike)) {
-      axios({
-        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`, // 통신할 웹문서
-        method: "post", // 통신 방식
-        headers: {
-          Authorization: token,
-          withCredentials: true,
-        },
-      }).then(() => {
-        axios({
-          url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
-          method: "get",
-          headers: {
-            Authorization: token,
-            withCredentials: true,
-          },
-        }).then((res) => {
-          console.log(res);
-          // setLike(res.data.data.currenState === 1 ? true : false);
-          // setDisLike(res.data.data.currenState === -1 ? true : false);
-        });
-      });
+      axiosLike = "unlikes";
     } else if (like && !disLike) {
-      axios({
-        url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/likes`, // 통신할 웹문서
-        method: "post", // 통신 방식
-        headers: {
-          Authorization: token,
-          withCredentials: true,
-        },
-      }).then(() => {
-        axios({
-          url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
-          method: "get",
-          headers: {
-            Authorization: token,
-            withCredentials: true,
-          },
-        }).then((res) => {
-          console.log(res);
-          // setLike(res.data.data.currenState === 1 ? true : false);
-          // setDisLike(res.data.data.currenState === -1 ? true : false);
-        });
-      });
+      axiosLike = "likes";
     }
+    axios({
+      url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/${axiosLike}`, // 통신할 웹문서
+      method: "post", // 통신 방식
+      headers: {
+        Authorization: token,
+        withCredentials: true,
+      },
+    }).then((res) => {
+      const handleLike = res.data.data.currentState;
+      if (handleLike === "like") {
+        setLike(true);
+      } else if (handleLike === "unlike") {
+        setDisLike(true);
+      } else if (handleLike === "nothing") {
+        setLike(false);
+        setDisLike(false);
+      }
+      setRecommendCount(res?.data?.data?.RecommendCount);
+    });
   };
 
   const handleSelection = () => {
@@ -226,7 +169,7 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
       <div className="post-layout">
         <MDEditor.Markdown
           className="post--body"
-          source={answer.content}
+          source={reAnswer.content}
           style={{ whiteSpace: "pre-wrap", backgroundColor: "white" }}
         />
         <div className="post--footer">
@@ -234,13 +177,13 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
             <span className="button">Share</span>
             <span
               className="button hoverE"
-              onClick={() => navigateEditpage(answer.id)}
+              onClick={() => navigateEditpage(reAnswer.id)}
             >
               Edit
             </span>
             <span className="button">Follow</span>
             {cookies?.ikuzo?.id === undefined ? null : cookies?.ikuzo?.id ===
-              answer?.member?.id ? (
+              reAnswer?.member?.id ? (
               <span className="button" onClick={() => handleDelete(questionId)}>
                 Delete
               </span>
@@ -248,14 +191,14 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
           </div>
           <div className="post--footer-profile">
             <div className="imgwrapper">
-              <img src={answer?.member.image}></img>
+              <img src={reAnswer?.member.image} alt="profile"></img>
             </div>
             <div className="profile-wrapper">
               <div className="profile-time">
-                asked {displayedAt(answer.createdAt)}
+                asked {displayedAt(reAnswer.createdAt)}
               </div>
               <div className="profile-user">
-                <div className="userName">{answer?.member?.nickname}</div>
+                <div className="userName">{reAnswer?.member?.nickname}</div>
                 <div className="user-follower">
                   <span className="follower">1,120</span>
                 </div>
