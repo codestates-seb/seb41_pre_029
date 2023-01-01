@@ -34,8 +34,8 @@ const QuestionPage = () => {
   const [recommendCount, setRecommendCount] = useState(0);
   const questionId = params.id;
 
-  const [like, setLike] = useState(false);
-  const [disLike, setDisLike] = useState(false);
+  const [like, setLike] = useState();
+  const [disLike, setDisLike] = useState();
 
   useEffect(() => {
     axios
@@ -48,6 +48,12 @@ const QuestionPage = () => {
       .then((res) => {
         setQuestion(res.data.data);
         setRecommendCount(res.data.data.articleLikeInfo.totalLike);
+        setLike(
+          res.data.data.articleLikeInfo.currentState === "like" ? true : false
+        );
+        setDisLike(
+          res.data.data.articleLikeInfo.currentState === "unlike" ? true : false
+        );
       });
   }, [like, disLike]);
 
@@ -127,7 +133,6 @@ const QuestionPage = () => {
             },
           })
           .then((res) => {
-            console.log(res);
             setLike(
               res.data.data.articleLikeInfo.currentState === "like"
                 ? true
@@ -207,7 +212,6 @@ const QuestionPage = () => {
             },
           })
           .then((res) => {
-            console.log(res);
             setLike(
               res.data.data.articleLikeInfo.currentState === "like"
                 ? true
