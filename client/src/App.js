@@ -18,15 +18,22 @@ import EditAnswerPage from "./pages/EditAnswerPage";
 function App() {
   const [searchData, setSearchData] = useState("");
   const [find, setFind] = useState("");
+  const [eventKey, setEventKey] = useState("");
   return (
     <CookiesProvider>
       <div className="App">
         <Router basename={process.env.PUBLIC_URL}>
-          <Header search={setSearchData} find={setFind} />
+          <Header
+            search={setSearchData}
+            find={setFind}
+            eventKey={setEventKey}
+          />
           <Routes>
             <Route
               path="/"
-              element={<MainPage data={searchData} find={find} />}
+              element={
+                <MainPage data={searchData} find={find} eventKey={eventKey} />
+              }
             />
             <Route path="/addquestionpage" element={<AddQuestionPage />} />
             <Route path="/*" element={<ErrorPage />} />

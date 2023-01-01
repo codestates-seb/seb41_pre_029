@@ -1,6 +1,6 @@
 import axios from "axios";
 import styled from "styled-components";
-import { useLocation,useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import NoSearch from "./noSearch";
@@ -8,12 +8,11 @@ import Pagination from "./Pagination";
 import useScrollTop from "../util/useScrollTop";
 import QuestionSummary from "./QuestionSummary";
 
-const QuestionList = ({ data, find }) => {
-    useScrollTop();
-  const navigate = useNavigate()
+const QuestionList = ({ data, find, eventKey }) => {
+  useScrollTop();
+  const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
   const [totalQuestions, setTotalQuestions] = useState(0);
-
   const [isActive, setIsActive] = useState("15");
 
   //페이지 당 게시물 수
@@ -23,13 +22,14 @@ const QuestionList = ({ data, find }) => {
   const [page, setPage] = useState(1);
 
   const location = useLocation();
-
-   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/questions`,
-    { withCredentials: true })
-    .then((res) => {
-      setQuestions(res?.data.data);
-    });
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/questions`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setQuestions(res?.data.data);
+      });
   }, []);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const QuestionList = ({ data, find }) => {
         setQuestions(res.data.data);
         setTotalQuestions(res.data?.pageInfo.totalElements);
       });
-  }, [location]);
+  }, []);
 
   const handleActive = (e) => {
     setIsActive(() => {
@@ -48,15 +48,17 @@ const QuestionList = ({ data, find }) => {
     setLimit(Number(e.target.value));
   };
 
-    useEffect(()=>{
-       navigate(`/?page=${0}&size=${limit}`)
-    },[limit]);
+  useEffect(() => {
+    navigate(`/?page=${0}&size=${limit}`);
+  }, [limit]);
 
   return (
     <>
-      {find && data.length === 0 && <NoSearch></NoSearch>}
+      {find && eventKey === "Enter" && data.length === 0 && (
+        <NoSearch></NoSearch>
+      )}
       <QuestionListContainer>
-        {data
+        {data && eventKey === "Enter"
           ? data.map((question) => (
               <QuestionSummary key={question.id} props={question} />
             ))

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import moment from "moment";
 import displayedAt from "../util/displayedAt";
 
 const QuestionSummary = ({ props }) => {
