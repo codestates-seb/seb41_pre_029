@@ -3,10 +3,11 @@ import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { ReactComponent as SubLogo } from "../assets/subLogo.svg";
 
 import Button from "./Button";
 
-const Header = ({ search, find }) => {
+const Header = ({ search, find, eventKey }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
   const [isToken, setIsToken] = useState();
 
@@ -52,7 +53,7 @@ const Header = ({ search, find }) => {
         })
         .catch(() => console.log("검색기능에서 ☠️"));
     }
-    find("");
+    eventKey(e.key);
   };
 
   return (
@@ -78,7 +79,9 @@ const Header = ({ search, find }) => {
           </SvgDiv>
           <Link to={"/"}>
             <SvgDiv>
+              <SubLogo />
               <svg
+                className="lage"
                 xmlns="http://www.w3.org/2000/svg"
                 width="150"
                 height="30"
@@ -104,9 +107,9 @@ const Header = ({ search, find }) => {
             </SvgDiv>
           </Link>
           <Ul>
-            <Li>About</Li>
+            <Li className="list">About</Li>
             <Li>Products</Li>
-            <Li>For Teams</Li>
+            <Li className="list">For Teams</Li>
           </Ul>
           <InputDiv>
             <Input
@@ -206,7 +209,17 @@ const SvgDiv = styled.div`
   width: ${(props) => props.width};
   text-align: center;
   justify-content: center;
-  margin: 0px 1px; //
+  margin: 0px 1px;
+  @media screen and (min-width: 799px) {
+    .small {
+      display: none;
+    }
+  }
+  @media all and (max-width: 800px) {
+    .lage {
+      display: none;
+    }
+  }
 `;
 const Div = styled.div`
   display: flex;
@@ -246,6 +259,11 @@ const InputDiv = styled.div`
   flex-grow: 1;
 `;
 const Ul = styled.ul`
+  @media screen and (max-width: 799px) {
+    .list {
+      display: none;
+    }
+  }
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -257,7 +275,6 @@ const Li = styled.li`
   padding: 6px 12px;
   margin: 6px 0px 0px 0px;
   cursor: pointer;
-
   font-size: 13px;
   &:hover {
     border-radius: 1000px;

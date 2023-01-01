@@ -38,7 +38,7 @@ public class CommentRecommendService {
 
         if(commentRecommendDto.flag() == 0) {
             CommentRecommendResponse commentRecommendResponse = CommentRecommendResponse
-                            .from(commentRecommendRepository.save(CommentRecommend.of(member, comment, 1)));
+                            .fromLike(commentRecommendRepository.save(CommentRecommend.of(member, comment, 1)));
 
             return commentRecommendResponse;
         } else if(commentRecommendDto.flag() == 1) {
@@ -61,7 +61,7 @@ public class CommentRecommendService {
 
         if(commentRecommendDto.flag() == 0) {
             CommentRecommendResponse commentRecommendResponse = CommentRecommendResponse
-                    .from(commentRecommendRepository.save(CommentRecommend.of(member, comment, -1)));
+                    .fromUnlike(commentRecommendRepository.save(CommentRecommend.of(member, comment, -1)));
 
             return commentRecommendResponse;
         } else if(commentRecommendDto.flag() == -1) {

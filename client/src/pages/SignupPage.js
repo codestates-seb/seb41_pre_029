@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 import { Link, useNavigate } from "react-router-dom";
-
+import Img from "../util/Img";
 import Button from "../components/Button";
 import { ReactComponent as Question } from "../assets/question.svg";
 import { ReactComponent as SvgGit } from "../assets/gitHub.svg";
@@ -175,6 +175,7 @@ const SignupPage = () => {
   const [isvalid, setIsValid] = useState("");
   const [emailValid, setEmailValid] = useState("");
   const [pwdValid, setPwdValid] = useState("");
+  const [msg, setMsg] = useState(false);
   const pathNavigate = useNavigate();
 
   //정규식 표현 '@' 포함여부와 대문자,소문자를 구분하지않게 표현식끝에 i 사용
@@ -227,154 +228,165 @@ const SignupPage = () => {
               token: res.headers.authorization,
             });
             setCookie("ikuzo", data);
-            pathNavigate("/");
-            window.location.reload();
-          });
+            setMsg(true);
+            setTimeout(() => {
+              setMsg(false);
+              pathNavigate("/");
+              window.location.reload();
+            }, 4000);
+          })
+          .catch(() => console.log("signup ☠️"));
       });
     }
   };
   return (
-    <Flex>
-      <Community>
-        <Title>Join the Stack Overflow community</Title>
-        <List>
-          <CommunitySpan>
-            <img
-              src="https://github.com/codestates-seb/seb40_pre_014/blob/main/client/src/assets/images/signup1.png?raw=true"
-              alt="signup_image1"
-            />
-          </CommunitySpan>
-          Get unstuck — ask a question
-        </List>
+    <>
+      {msg ? (
+        <Img />
+      ) : (
+        <Flex>
+          <Community>
+            <Title>Join the Stack Overflow community</Title>
+            <List>
+              <CommunitySpan>
+                <img
+                  src="https://github.com/codestates-seb/seb40_pre_014/blob/main/client/src/assets/images/signup1.png?raw=true"
+                  alt="signup_image1"
+                />
+              </CommunitySpan>
+              Get unstuck — ask a question
+            </List>
 
-        <List>
-          <CommunitySpan>
-            <img
-              src="https://raw.githubusercontent.com/codestates-seb/seb40_pre_014/d7e59081970952ae87bec1e87646f314ced39747/client/src/assets/images/signup3.png"
-              alt="signup_image2"
-            />
-          </CommunitySpan>
-          Unlock new privileges like voting and commenting
-        </List>
-        <List>
-          <CommunitySpan>
-            <img
-              src="https://raw.githubusercontent.com/codestates-seb/seb40_pre_014/d7e59081970952ae87bec1e87646f314ced39747/client/src/assets/images/signup2.png"
-              alt="signup_image3"
-            />
-          </CommunitySpan>
-          Save your favorite tags, filters, and jobs
-        </List>
-        <List>
-          <CommunitySpan>
-            <img
-              src="https://raw.githubusercontent.com/codestates-seb/seb40_pre_014/d7e59081970952ae87bec1e87646f314ced39747/client/src/assets/images/signup4.png"
-              alt="signup_image4"
-            />
-          </CommunitySpan>
-          Earn reputation and badges
-        </List>
-        <List className="content">
-          Collaborate and share knowledge with a private group for FREE.
-          <a
-            href="https://stackoverflow.com/teams?utm_source=so-owned&amp;utm_medium=product&amp;utm_campaign=free-50&amp;utm_content=public-sign-up"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Get Stack Overflow for Teams free for up to 50 users
-          </a>
-        </List>
-      </Community>
-      <Wrap>
-        <Div className="logIn">
-          <BtnStyle color={"#232629"} background={"white"}>
-            <Span>
-              <Google />
-            </Span>
-            Log in with Google
-          </BtnStyle>
-          <BtnStyle color={"#ffffff"} background={"#2f3337"}>
-            <Span>
-              <SvgGit />
-            </Span>
-            Log in with GitHub
-          </BtnStyle>
-          <BtnStyle color={"#ffffff"} background={"#385499"}>
-            <Span>
-              <Facebook />
-            </Span>
-            Log in with Facebook
-          </BtnStyle>
-        </Div>
-        <Div className="form">
-          <Form>
-            <Label>Display name</Label>
-            <LoginInput
-              type="text"
-              className={displayName}
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-            />
-            <Label>Email</Label>
-            {emailValid && (
-              <Span>
-                <Screamer />
-              </Span>
-            )}
-            <LoginInput
-              type="text"
-              className={emailValid}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Label>Password</Label>
-            {pwdValid && (
-              <Span>
-                <Screamer />
-              </Span>
-            )}
-            <LoginInput
-              className={pwdValid}
-              type="password"
-              value={pwd}
-              onChange={(e) => setPwd(e.target.value)}
-            />
-            <span>{isvalid}</span>
-            <CheckBox>
-              <div>
-                <input type="checkbox"></input>
-              </div>
-              <div>
-                <label>
-                  Opt-in to receive occasional product updates, user research
-                  invitations, company announcements, and digests.
-                </label>
-              </div>
-              <div>
-                <Question />
-              </div>
-            </CheckBox>
-            <p onClick={submitHandler}>
-              <FormBtn type={"submmit"} buttonName={"Sign Up"}></FormBtn>
-            </p>
-            <Div>
-              <SinUpdiv>
-                By clicking “Sign up”, you agree to our
-                <Link>terms of service, privacy policy</Link>
-                and
-                <Link>cookie policy</Link>
-              </SinUpdiv>
+            <List>
+              <CommunitySpan>
+                <img
+                  src="https://raw.githubusercontent.com/codestates-seb/seb40_pre_014/d7e59081970952ae87bec1e87646f314ced39747/client/src/assets/images/signup3.png"
+                  alt="signup_image2"
+                />
+              </CommunitySpan>
+              Unlock new privileges like voting and commenting
+            </List>
+            <List>
+              <CommunitySpan>
+                <img
+                  src="https://raw.githubusercontent.com/codestates-seb/seb40_pre_014/d7e59081970952ae87bec1e87646f314ced39747/client/src/assets/images/signup2.png"
+                  alt="signup_image3"
+                />
+              </CommunitySpan>
+              Save your favorite tags, filters, and jobs
+            </List>
+            <List>
+              <CommunitySpan>
+                <img
+                  src="https://raw.githubusercontent.com/codestates-seb/seb40_pre_014/d7e59081970952ae87bec1e87646f314ced39747/client/src/assets/images/signup4.png"
+                  alt="signup_image4"
+                />
+              </CommunitySpan>
+              Earn reputation and badges
+            </List>
+            <List className="content">
+              Collaborate and share knowledge with a private group for FREE.
+              <a
+                href="https://stackoverflow.com/teams?utm_source=so-owned&amp;utm_medium=product&amp;utm_campaign=free-50&amp;utm_content=public-sign-up"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Get Stack Overflow for Teams free for up to 50 users
+              </a>
+            </List>
+          </Community>
+          <Wrap>
+            <Div className="logIn">
+              <BtnStyle color={"#232629"} background={"white"}>
+                <Span>
+                  <Google />
+                </Span>
+                Log in with Google
+              </BtnStyle>
+              <BtnStyle color={"#ffffff"} background={"#2f3337"}>
+                <Span>
+                  <SvgGit />
+                </Span>
+                Log in with GitHub
+              </BtnStyle>
+              <BtnStyle color={"#ffffff"} background={"#385499"}>
+                <Span>
+                  <Facebook />
+                </Span>
+                Log in with Facebook
+              </BtnStyle>
             </Div>
-          </Form>
-        </Div>
-        <LogIndiv>
-          Don’t have an account? <Link to={"/loginpage"}>Log In</Link>
-        </LogIndiv>
-        <LogIndiv>
-          Are you an employer? <Link>Sign up on Talent</Link>
-        </LogIndiv>
-      </Wrap>
-    </Flex>
+            <Div className="form">
+              <Form>
+                <Label>Display name</Label>
+                <LoginInput
+                  type="text"
+                  className={displayName}
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                />
+                <Label>Email</Label>
+                {emailValid && (
+                  <Span>
+                    <Screamer />
+                  </Span>
+                )}
+                <LoginInput
+                  type="text"
+                  className={emailValid}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <Label>Password</Label>
+                {pwdValid && (
+                  <Span>
+                    <Screamer />
+                  </Span>
+                )}
+                <LoginInput
+                  className={pwdValid}
+                  type="password"
+                  value={pwd}
+                  onChange={(e) => setPwd(e.target.value)}
+                />
+                <span>{isvalid}</span>
+                <CheckBox>
+                  <div>
+                    <input type="checkbox"></input>
+                  </div>
+                  <div>
+                    <label>
+                      Opt-in to receive occasional product updates, user
+                      research invitations, company announcements, and digests.
+                    </label>
+                  </div>
+                  <div>
+                    <Question />
+                  </div>
+                </CheckBox>
+                <p onClick={submitHandler}>
+                  <FormBtn type={"submmit"} buttonName={"Sign Up"}></FormBtn>
+                </p>
+                <Div>
+                  <SinUpdiv>
+                    By clicking “Sign up”, you agree to our
+                    <Link>terms of service, privacy policy</Link>
+                    and
+                    <Link>cookie policy</Link>
+                  </SinUpdiv>
+                </Div>
+              </Form>
+            </Div>
+            <LogIndiv>
+              Don’t have an account? <Link to={"/loginpage"}>Log In</Link>
+            </LogIndiv>
+            <LogIndiv>
+              Are you an employer? <Link>Sign up on Talent</Link>
+            </LogIndiv>
+          </Wrap>
+        </Flex>
+      )}
+    </>
   );
 };
 export default SignupPage;

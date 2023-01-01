@@ -1,8 +1,8 @@
 import "./App.css";
-import { useState } from "react";
+import React, { useState } from "react";
 import { CookiesProvider } from "react-cookie";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-//const Header = React.lazy(() => import("./components/Header"));
+
 import Header from "./components/Header";
 import MainPage from "./pages/MainPage";
 import AddQuestionPage from "./pages/AddQuestionPage";
@@ -15,18 +15,27 @@ import SignupPage from "./pages/SignupPage";
 import EditQuestionPage from "./pages/EditQuestionPage";
 import EditAnswerPage from "./pages/EditAnswerPage";
 
+/* dark mode */
+
 function App() {
   const [searchData, setSearchData] = useState("");
   const [find, setFind] = useState("");
+  const [eventKey, setEventKey] = useState("");
   return (
     <CookiesProvider>
       <div className="App">
         <Router basename={process.env.PUBLIC_URL}>
-          <Header search={setSearchData} find={setFind} />
+          <Header
+            search={setSearchData}
+            find={setFind}
+            eventKey={setEventKey}
+          />
           <Routes>
             <Route
               path="/"
-              element={<MainPage data={searchData} find={find} />}
+              element={
+                <MainPage data={searchData} find={find} eventKey={eventKey} />
+              }
             />
             <Route path="/addquestionpage" element={<AddQuestionPage />} />
             <Route path="/*" element={<ErrorPage />} />

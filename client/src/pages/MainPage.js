@@ -11,7 +11,7 @@ import YellowBox from "../components/YellowBox";
 import useScrollTop from "../util/useScrollTop";
 import QuestionList from "../components/QuestionList";
 
-const MainPage = ({ data, find }) => {
+const MainPage = ({ data, find, eventKey }) => {
   useScrollTop();
   const location = useLocation();
   const [questionAmount, setQuestionAmount] = useState();
@@ -43,14 +43,31 @@ const MainPage = ({ data, find }) => {
           <div className="data_controller">
             <div className="question_count">{`${questionAmount} questions`}</div>
           </div>
-          <QuestionList data={data} find={find} />
+          <QuestionList data={data} find={find} eventKey={eventKey} />
         </MainBar>
         <SideBar>
           <YellowBox />
-          <GreyBox title="Custom Filters"></GreyBox>
-          <GreyBox title="Watched Tags Filters"></GreyBox>
-          <GreyBox title="Ignored Tags"></GreyBox>
-          <GreyBox title="Collectives"></GreyBox>
+          <GreyBox
+            title="Custom Filters"
+            content="Create a custom filter"
+            color="#0074cc"
+            height="90px"
+          ></GreyBox>
+          <GreyBox
+            title="Pre-project No.29"
+            content="Stack Overflow Clone"
+            color="slateblue"
+          ></GreyBox>
+          <GreyBox
+            title="Period"
+            content="2022.12.20. ~ 2023.01.02."
+            color="#purple"
+          ></GreyBox>
+          <GreyBox
+            title="Link"
+            content="github repository"
+            color="slateblue"
+          ></GreyBox>
         </SideBar>
       </MainPageContainer>
       <Footer />
@@ -76,14 +93,16 @@ const MainBar = styled.div`
     justify-content: space-between;
 
     > h1 {
+      margin-top: 5px;
       margin-right: 12px;
       margin-bottom: 12px;
 
       font-size: 27px;
-      line-height: 35px;
+      font-weight: 600px;
       text-align: left;
-      letter-spacing: normal;
+      letter-spacing: 0px;
     }
+
     > .go_add_question {
       :hover {
         background-color: #015366;
@@ -94,8 +113,11 @@ const MainBar = styled.div`
   & .data_controller {
     > .question_count {
       height: 47px;
+
+      margin-top: 35px;
       color: #232629;
       font-size: 17px;
+      font-weight: 450;
     }
   }
 `;

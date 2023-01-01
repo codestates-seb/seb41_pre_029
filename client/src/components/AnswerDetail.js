@@ -2,6 +2,7 @@ import axios from "axios";
 import styled from "styled-components";
 import MDEditor from "@uiw/react-md-editor";
 import { useState, useEffect } from "react";
+import moment from "moment";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
@@ -45,8 +46,7 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
         },
       })
         .then((res) => {
-          setLike(res.data.data.recommendCount === 1 ? true : false);
-          setDisLike(res.data.data.recommendCount === -1 ? true : false);
+          console.log(res);
         })
         .catch((err) => console.log(err));
     }
@@ -62,7 +62,6 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
         withCredentials: true,
       },
     })
-      // .then((res) => window.location.reload())
       .then((res) => setRecommendCount(res.data.data.recommendCount))
       .catch((err) => console.log(err));
   }, [like, disLike]);
@@ -78,7 +77,7 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
         },
       })
         .then((res) => window.location.reload())
-        .catch((err) => console.log(err));
+        .catch((err) => console.log("계정삭제 ☠️"));
     }
   };
 
@@ -92,10 +91,20 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
           withCredentials: true,
         },
       }).then(() => {
-        setLike(!like);
+        axios({
+          url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
+          method: "get",
+          headers: {
+            Authorization: token,
+            withCredentials: true,
+          },
+        }).then((res) => {
+          console.log(res);
+          // setLike(res.data.data.currenState === 1 ? true : false);
+          // setDisLike(res.data.data.currenState === -1 ? true : false);
+        });
       });
     } else if (!like && disLike) {
-      //[false && true] unlike 요청 && unlike(false)
       axios({
         url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}/unlikes`, // 통신할 웹문서
         method: "post", // 통신 방식
@@ -105,7 +114,18 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
         },
       })
         .then(() => {
-          setDisLike(!disLike);
+          axios({
+            url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
+            method: "get",
+            headers: {
+              Authorization: token,
+              withCredentials: true,
+            },
+          }).then((res) => {
+            console.log(res);
+            // setLike(res.data.data.currenState === 1 ? true : false);
+            // setDisLike(res.data.data.currenState === -1 ? true : false);
+          });
         })
         .catch(() => {
           console.log("에러!");
@@ -123,7 +143,18 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
           withCredentials: true,
         },
       }).then(() => {
-        setDisLike(!disLike);
+        axios({
+          url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
+          method: "get",
+          headers: {
+            Authorization: token,
+            withCredentials: true,
+          },
+        }).then((res) => {
+          console.log(res);
+          // setLike(res.data.data.currenState === 1 ? true : false);
+          // setDisLike(res.data.data.currenState === -1 ? true : false);
+        });
       });
     } else if (like && !disLike) {
       axios({
@@ -134,7 +165,18 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
           withCredentials: true,
         },
       }).then(() => {
-        setLike(!like);
+        axios({
+          url: `${process.env.REACT_APP_API_URL}/questions/${questionId}/comments/${answerId}`,
+          method: "get",
+          headers: {
+            Authorization: token,
+            withCredentials: true,
+          },
+        }).then((res) => {
+          console.log(res);
+          // setLike(res.data.data.currenState === 1 ? true : false);
+          // setDisLike(res.data.data.currenState === -1 ? true : false);
+        });
       });
     }
   };
@@ -175,7 +217,7 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
         />
         <div className="select-wrapper">
           {isSelected && selection && <Select className={"selected"} />}
-          {!isSelected && cookies?.ikuzo.id === memberInfo?.id ? (
+          {!isSelected && cookies?.ikuzo?.id === memberInfo?.id ? (
             <Select onClick={handleSelection} className="not_selected" />
           ) : null}
         </div>
@@ -197,13 +239,16 @@ const AnswerDetail = ({ answer, isSelected, memberInfo }) => {
               Edit
             </span>
             <span className="button">Follow</span>
-            <span className="button" onClick={() => handleDelete(questionId)}>
-              Delete
-            </span>
+            {cookies?.ikuzo?.id === undefined ? null : cookies?.ikuzo?.id ===
+              answer?.member?.id ? (
+              <span className="button" onClick={() => handleDelete(questionId)}>
+                Delete
+              </span>
+            ) : null}
           </div>
           <div className="post--footer-profile">
             <div className="imgwrapper">
-              <img src={answer?.member?.image}></img>
+              <img src={answer?.member.image}></img>
             </div>
             <div className="profile-wrapper">
               <div className="profile-time">

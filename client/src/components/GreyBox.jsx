@@ -17,10 +17,11 @@ const GreyBox = ({ title, ...props }) => {
 export default GreyBox;
 
 const GreyBoxContainer = styled.div`
-  height: ${(props) => props.height || "120px"};
+  height: ${(props) => props.height || "90px"};
   width: 300px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 3px;
+
 
 background-color: transparent;
   box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.05),
@@ -43,5 +44,8 @@ background-color: transparent;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     padding: 16px 15px;
     font-size: 13px;
+    text-align: left;
+    color:${(props)=>props.color|| "#000"};
+    cursor: pointer;
   }
 `;

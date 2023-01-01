@@ -27,22 +27,20 @@ const EditProfile = () => {
   }, []);
 
   useEffect(() => {
-
-    if(memberId !== null) {
+    if (memberId) {
       axios
-      .get(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
-        headers: {
-          Authorization: isToken,
-          withCredentials: true,
-        }
-      })
-      .then((res) => res.data.data)
-      .then((res) => {
-        setInfo(res);
-      });
+        .get(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
+          headers: {
+            Authorization: isToken,
+            withCredentials: true,
+          },
+        })
+        .then((res) => res.data.data)
+        .then((res) => {
+          setInfo(res);
+        });
     }
   }, [memberId]);
-
 
   const { link, nickname, profile } = info;
 
@@ -67,20 +65,22 @@ const EditProfile = () => {
       twitter: link.twitter,
     };
 
-
-
-    axios.patch(`${process.env.REACT_APP_API_URL}/members/${memberId}`, {
-       ...data
-    }, {
-      headers: {
-        Authorization: isToken,
-      }
-    }
-    ).then((res) => {
-      window.scrollTo(0, 0)
-      window.location.reload()
-    })
-
+    axios
+      .patch(
+        `${process.env.REACT_APP_API_URL}/members/${memberId}`,
+        {
+          ...data,
+        },
+        {
+          headers: {
+            Authorization: isToken,
+          },
+        }
+      )
+      .then((res) => {
+        window.scrollTo(0, 0);
+        window.location.reload();
+      });
   };
 
   return (
