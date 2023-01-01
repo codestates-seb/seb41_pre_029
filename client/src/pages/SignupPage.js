@@ -5,7 +5,6 @@ import { useCookies } from "react-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import Img from "../util/Img";
 import Button from "../components/Button";
-
 import { ReactComponent as Question } from "../assets/question.svg";
 import { ReactComponent as SvgGit } from "../assets/gitHub.svg";
 import { ReactComponent as Google } from "../assets/google.svg";
@@ -19,7 +18,6 @@ const Flex = styled.div`
   align-items: center;
   height: 100vh;
   background-color: #f1f2f3;
-  overflow: hidden;
 `;
 const Wrap = styled.div`
   display: flex;
@@ -170,7 +168,6 @@ const LogIndiv = styled.div`
   line-height: 17px;
   text-align: center;
 `;
-
 const SignupPage = () => {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
@@ -193,6 +190,7 @@ const SignupPage = () => {
 
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
 
+  //폼 제출시 서버통신
   const submitHandler = (e) => {
     e.preventDefault();
     if (!emailValueCheck || email.trim() === "") {
@@ -202,11 +200,7 @@ const SignupPage = () => {
       setIsValid(" The password is not a valid .");
       setEmailValid("");
       setPwdValid("valid");
-    } else if (
-      emailValueCheck &&
-      passwordValueCheck &&
-      displayName.trim() === ""
-    ) {
+    } else if (emailValueCheck && passwordValueCheck) {
       axios(
         {
           method: "post",
@@ -229,7 +223,6 @@ const SignupPage = () => {
             { withCredentials: true }
           )
           .then((res) => {
-            console.log(res);
             const data = JSON.stringify({
               id: res.data.id,
               token: res.headers.authorization,
