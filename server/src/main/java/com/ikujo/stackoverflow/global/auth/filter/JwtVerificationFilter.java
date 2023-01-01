@@ -81,7 +81,6 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         return jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
     }
 
-
     /**
      * SecurityContext에 저장하기 위한 메서드
      */
