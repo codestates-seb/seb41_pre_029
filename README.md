@@ -24,8 +24,6 @@
 
 ## 📌 기술 스택
 ![image](https://user-images.githubusercontent.com/111113889/210197615-098ff7bd-5de5-43d1-aa3b-28c9e5792a5f.png)
-
-</br>
 </br>
 
 ## ✨ 서비스 구현
