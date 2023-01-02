@@ -4,9 +4,9 @@
 ## 👥 이쿠조 팀원 소개  
 
 |김소라|김현우|김현정|박성호|배용현|조대희|
-|---|---|---|---|---|---|
+|:---:|:---:|:---:|:---:|:---:|:---:|
 |![김소라 (1)](https://user-images.githubusercontent.com/80394894/210201079-d3deb66d-4116-4f00-975e-896ef98de109.jpg)|![김현우2](https://user-images.githubusercontent.com/80394894/210201140-40e28ce0-3196-4414-b9f6-3c03b54110ab.jpg)|![김현정](https://user-images.githubusercontent.com/80394894/210201160-93bb3746-f4cd-4708-83e7-d7fbe7141866.gif)|![박성호](https://user-images.githubusercontent.com/80394894/210201174-7972272f-9b5f-4bd2-b148-bc7269b907c2.jpg)|![배용현](https://user-images.githubusercontent.com/80394894/210201184-a7ab9e2d-74bc-4c89-b04d-1ce77e52aeac.jpg)|![조대희](https://user-images.githubusercontent.com/80394894/210201192-9822645d-7920-4be0-8464-93c23f3da4a3.jpg)|
-|FE|**FE**|**FE**|**BE**|**BE**|**BE**|
+|**FE**|**FE**|**FE**|**BE**|**BE**|**BE**|
 </br>
 
 ## 🔥 서비스 소개
