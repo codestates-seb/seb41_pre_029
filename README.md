@@ -28,7 +28,7 @@
 </br>
 
 ## 📓 ERD
-![image](https://user-images.githubusercontent.com/80394894/210198308-627c54a5-b993-4283-a546-b081f6a59a21.PNG)
+![erddiag](https://user-images.githubusercontent.com/80394894/210198347-b493a2a3-847b-463f-a81c-095a4772ea78.PNG)
 </br>
 </br>
 
