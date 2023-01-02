@@ -175,7 +175,6 @@ const QuestionPage = () => {
             })
 
             .then((res) => {
-              console.log(res);
               setLike(
                 res.data.data.articleLikeInfo.currentState === "like"
                   ? true

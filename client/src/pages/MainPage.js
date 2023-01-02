@@ -60,7 +60,7 @@ const MainPage = ({ data, find, eventKey }) => {
           ></GreyBox>
           <GreyBox
             title="Period"
-            content="2022.12.20. ~ 2023.01.02."
+            content="2022.12.15. ~ 2023.01.02."
             color="#purple"
           ></GreyBox>
           <GreyBox
