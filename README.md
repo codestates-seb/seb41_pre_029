@@ -28,10 +28,10 @@
 </br>
 
 ## 📓 ERD
+![image](https://user-images.githubusercontent.com/80394894/210198308-627c54a5-b993-4283-a546-b081f6a59a21.PNG)
+</br>
+</br>
 
-</br>
-</br>
-![캡처](https://user-images.githubusercontent.com/80394894/210198308-627c54a5-b993-4283-a546-b081f6a59a21.PNG)
 ## ✨ 서비스 구현
 ### Member
  - Create : 멤버 회원가입
