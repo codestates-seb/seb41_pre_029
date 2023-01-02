@@ -38,7 +38,7 @@ const Img = () => {
   jsConfetti.addConfetti({
     emojis: ["🌈", "💥", "✨", "💫", "🌸", "🌟", "🌼"],
     emojiSize: 60,
-    confettiNumber: 60,
+    confettiNumber: 70,
   });
 
   return (
