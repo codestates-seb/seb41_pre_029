@@ -8,7 +8,7 @@ import { ReactComponent as SvgGit } from "../assets/gitHub.svg";
 import { ReactComponent as Google } from "../assets/google.svg";
 import { ReactComponent as Facebook } from "../assets/facebook.svg";
 import { ReactComponent as Screamer } from "../assets/screamer.svg";
-
+import moment from "moment";
 import Button from "../components/Button";
 
 const Loginpage = () => {
@@ -30,14 +30,7 @@ const Loginpage = () => {
   const passwordValueCheck = passwordRegex.test(pwd);
 
   const [cookies, setCookie, removeCookie] = useCookies(["ikuzo"]);
-  //초기화기능
-  // const clear = () => {
-  //   setEmail("");
-  //   setPwd("");
-  //   setIsValid("");
-  //   setPwd("");
-  //   setPwdValid("");
-  // };
+
   //폼 제출시 서버통신
 
   const submitHandler = (e) => {
@@ -64,7 +57,8 @@ const Loginpage = () => {
           id: res.data.id,
           token: res.headers.authorization,
         });
-        setCookie("ikuzo", data);
+        const expires = moment().add("40", "m").toDate();
+        setCookie("ikuzo", data, { expires });
         navigate("/");
         window.location.reload();
       })

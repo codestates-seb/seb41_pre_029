@@ -10,7 +10,7 @@ import { ReactComponent as SvgGit } from "../assets/gitHub.svg";
 import { ReactComponent as Google } from "../assets/google.svg";
 import { ReactComponent as Facebook } from "../assets/facebook.svg";
 import { ReactComponent as Screamer } from "../assets/screamer.svg";
-
+import moment from "moment";
 //스타일 감싸는 div
 const Flex = styled.div`
   display: flex;
@@ -227,7 +227,8 @@ const SignupPage = () => {
               id: res.data.id,
               token: res.headers.authorization,
             });
-            setCookie("ikuzo", data);
+            const expires = moment().add("40", "m").toDate();
+            setCookie("ikuzo", data, { expires });
             setMsg(true);
             setTimeout(() => {
               setMsg(false);
