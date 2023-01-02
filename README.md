@@ -9,19 +9,20 @@
 
 ## 🔥 서비스 소개
 - Stack Overflow Clone Coding 스택 오버플로우 클론 코딩입니다.
-
+</br>
 
 ## 🗓️ 프로젝트 기간
 - 2022.12.20 ~ 2023.01.02
-
+</br>
 
 ## 📚 문서
 - [요구사항 정의서](https://docs.google.com/document/d/1jQU9doK8h_rl54DL878T_I1RqKnNkDNsRhlyP95LDxY/edit)
 - [API 명세서](https://codestates.notion.site/API-f817c7da979640ba99d528ab0e98498c)
+</br>
 
 ## 📌 기술 스택
 이미지가 들어갈 공간
-
+</br>
 
 ## ✨ 서비스 구현
 ### Member
