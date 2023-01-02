@@ -37,8 +37,10 @@ const Header = ({ search, find, eventKey }) => {
     }
     setTimeout(() => {
       setIsLogin(false);
+
       window.location.reload();
     }, 2399000);
+
   }, [memberId]);
 
   const changeValue = (e) => {
