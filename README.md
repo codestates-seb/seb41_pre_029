@@ -64,17 +64,11 @@
 ### 회원가입
 ![ezgif com-gif-maker](https://user-images.githubusercontent.com/100066239/210198271-63c6b53b-6b9e-44e6-87e3-2da49ad260a9.gif)
 
-### 회원탈퇴
-![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/100066239/210198567-14ef892a-aa9b-4b6a-8d94-60cf63072955.gif)
-
 ### 로그인
 ![로그인](https://user-images.githubusercontent.com/110877564/210201668-15043816-efd9-4a68-9365-b23fc16053eb.gif)
 
 ### 회원정보 수정
 ![회원정보수정](https://user-images.githubusercontent.com/110877564/210201776-c45f0483-ab2a-4e5b-8cca-5336f997335b.gif)
-
-### 로그아웃
-![로그아웃](https://user-images.githubusercontent.com/110877564/210201694-8a08fbd4-cddd-42ef-abe1-9bf7b7478bb4.gif)
 
 ### 게시글 추가
 ![게시글 추가](https://user-images.githubusercontent.com/110877564/210201703-ead48a6b-6a28-4883-8a86-c43176cca6ba.gif)
@@ -97,8 +91,9 @@
 ### 답글 삭제
 ![답글 삭제](https://user-images.githubusercontent.com/110877564/210202408-66ad4719-844d-496b-816c-a39eb0aee34f.gif)
 
+### 로그아웃
+![로그아웃](https://user-images.githubusercontent.com/110877564/210201694-8a08fbd4-cddd-42ef-abe1-9bf7b7478bb4.gif)
 
-
-
-
+### 회원탈퇴
+![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/100066239/210198567-14ef892a-aa9b-4b6a-8d94-60cf63072955.gif)
 
