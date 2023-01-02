@@ -1,1 +1,1 @@
-                        ![image](https://user-images.githubusercontent.com/111113889/210195200-1533a752-025d-4d30-8046-60ac6892fc71.png)
+<p align="center"><img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcqaWq0%2FbtqTqITdGzT%2FgcCvT4ZcQ5LNJ6wxvkxNkk%2Fimg.jpg" width="400px"></p>
