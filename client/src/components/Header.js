@@ -35,6 +35,9 @@ const Header = ({ search, find, eventKey }) => {
           setProfile(res.data.data.profile);
         });
     }
+    setTimeout(() => {
+      setIsLogin(false);
+    }, 2400000);
   }, [memberId]);
 
   const changeValue = (e) => {
