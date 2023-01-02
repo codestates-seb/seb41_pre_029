@@ -56,8 +56,6 @@ const EditQuestion = ({ originData }) => {
     setSubmitTags(`##${tags.map((el) => el.replaceAll(" ", "-")).join("##")}`);
   });
 
-  /* 태그 뷰 형식으로 변경 */ //tags가 바뀔 때마다 변경
-
   const handleChange = (e) => {
     setInput({
       ...input,

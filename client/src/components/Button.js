@@ -19,7 +19,6 @@ const StyledButton = styled.button`
   margin: 0 3px;
   padding: 8px 10.4px;
   border-radius: 3px;
-  /* border: 1px solid #39739d; */
   border: 1px solid transparent;
   color: ${(props) => props.color || "#FFFFFF"};
   background-color: ${(props) => props.background || "#0A95FF"};

@@ -332,11 +332,7 @@ const MyPage = () => {
               <div className="content-about">
                 <div className="content-about--title">About</div>
                 <div className="content-about--body">
-                  <p>
-                    {userInfo?.profile?.aboutMe}
-                    {/* 자꾸 눈이 감긴다.Your about me section is currently blank.
-                    Would you like to add one? Edit profile */}
-                  </p>
+                  <p>{userInfo?.profile?.aboutMe}</p>
                 </div>
               </div>
               <div className="content-interface">

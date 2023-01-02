@@ -2,7 +2,6 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useState, useEffect } from "react";
-import useStore from "../zustand/store";
 import EditQuestion from "../components/EditQuestion";
 
 const EditQuestionPage = () => {
