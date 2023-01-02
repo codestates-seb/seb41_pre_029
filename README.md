@@ -1,7 +1,12 @@
 <p align="center"><img src="https://upload.wikimedia.org/wikipedia/commons/0/02/Stack_Overflow_logo.svg" width="800px"></p>
 
 이쿠조 팀원 소개  
-~~ 소개가 들어갈 공간 ~~
+이쿠조 팀원 소개  
+
+|김소라|김현우|김현정|박성호|배용현|조대희|
+|---|---|---|---|---|---|
+|테스트1|테스트2|테스트3|테스트4|테스트5|테스트6|
+|테스트1|테스트2|테스트3|테스트4|테스트5|테스트6|
 
 ## 🔥 서비스 소개
 - Stack Overflow Clone Coding 스택 오버플로우 클론 코딩입니다.
