@@ -16,7 +16,7 @@ const Nav = ({ location }) => {
       setMemberId(cookies.ikuzo.id);
       setMyPageLink(`/mypage/${memberId}`);
     }
-  }, []);
+  }, [memberId]);
 
   const handleClick = (link) => {
     setActive(link);

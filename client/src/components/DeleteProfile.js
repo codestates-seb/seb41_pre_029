@@ -15,7 +15,6 @@ const DeleteProfile = () => {
   const [isToken, setIsToken] = useState();
   const [memberId, setMemberId] = useState();
 
-
   useEffect(() => {
     if (cookies.ikuzo) {
       setIsToken(cookies.ikuzo.token);
@@ -29,7 +28,6 @@ const DeleteProfile = () => {
   //회원 탈퇴 기능
   const handleDeleteProfile = () => {
     if (active) {
-
       window.confirm("정말 삭제하시겠습니까?");
       //상태 로그아웃으로 만들기
       axios
@@ -46,7 +44,6 @@ const DeleteProfile = () => {
           window.location.reload();
         })
         .catch((err) => console.log("로그아웃 ☠️"));
-
     }
   };
 
