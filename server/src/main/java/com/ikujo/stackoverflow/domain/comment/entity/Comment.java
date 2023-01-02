@@ -1,19 +1,21 @@
 package com.ikujo.stackoverflow.domain.comment.entity;
 
 import com.ikujo.stackoverflow.domain.article.entity.Article;
+import com.ikujo.stackoverflow.domain.member.entity.Member;
 import com.ikujo.stackoverflow.global.entity.BaseTime;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
 @Entity
+@DynamicInsert
 public class Comment extends BaseTime {
 
     @Id
@@ -25,14 +27,17 @@ public class Comment extends BaseTime {
     @JoinColumn(name = "article_id")
     private Article article;
 
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     @Column(nullable = false, length = 2000)
     private String content;
 
     @Column(nullable = false)
+    @ColumnDefault("false")
     private Boolean selection;
-
-    @Column(nullable = false)
-    private Integer recommendCount;
 
     @OneToMany(mappedBy = "comment", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<CommentRecommend> commentRecommendList = new ArrayList<>();
@@ -44,4 +49,19 @@ public class Comment extends BaseTime {
         }
     }
 
+    public Boolean isSelection() {
+        return this.selection;
+    }
+
+    public Comment(Long id, Article article, Member member, String content, Boolean selection) {
+        this.id = id;
+        this.article = article;
+        this.member = member;
+        this.content = content;
+        this.selection = selection;
+    }
+
+    public static Comment of(Long id, Article article, Member member, String content, Boolean selection) {
+        return new Comment(id, article, member, content, selection);
+    }
 }
