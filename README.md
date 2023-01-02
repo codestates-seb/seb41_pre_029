@@ -61,5 +61,7 @@
 ### 회원가입
 ![ezgif com-gif-maker](https://user-images.githubusercontent.com/100066239/210198271-63c6b53b-6b9e-44e6-87e3-2da49ad260a9.gif)
 
+### 회원탈퇴
+![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/100066239/210198567-14ef892a-aa9b-4b6a-8d94-60cf63072955.gif)
 
 
