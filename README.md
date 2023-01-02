@@ -5,7 +5,13 @@
 
 |김소라|김현우|김현정|박성호|배용현|조대희|
 |---|---|---|---|---|---|
-|테스트1|테스트2|테스트3|테스트4|테스트5|테스트6|
+![김소라](https://user-images.githubusercontent.com/80394894/210200060-e33bf5f7-d518-44bf-883c-f4efc60e550b.png)
+||![김현우](https://user-images.githubusercontent.com/80394894/210200089-217a18a9-96ca-4bb5-999c-c8794e338ad0.png)
+|![김현정](https://user-images.githubusercontent.com/80394894/210200095-5633bffc-fb28-47f7-a56b-6f78e1f718b5.png)
+|![박성호](https://user-images.githubusercontent.com/80394894/210200106-3f506de5-4145-4ffa-b347-31d2b0480a62.png)
+|![배용현](https://user-images.githubusercontent.com/80394894/210200119-cca3b73b-8eb5-426b-923c-945dc3578d35.png)
+|![조대희](https://user-images.githubusercontent.com/80394894/210200123-e58b67af-45a6-4278-9a03-7a25299d6d9a.png)
+|
 |테스트1|테스트2|테스트3|테스트4|테스트5|테스트6|
 </br>
 
