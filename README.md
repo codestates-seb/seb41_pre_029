@@ -59,4 +59,7 @@
 ## 🖥️ 서비스 화면
 
 ### 회원가입
-![image](https://user-images.githubusercontent.com/100066239/210198207-db1f353b-1e08-4ecb-99e9-2a40d2dd8173.png)
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/100066239/210198271-63c6b53b-6b9e-44e6-87e3-2da49ad260a9.gif)
+
+
+
