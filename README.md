@@ -22,7 +22,8 @@
 </br>
 
 ## 📌 기술 스택
-![image](https://user-images.githubusercontent.com/111113889/210197540-2a4cc181-0c70-461a-af85-f89ec4c4128c.png)
+![image](https://user-images.githubusercontent.com/111113889/210197615-098ff7bd-5de5-43d1-aa3b-28c9e5792a5f.png)
+
 </br>
 </br>
 
