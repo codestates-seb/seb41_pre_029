@@ -11,7 +11,10 @@
 
 ## 🔥 서비스 소개
 - Stack Overflow Clone Coding 스택 오버플로우 클론 코딩입니다.
+- 배포 링크 : http://ikuzo.s3-website.ap-northeast-2.amazonaws.com/
 </br>
+
+
 
 ## 🗓️ 프로젝트 기간
 - 2022.12.20 ~ 2023.01.02
@@ -67,6 +70,9 @@
 ### 로그인
 ![로그인](https://user-images.githubusercontent.com/110877564/210201668-15043816-efd9-4a68-9365-b23fc16053eb.gif)
 
+### 회원정보 수정
+![회원정보수정](https://user-images.githubusercontent.com/110877564/210201776-c45f0483-ab2a-4e5b-8cca-5336f997335b.gif)
+
 ### 로그아웃
 ![로그아웃](https://user-images.githubusercontent.com/110877564/210201694-8a08fbd4-cddd-42ef-abe1-9bf7b7478bb4.gif)
 
@@ -79,8 +85,7 @@
 ### 게시글 삭제
 ![게시글 삭제](https://user-images.githubusercontent.com/110877564/210201756-86729187-effe-4244-b009-e966317382e6.gif)
 
-### 회원정보 수정
-![회원정보수정](https://user-images.githubusercontent.com/110877564/210201776-c45f0483-ab2a-4e5b-8cca-5336f997335b.gif)
+
 
 
 
