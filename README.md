@@ -1,1 +1,1 @@
-<p align="center"><img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcqaWq0%2FbtqTqITdGzT%2FgcCvT4ZcQ5LNJ6wxvkxNkk%2Fimg.jpg" width="400px"></p>
+<p align="center"><img src="https://upload.wikimedia.org/wikipedia/commons/0/02/Stack_Overflow_logo.svg" width="400px"></p>
