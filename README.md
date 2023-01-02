@@ -1,7 +1,7 @@
 <p align="center"><img src="https://upload.wikimedia.org/wikipedia/commons/0/02/Stack_Overflow_logo.svg" width="800px"></p>
 </br>
 
-## 이쿠조 팀원 소개  
+## 👥 이쿠조 팀원 소개  
 
 |김소라|김현우|김현정|박성호|배용현|조대희|
 |---|---|---|---|---|---|
