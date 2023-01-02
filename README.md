@@ -22,7 +22,7 @@
 </br>
 
 ## 📌 기술 스택
-이미지가 들어갈 공간
+![image](https://user-images.githubusercontent.com/111113889/210197540-2a4cc181-0c70-461a-af85-f89ec4c4128c.png)
 </br>
 </br>
 
