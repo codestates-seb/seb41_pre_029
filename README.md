@@ -57,9 +57,6 @@
 </br>
 
 ## 🖥️ 서비스 화면
-서비스 화면이 들어갈 공간.
 
-
-https://user-images.githubusercontent.com/100066239/210198163-0b6e2242-dc74-408f-8723-cc1504bf3e69.mov
-
-
+### 회원가입
+![image](https://user-images.githubusercontent.com/100066239/210198207-db1f353b-1e08-4ecb-99e9-2a40d2dd8173.png)
