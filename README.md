@@ -80,7 +80,8 @@
 ![게시글 삭제](https://user-images.githubusercontent.com/110877564/210201756-86729187-effe-4244-b009-e966317382e6.gif)
 
 ### 게시글 좋아요
-![4F89ADCA-4852-45C3-B6BA-AB69E4A5E795_4_5005_c](https://user-images.githubusercontent.com/110877564/210202137-ccb03f34-c228-454f-887b-cbdbc9fa37ee.jpeg)
+![ezgif com-gif-maker (7)](https://user-images.githubusercontent.com/110877564/210204021-b2f6e0e6-6281-4d0b-881c-6d1ae18e9fec.gif)
+
 
 ### 답글 작성
 ![답글작성](https://user-images.githubusercontent.com/110877564/210202213-e9a84f52-3fc8-44c9-9ec2-fdb9d1fd3c4c.gif)
